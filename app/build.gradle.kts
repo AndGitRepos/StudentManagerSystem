@@ -8,6 +8,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+    id("com.diffplug.spotless") version "6.23.3"
 }
 
 repositories {
@@ -33,4 +34,16 @@ java {
 application {
     // Define the main class for the application.
     mainClass = "sms.gradle.App"
+}
+
+spotless {
+    java {
+        importOrder()
+        removeUnusedImports()
+        palantirJavaFormat()
+    }
+}
+
+tasks.named<JavaCompile>("compileJava").configure {
+    tasks.named("spotlessApply").get().mustRunAfter(this)
 }
