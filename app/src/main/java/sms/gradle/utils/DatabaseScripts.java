@@ -83,6 +83,7 @@ public class DatabaseScripts {
         );
         """;
 
+    // note: '8c697...' is a sha256 hash for the word 'admin'
     public static final String CREATE_DEFAULT_ADMIN =
             """
         MERGE INTO admins (
