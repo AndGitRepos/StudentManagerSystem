@@ -1,3 +1,3 @@
 package sms.gradle.model.dao;
 
-public class GradeDAO {}
+public class ResultDAO {}

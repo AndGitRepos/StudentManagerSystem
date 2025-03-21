@@ -1,0 +1,13 @@
+classDiagram
+    class AssessmentDAO {
+        -Connection connection
+
+        +AssessmentDAO()
+        +addAssessment(assessment)
+        +findById(id)
+        +findByName(name)
+        +findByModuleId(moduleId)
+        +findAll()
+        +update(assessment)
+        +delete(id)
+    }

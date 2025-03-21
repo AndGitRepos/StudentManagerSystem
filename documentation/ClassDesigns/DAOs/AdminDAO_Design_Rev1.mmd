@@ -1,0 +1,12 @@
+classDiagram
+    class AdminDAO {
+        -Connection connection
+
+        +AdminDAO()
+        +addAdmin(admin)
+        +findById(id)
+        +findByEmail(email)
+        +findAll()
+        +update(admin)
+        +delete(id)
+    }
