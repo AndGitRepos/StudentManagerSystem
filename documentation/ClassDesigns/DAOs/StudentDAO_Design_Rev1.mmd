@@ -1,0 +1,12 @@
+classDiagram
+    class StudentDAO {
+        -Connection connection
+
+        +StudentDAO()
+        +addStudent(student)
+        +findById(id)
+        +findByEmail(email)
+        +findAll()
+        +update(student)
+        +delete(id)
+    }

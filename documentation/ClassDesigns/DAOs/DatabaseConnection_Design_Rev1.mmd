@@ -1,0 +1,13 @@
+classDiagram
+    class DatabaseConnection {
+        -DatabaseConnection instance
+        -Connection connection
+        -String DatabasePath
+
+        +DatabaseConnection()
+        +getInstance()
+        +createDataFolder()
+        +connectToDatabase()
+        +getConnection()
+        +setupTables()
+    }

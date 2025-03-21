@@ -1,0 +1,13 @@
+classDiagram
+    class CourseEnrollmentDAO {
+        -Connection connection
+
+        +CourseEnrollmentDAO()
+        +addCourseEnrollment(courseEnrollment)
+        +findById(id)
+        +findByStudentId(studentId)
+        +findByCourseId(courseId)
+        +findAll()
+        +update(courseEnrollment)
+        +delete(id)
+    }

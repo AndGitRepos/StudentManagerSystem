@@ -1,3 +1,3 @@
 package sms.gradle.model.entities;
 
-public class Grade {}
+public class Result {}
