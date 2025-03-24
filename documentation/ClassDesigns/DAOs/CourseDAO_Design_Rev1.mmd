@@ -1,0 +1,12 @@
+classDiagram
+    class CourseDAO {
+        -Connection connection
+
+        +CourseDAO()
+        +addCourse(course)
+        +findById(id)
+        +findByName(name)
+        +findAll()
+        +update(course)
+        +delete(id)
+    }

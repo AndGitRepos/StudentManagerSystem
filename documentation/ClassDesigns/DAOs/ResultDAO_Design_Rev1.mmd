@@ -1,0 +1,13 @@
+classDiagram
+    class ResultDAO {
+        -Connection connection
+
+        +ResultDAO()
+        +addResult(result)
+        +findById(id)
+        +findByStudentId(studentId)
+        +findByAssessmentId(assessmentId)
+        +findAll()
+        +update(result)
+        +delete(id)
+    }
