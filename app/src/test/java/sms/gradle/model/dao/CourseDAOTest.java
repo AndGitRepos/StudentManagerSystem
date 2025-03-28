@@ -34,7 +34,7 @@ public class CourseDAOTest {
     private ResultSet mockResultSet;
 
     @Before
-    public void setUp() throws SQLException {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
         mockedStatic = mockStatic(DatabaseConnection.class);
         mockedStatic.when(DatabaseConnection::getInstance).thenReturn(mockDbConnection);

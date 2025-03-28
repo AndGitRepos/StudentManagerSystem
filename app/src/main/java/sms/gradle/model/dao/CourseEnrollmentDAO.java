@@ -1,3 +1,182 @@
 package sms.gradle.model.dao;
 
-public class CourseEnrollmentDAO {}
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import sms.gradle.model.entities.CourseEnrollment;
+
+public final class CourseEnrollmentDAO {
+    private CourseEnrollmentDAO() {
+        throw new UnsupportedOperationException("This is a DAO class and cannot be instantiated");
+    }
+
+    /**
+     * Converts a <code>ResultSet</code> containing course enrollment data into a List of <code>CourseEnrollment</code> objects
+     * @param resultSet The ResultSet containing course enrollment data to convert
+     * @return A List of <code>CourseEnrollment</code> objects created from the <code>ResultSet</code> data
+     * @throws SQLException if there is an error accessing the <code>ResultSet</code> data
+     */
+    private static List<CourseEnrollment> getAllCoursesEnrollmentsFromResultSet(final ResultSet resultSet)
+            throws SQLException {
+        List<CourseEnrollment> courseEnrollments = new ArrayList<>();
+        while (resultSet.next()) {
+            courseEnrollments.add(new CourseEnrollment(
+                    resultSet.getInt("id"),
+                    resultSet.getInt("student_id"),
+                    resultSet.getInt("course_id"),
+                    resultSet.getDate("enrollment_date")));
+        }
+        return courseEnrollments;
+    }
+
+    /**
+     * Creates an <code>Optional<CourseEnrollment></code> from a <code>ResultSet</code> row
+     * @param resultSet The ResultSet containing course enrollment data
+     * @return An Optional containing a <code>CourseEnrollment</code> object if data is present, or an empty Optional if not
+     * @throws SQLException if there is an error accessing the <code>ResultSet</code> data
+     */
+    private static Optional<CourseEnrollment> getCourseEnrollmentFromResultSet(final ResultSet resultSet)
+            throws SQLException {
+        if (resultSet.next()) {
+            return Optional.of(new CourseEnrollment(
+                    resultSet.getInt("id"),
+                    resultSet.getInt("student_id"),
+                    resultSet.getInt("course_id"),
+                    resultSet.getDate("enrollment_date")));
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Adds a new course enrollment to the database
+     * @param courseEnrollment The <code>CourseEnrollment</code> object to add
+     * @throws RuntimeException if there is an error executing the query
+     */
+    public static void addCourseEnrollment(final CourseEnrollment courseEnrollment) throws SQLException {
+        final String sql = "INSERT INTO course_enrollments (student_id, course_id, enrollment_date) VALUES (?, ?)";
+        try (PreparedStatement addSqlStatement =
+                DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            addSqlStatement.setInt(1, courseEnrollment.getStudentId());
+            addSqlStatement.setInt(2, courseEnrollment.getCourseId());
+            addSqlStatement.setDate(3, courseEnrollment.getEnrollmentDate());
+            addSqlStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(
+                    String.format("Failed to add course enrollment: %s", courseEnrollment.toString()), e);
+        }
+    }
+
+    /**
+     * Finds a course enrollment by its ID
+     * @param id The ID of the course to find
+     * @return An Optional containing the <code>CourseEnrollment</code> object if found, or an empty Optional if not found
+     * @throws RuntimeException if there is an error executing the query
+     */
+    public static Optional<CourseEnrollment> findById(final int id) throws SQLException {
+        final String sql = "SELECT * FROM course_enrollments WHERE id = ?";
+        try (PreparedStatement findSqlStatement =
+                DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            findSqlStatement.setInt(1, id);
+            ResultSet resultSet = findSqlStatement.executeQuery();
+            return getCourseEnrollmentFromResultSet(resultSet);
+        } catch (SQLException e) {
+            throw new SQLException(String.format("Failed to find course enrollment with Id: %d", id), e);
+        }
+    }
+
+    /**
+     * Finds course enrollments by student ID
+     * @param studentId The ID of the student to find course enrollments for
+     * @return A List of <code>CourseEnrollment</code> objects for the specified student
+     * @throws RuntimeException if there is an error executing the query
+     */
+    public static List<CourseEnrollment> findByStudentId(final int studentId) throws SQLException {
+        final String sql = "SELECT * FROM course_enrollments WHERE student_id = ?";
+        try (PreparedStatement findSqlStatement =
+                DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            findSqlStatement.setInt(1, studentId);
+            ResultSet resultSet = findSqlStatement.executeQuery();
+            return getAllCoursesEnrollmentsFromResultSet(resultSet);
+        } catch (SQLException e) {
+            throw new SQLException(
+                    String.format("Failed to find course enrollments for student with Id: %d", studentId), e);
+        }
+    }
+
+    /**
+     * Finds course enrollments by course ID
+     * @param courseId The ID of the course to find enrollments for
+     * @return A List of <code>CourseEnrollment</code> objects for the specified course
+     * @throws RuntimeException if there is an error executing the query
+     */
+    public static List<CourseEnrollment> findByCourseId(final int courseId) throws SQLException {
+        final String sql = "SELECT * FROM course_enrollments WHERE course_id = ?";
+        try (PreparedStatement findSqlStatement =
+                DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            findSqlStatement.setInt(1, courseId);
+            ResultSet resultSet = findSqlStatement.executeQuery();
+            return getAllCoursesEnrollmentsFromResultSet(resultSet);
+        } catch (SQLException e) {
+            throw new SQLException(
+                    String.format("Failed to find course enrollments for course with Id: %d", courseId), e);
+        }
+    }
+
+    /**
+     * Retrieves all course enrollments from the database
+     * @return A List containing all <code>CourseEnrollment</code> objects in the database
+     * @throws RuntimeException if there is an error executing the query
+     */
+    public static List<CourseEnrollment> findAll() throws SQLException {
+        final String sql = "SELECT * FROM course_enrollments";
+        try (PreparedStatement findSqlStatement =
+                DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            ResultSet resultSet = findSqlStatement.executeQuery();
+            return getAllCoursesEnrollmentsFromResultSet(resultSet);
+        } catch (SQLException e) {
+            throw new SQLException("Failed to find all course enrollments", e);
+        }
+    }
+
+    /**
+     * Updates a course enrollment in the database
+     * @param courseEnrollment The <code>CourseEnrollment</code> object with updated information
+     * @return The number of rows affected (1 if successful, 0 if course enrollment not found)
+     * @throws RuntimeException if there is an error executing the update operation
+     */
+    public static int update(final CourseEnrollment courseEnrollment) throws SQLException {
+        final String sql =
+                "UPDATE course_enrollments SET student_id = ?, course_id = ?, enrollment_date = ? WHERE id = ?";
+        try (PreparedStatement updateSqlStatement =
+                DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            updateSqlStatement.setInt(1, courseEnrollment.getStudentId());
+            updateSqlStatement.setInt(2, courseEnrollment.getCourseId());
+            updateSqlStatement.setDate(3, courseEnrollment.getEnrollmentDate());
+            updateSqlStatement.setInt(4, courseEnrollment.getId());
+            return updateSqlStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(
+                    String.format("Failed to update course enrollment: %s", courseEnrollment.toString()), e);
+        }
+    }
+
+    /**
+     * Deletes a course enrollment from the database by its ID
+     * @param id The ID of the course enrollment to delete
+     * @return The number of rows affected (1 if successful, 0 if course enrollment is not found)
+     * @throws RuntimeException if there is an error executing the delete operation
+     */
+    public static int delete(final int id) throws SQLException {
+        final String sql = "DELETE FROM course_enrollments WHERE id = ?";
+        try (PreparedStatement deleteSqlStatement =
+                DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            deleteSqlStatement.setInt(1, id);
+            return deleteSqlStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(String.format("Failed to delete course enrollment with Id: %d", id), e);
+        }
+    }
+}
