@@ -1,0 +1,14 @@
+classDiagram
+    class CourseEnrollmentDAO {
+        -CourseEnrollmentDAO()
+        +addCourseEnrollment(courseEnrollment)
+        +findById(id)
+        +findByStudentId(studentId)
+        +findByCourseId(courseId)
+        +findAll()
+        +update(courseEnrollment)
+        +delete(id)
+
+        -getAllCourseEnrollmentsFromResultSet()
+        -getCourseEnrollmentFromResultSet()
+    }
