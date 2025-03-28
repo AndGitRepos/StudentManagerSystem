@@ -1,0 +1,13 @@
+classDiagram
+    class CourseDAO {
+        -CourseDAO()
+        +addCourse(course)
+        +findById(id)
+        +findByName(name)
+        +findAll()
+        +update(course)
+        +delete(id)
+
+        -getCourseFromResultSet()
+        -getOptionalCourseFromResultSet()
+    }

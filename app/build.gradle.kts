@@ -9,6 +9,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
     id("com.diffplug.spotless") version "6.23.3"
+    id("io.freefair.lombok") version "8.13.1"
 }
 
 repositories {
@@ -19,6 +20,8 @@ repositories {
 dependencies {
     // Use JUnit test framework.
     testImplementation(libs.junit)
+    testImplementation("org.mockito:mockito-core:5.8.0")
+    testImplementation("org.mockito:mockito-inline:5.2.0")
 
     // This dependency is used by the application.
     implementation(libs.guava)
