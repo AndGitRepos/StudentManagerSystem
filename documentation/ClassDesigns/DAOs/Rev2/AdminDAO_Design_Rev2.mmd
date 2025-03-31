@@ -1,0 +1,13 @@
+classDiagram
+    class AdminDAO {
+        -AdminDAO()
+        +addAdmin(admin)
+        +findById(id)
+        +findByEmail(email)
+        +findAll()
+        +update(admin)
+        +delete(id)
+
+        -getAdminFromResultSet()
+        -getOptionalAdminFromResultSet()
+    }
