@@ -1,0 +1,13 @@
+classDiagram
+    class StudentDAO {
+        -StudentDAO()
+        +addStudent(student, password)
+        +findById(id)
+        +findByEmail(name)
+        +findAll()
+        +update(student)
+        +delete(id)
+
+        -getStudentFromResultSet()
+        -getOptionalStudentFromResultSet()
+    }
