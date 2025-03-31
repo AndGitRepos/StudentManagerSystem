@@ -52,3 +52,20 @@ spotless {
 tasks.named<JavaCompile>("compileJava").configure {
     tasks.named("spotlessApply").get().mustRunAfter(this)
 }
+
+tasks.register<Jar>("fatJar") {
+    archiveClassifier.set("all")
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+
+    from({
+        configurations.runtimeClasspath.get().filter { it.exists() }.map { zipTree(it) }
+    })
+
+    manifest {
+        attributes["Main-Class"] = "sms.gradle.App" // Replace with your actual main class
+    }
+}
