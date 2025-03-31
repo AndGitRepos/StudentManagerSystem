@@ -1,10 +1,8 @@
 name: Gradle Test on PR
 
 on:
-  workflow_run:
-    workflows: [ "Gradle Build on PR" ]
-    types:
-      - completed
+  pull_request:
+    branches: [ main ]
 
 jobs:
   test:
