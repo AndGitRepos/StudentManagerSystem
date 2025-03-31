@@ -1,0 +1,15 @@
+classDiagram
+    class ModuleDAO {
+        -ModuleDAO()
+        +addModule(module)
+        +findById(id)
+        +findByName(name)
+        +findByLecturer(lecturer)
+        +findByCourseId(courseId)
+        +findAll()
+        +update(module)
+        +delete(id)
+
+        -getAllModulesFromResultSet()
+        -getModuleFromResultSet()
+    }
