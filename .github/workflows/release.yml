@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,11 +40,11 @@ jobs:
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
-        with:
+        with: 
           tag_name: "release-${{ env.NEW_VERSION }}"
-          release_name: "Release ${{ env.NEW_VERSION }}"
+          name: "Release ${{ env.NEW_VERSION }}"
           draft: false
           prerelease: false
-          files: build/libs/*-all.jar
+          files: app/build/libs/*.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
