@@ -1,50 +1,51 @@
-name: Release on PR Approval
+name: Release on Merge
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+
+permissions:
+  contents: write
+
 
 jobs:
-  build-and-release:
-    if: github.event.review.state == 'approved'
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Set up JDK 21
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '21'
+          java-version: '17'
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
+      - name: Grant execute permission for Gradle
+        run: chmod +x gradlew
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+      - name: Build JAR with Gradle
+        run: ./gradlew clean fatJar
 
-      - name: Build the project
-        run: ./gradlew build
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+      - name: Get Latest Release Number
+        id: get_latest_release
+        run: |
+          LATEST_TAG=$(gh release list --limit 1 --json tagName --jq '.[0].tagName' || echo "0")
+          RELEASE_NUM=$(echo $LATEST_TAG | grep -o '[0-9]*' || echo "0")
+          NEW_RELEASE_NUM=$((RELEASE_NUM + 1))
+          echo "NEW_VERSION=$NEW_RELEASE_NUM" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ github.run_number }}
-          release_name: Release ${{ github.run_number }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with: 
+          tag_name: "release-${{ env.NEW_VERSION }}"
+          name: "Release ${{ env.NEW_VERSION }}"
           draft: false
           prerelease: false
-
-      - name: Upload JAR to Release
-        uses: actions/upload-release-asset@v1
+          files: app/build/libs/*.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/libs/app.jar
-          asset_name: app.jar
-          asset_content_type: application/java-archive
