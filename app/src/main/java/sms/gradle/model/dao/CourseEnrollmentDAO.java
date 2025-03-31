@@ -53,10 +53,10 @@ public final class CourseEnrollmentDAO {
     /**
      * Adds a new course enrollment to the database
      * @param courseEnrollment The <code>CourseEnrollment</code> object to add
-     * @throws RuntimeException if there is an error executing the query
+     * @throws SQLException if there is an error executing the query
      */
     public static void addCourseEnrollment(final CourseEnrollment courseEnrollment) throws SQLException {
-        final String sql = "INSERT INTO course_enrollments (student_id, course_id, enrollment_date) VALUES (?, ?)";
+        final String sql = "INSERT INTO course_enrollments (student_id, course_id, enrollment_date) VALUES (?, ?, ?)";
         try (PreparedStatement addSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             addSqlStatement.setInt(1, courseEnrollment.getStudentId());
@@ -73,7 +73,7 @@ public final class CourseEnrollmentDAO {
      * Finds a course enrollment by its ID
      * @param id The ID of the course to find
      * @return An Optional containing the <code>CourseEnrollment</code> object if found, or an empty Optional if not found
-     * @throws RuntimeException if there is an error executing the query
+     * @throws SQLException if there is an error executing the query
      */
     public static Optional<CourseEnrollment> findById(final int id) throws SQLException {
         final String sql = "SELECT * FROM course_enrollments WHERE id = ?";
@@ -91,7 +91,7 @@ public final class CourseEnrollmentDAO {
      * Finds course enrollments by student ID
      * @param studentId The ID of the student to find course enrollments for
      * @return A List of <code>CourseEnrollment</code> objects for the specified student
-     * @throws RuntimeException if there is an error executing the query
+     * @throws SQLException if there is an error executing the query
      */
     public static List<CourseEnrollment> findByStudentId(final int studentId) throws SQLException {
         final String sql = "SELECT * FROM course_enrollments WHERE student_id = ?";
@@ -110,7 +110,7 @@ public final class CourseEnrollmentDAO {
      * Finds course enrollments by course ID
      * @param courseId The ID of the course to find enrollments for
      * @return A List of <code>CourseEnrollment</code> objects for the specified course
-     * @throws RuntimeException if there is an error executing the query
+     * @throws SQLException if there is an error executing the query
      */
     public static List<CourseEnrollment> findByCourseId(final int courseId) throws SQLException {
         final String sql = "SELECT * FROM course_enrollments WHERE course_id = ?";
@@ -128,7 +128,7 @@ public final class CourseEnrollmentDAO {
     /**
      * Retrieves all course enrollments from the database
      * @return A List containing all <code>CourseEnrollment</code> objects in the database
-     * @throws RuntimeException if there is an error executing the query
+     * @throws SQLException if there is an error executing the query
      */
     public static List<CourseEnrollment> findAll() throws SQLException {
         final String sql = "SELECT * FROM course_enrollments";
@@ -145,7 +145,7 @@ public final class CourseEnrollmentDAO {
      * Updates a course enrollment in the database
      * @param courseEnrollment The <code>CourseEnrollment</code> object with updated information
      * @return The number of rows affected (1 if successful, 0 if course enrollment not found)
-     * @throws RuntimeException if there is an error executing the update operation
+     * @throws SQLException if there is an error executing the update operation
      */
     public static int update(final CourseEnrollment courseEnrollment) throws SQLException {
         final String sql =
@@ -167,7 +167,7 @@ public final class CourseEnrollmentDAO {
      * Deletes a course enrollment from the database by its ID
      * @param id The ID of the course enrollment to delete
      * @return The number of rows affected (1 if successful, 0 if course enrollment is not found)
-     * @throws RuntimeException if there is an error executing the delete operation
+     * @throws SQLException if there is an error executing the delete operation
      */
     public static int delete(final int id) throws SQLException {
         final String sql = "DELETE FROM course_enrollments WHERE id = ?";
