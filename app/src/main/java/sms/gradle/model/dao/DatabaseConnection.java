@@ -65,4 +65,20 @@ public final class DatabaseConnection {
             System.out.println("Failed to create database tables: " + e.getMessage());
         }
     }
+
+    /**
+     * Closing database connection
+     *
+     * @throws SQLException if error appears during closing of connection
+     */
+    public void close() {
+        if (connection != null) {
+            try {
+                connection.close();
+                System.out.println("Successfully closed database connection");
+            } catch (SQLException exc) {
+                System.out.println("Error! Database connection cannot close: " + exc.getMessage());
+            }
+        }
+    }
 }

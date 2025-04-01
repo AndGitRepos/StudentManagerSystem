@@ -3,10 +3,53 @@
  */
 package sms.gradle;
 
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.stage.Stage;
 import sms.gradle.model.dao.DatabaseConnection;
+import sms.gradle.view.ViewFactory;
 
-public class App {
+public class App extends Application {
+
+    private static DatabaseConnection dbConnection;
+
+    @Override
+    public void init() {
+
+        dbConnection = DatabaseConnection.getInstance();
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        try {
+            ViewFactory viewFactory = ViewFactory.getInstance();
+            viewFactory.showLogInWindow();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Application Error");
+            alert.setHeaderText("Application failed to start");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            Platform.exit(); // Graceful shutdown exit if login view fails to load
+        }
+    }
+
+    @Override
+    public void stop() {
+        try {
+            if (dbConnection != null) {
+                dbConnection.close();
+            }
+            System.out.println("Completed application cleanup");
+        } catch (Exception exc) {
+
+            System.out.println("Clean up error: " + exc.getMessage());
+        }
+    }
+
     public static void main(String[] args) {
-        DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+        launch(args);
     }
 }
