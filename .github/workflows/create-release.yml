@@ -1,0 +1,78 @@
+name: Create Release
+
+on:
+  workflow_run:
+    workflows: ["Create Scripts and Documentation"]
+    types:
+      - completed
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Download JARs
+        uses: actions/download-artifact@v3
+        with:
+          path: artifacts
+
+      - name: Download Scripts and Docs
+        uses: actions/download-artifact@v3
+        with:
+          name: scripts-and-docs
+          path: release-files
+
+      - name: Get Latest Release Number
+        id: get_latest_release
+        run: |
+          LATEST_TAG=$(gh release list --limit 1 --json tagName --jq '.[0].tagName' || echo "0")
+          RELEASE_NUM=$(echo $LATEST_TAG | grep -o '[0-9]*' || echo "0")
+          NEW_RELEASE_NUM=$((RELEASE_NUM + 1))
+          echo "NEW_VERSION=$NEW_RELEASE_NUM" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "release-${{ env.NEW_VERSION }}"
+          name: "Release ${{ env.NEW_VERSION }}"
+          body: |
+            # Student Management System Release ${{ env.NEW_VERSION }}
+
+            ## Quick Start
+            1. Download the appropriate JAR for your platform and the run scripts
+            2. Make sure Java 21 is installed
+            3. Run using one of these methods:
+               - Windows: Double-click `run.bat`
+               - Mac/Linux: Run `./run.sh`
+               - Any platform: `java -jar StudentManagementSystem-[platform].jar`
+            
+            ## Requirements
+            - Java 21 or later
+            
+            ## Files Included
+            - StudentManagementSystem-windows.jar (Windows build)
+            - StudentManagementSystem-mac.jar (macOS build)
+            - StudentManagementSystem-linux.jar (Linux build)
+            - run.sh (Unix/Mac launcher)
+            - run.bat (Windows launcher)
+            - README.md (Instructions)
+
+            ## Platform-Specific Builds
+            Each JAR was built on its native platform for maximum compatibility.
+            Choose the appropriate JAR for your operating system.
+
+            ## Need Help?
+            See README.md for detailed instructions and troubleshooting.
+          draft: false
+          prerelease: false
+          files: |
+            artifacts/**/*.jar
+            release-files/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

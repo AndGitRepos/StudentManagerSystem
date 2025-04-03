@@ -1,0 +1,80 @@
+name: Create Scripts and Documentation
+
+on:
+  workflow_run:
+    workflows: ["Build Platform JARs"]
+    types:
+      - completed
+
+permissions:
+  contents: write
+
+jobs:
+  create-scripts:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Create Run Scripts
+        run: |
+          # Create run.sh
+          echo '#!/bin/bash
+          java -jar StudentManagementSystem*.jar' > run.sh
+          
+          # Create run.bat
+          echo '@echo off
+          java -jar StudentManagementSystem*.jar
+          pause' > run.bat
+          
+          chmod +x run.sh
+
+      - name: Create README
+        run: |
+          echo '# Student Management System
+
+          ## Requirements
+          - Java 21 or later
+
+          ## Platform-Specific JARs
+          - StudentManagementSystem-windows.jar (Built on Windows)
+          - StudentManagementSystem-mac.jar (Built on macOS)
+          - StudentManagementSystem-linux.jar (Built on Linux)
+
+          ## Running the Application
+
+          ### Option 1: Using Scripts
+          #### Windows
+          Double-click `run.bat`
+
+          #### macOS/Linux
+          Make the script executable (first time only):
+          ```bash
+          chmod +x run.sh
+          ```
+          Then run:
+          ```bash
+          ./run.sh
+          ```
+
+          ### Option 2: Direct Command
+          From the command line:
+          ```
+          java -jar StudentManagementSystem-[platform].jar
+          ```
+          Replace [platform] with windows, mac, or linux depending on your system.
+
+          ## Troubleshooting
+          If you encounter any issues:
+          1. Ensure Java 21 is installed and in your PATH
+          2. Verify Java version by running: `java -version`
+          3. Try running the direct command to see any error messages
+          4. Make sure you are using the JAR built for your platform' > README.md
+
+      - name: Upload Scripts and Docs
+        uses: actions/upload-artifact@v3
+        with:
+          name: scripts-and-docs
+          path: |
+            run.sh
+            run.bat
+            README.md
