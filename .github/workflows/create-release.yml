@@ -37,7 +37,7 @@ jobs:
       - name: Get Latest Release Number
         id: get_latest_release
         run: |
-          LATEST_TAG=$(gh release list --limit 1 --json tagName --jq '.[0].tagName' || echo "0")
+          LATEST_TAG=$(gh release view --json tagName --jq '.tagName' || echo "0")
           RELEASE_NUM=$(echo $LATEST_TAG | grep -o '[0-9]*' || echo "0")
           NEW_RELEASE_NUM=$((RELEASE_NUM + 1))
           echo "NEW_VERSION=$NEW_RELEASE_NUM" >> $GITHUB_ENV

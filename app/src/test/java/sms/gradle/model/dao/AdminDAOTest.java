@@ -1,7 +1,7 @@
 package sms.gradle.model.dao;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.times;
@@ -14,9 +14,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
@@ -38,7 +38,7 @@ public class AdminDAOTest {
     @Mock
     private ResultSet mockResultSet;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         mockedStatic = mockStatic(DatabaseConnection.class);
@@ -46,7 +46,7 @@ public class AdminDAOTest {
         when(mockDbConnection.getConnection()).thenReturn(mockConnection);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         mockedStatic.close();
     }
