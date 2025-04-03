@@ -15,18 +15,18 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
-      - name: Download JARs
+      - name: Download All JARs
         uses: actions/download-artifact@v4
         with:
-          path: artifacts
-          retention-days: 1
+          pattern: jar-*
+          merge-multiple: true
+          path: release-files
 
       - name: Download Scripts and Docs
         uses: actions/download-artifact@v4
         with:
           name: scripts-and-docs
           path: release-files
-          retention-days: 1
 
       - name: Get Latest Release Number
         id: get_latest_release
@@ -74,7 +74,6 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            artifacts/**/*.jar
             release-files/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
