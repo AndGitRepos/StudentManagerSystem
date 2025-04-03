@@ -19,13 +19,13 @@ public class Login extends VBox implements CoreViewInterface {
     private Label titleLabel;
 
     public Login() {
-        componentsInitialised();
-        componentsLayout();
-        componentsStyling();
+        initialiseCoreUIComponents();
+        layoutCoreUIComponents();
+        styleCoreUIComponents();
     }
 
     @Override
-    public void componentsInitialised() {
+    public void initialiseCoreUIComponents() {
 
         titleLabel = new Label("Student Management System");
 
@@ -49,7 +49,8 @@ public class Login extends VBox implements CoreViewInterface {
     }
 
     @Override
-    public void componentsLayout() {
+
+    public void layoutCoreUIComponents() {
 
         setAlignment(Pos.CENTER);
         setSpacing(20);
@@ -65,11 +66,13 @@ public class Login extends VBox implements CoreViewInterface {
         Label passwordLabel = new Label("Password");
         passwordSection.getChildren().addAll(passwordLabel, passwordField);
 
-        getChildren().addAll(titleLabel, usernameSection, passwordSection, loginErrorLabel, loginButton);
+        getChildren().addAll(titleLabel, usernameSection, passwordSection, loginErrorLabel,
+                loginButton);
     }
 
     @Override
-    public void componentsStyling() {
+
+    public void styleCoreUIComponents() {
         getStyleClass().add("login-container");
         titleLabel.getStyleClass().add("title-label");
         loginButton.getStyleClass().add("login-button");

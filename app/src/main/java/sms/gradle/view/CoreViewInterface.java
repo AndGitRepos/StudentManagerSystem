@@ -1,15 +1,16 @@
 package sms.gradle.view;
 
-// Base interface for all views
-// Uses Template method design pattern
+/*
+ * Base interface for all views using Template pattern
+ */
 public interface CoreViewInterface {
 
-    // initialises UI components - labels, text fields + areas buttons etc.
-    void componentsInitialised();
+    // e.g. labels, text fields + areas & buttons
+    void initialiseCoreUIComponents();
 
-    // components positioning / padding / spacing
-    void componentsLayout();
+    // e.g. positioning, padding & spacing
+    void layoutCoreUIComponents();
 
-    // colours, fonts, shades to components
-    void componentsStyling();
+    // e.g. colours, fonts & shades
+    void styleCoreUIComponents();
 }
