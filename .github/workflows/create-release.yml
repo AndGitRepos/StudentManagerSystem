@@ -16,19 +16,18 @@ jobs:
 
     steps:
       - name: Download artifacts from Build JARs workflow
-        uses: dawidd6/action-download-artifact@v3
+        uses: dawidd6/action-download-artifact@v9
         with:
-          workflow: Build Platform JARs
+          workflow: build-jars.yml
           path: release-files
           workflow_conclusion: success
 
       - name: Download artifacts from Scripts workflow
-        uses: dawidd6/action-download-artifact@v3
+        uses: dawidd6/action-download-artifact@v9
         with:
-          workflow: Create Scripts and Documentation
+          workflow: create-scripts.yml
           path: release-files
-          workflow_conclusion: success
-
+          
       - name: Get Latest Release Number
         id: get_latest_release
         run: |
