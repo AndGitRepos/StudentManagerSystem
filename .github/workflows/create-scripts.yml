@@ -71,10 +71,11 @@ jobs:
           4. Make sure you are using the JAR built for your platform' > README.md
 
       - name: Upload Scripts and Docs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: scripts-and-docs
           path: |
             run.sh
             run.bat
             README.md
+          retention-days: 1
