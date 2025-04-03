@@ -15,18 +15,19 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
-      - name: Download All JARs
-        uses: actions/download-artifact@v4
+      - name: Download artifacts from Build JARs workflow
+        uses: dawidd6/action-download-artifact@v3
         with:
-          pattern: jar-*
-          merge-multiple: true
+          workflow: Build Platform JARs
           path: release-files
+          workflow_conclusion: success
 
-      - name: Download Scripts and Docs
-        uses: actions/download-artifact@v4
+      - name: Download artifacts from Scripts workflow
+        uses: dawidd6/action-download-artifact@v3
         with:
-          name: scripts-and-docs
+          workflow: Create Scripts and Documentation
           path: release-files
+          workflow_conclusion: success
 
       - name: Get Latest Release Number
         id: get_latest_release
