@@ -23,7 +23,7 @@ jobs:
           workflow_conclusion: success
 
       - name: Download artifacts from Scripts workflow
-        uses: dawidd6/action-download-artifact@v3
+        uses: dawidd6/action-download-artifact@v9
         with:
           workflow: create-scripts.yml
           path: release-files
