@@ -15,17 +15,18 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
-      - name: Download artifacts
-        uses: dawidd6/action-download-artifact@v3
+      - name: Download All JARs
+        uses: actions/download-artifact@v4
         with:
-          workflow: ${{ github.event.workflow_run.workflow_id }}
-          workflow_conclusion: success
-          path: artifacts
+          pattern: jar-*
+          merge-multiple: true
+          path: release-files
 
-      - name: List Downloaded Files
-        run: |
-          echo "Contents of artifacts directory:"
-          ls -R artifacts/
+      - name: Download Scripts and Docs
+        uses: actions/download-artifact@v4
+        with:
+          name: scripts-and-docs
+          path: release-files
 
       - name: Get Latest Release Number
         id: get_latest_release
@@ -73,6 +74,6 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            artifacts/**/*
+            release-files/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
