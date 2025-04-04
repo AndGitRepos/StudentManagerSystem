@@ -78,7 +78,7 @@ public final class AssessmentDAO {
      * @throws SQLException if there is an error executing the query
      */
     public static Optional<Assessment> findById(final int id) throws SQLException {
-        final String sql = "SELECT * FROM assessment WHERE id = ?";
+        final String sql = "SELECT * FROM assessments WHERE id = ?";
         Optional<Assessment> assessment = Optional.empty();
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -110,42 +110,41 @@ public final class AssessmentDAO {
     }
 
     /**
-     * Find an assessment by its due date
-     * @param dueDate The due date for the assessment to find
-     * @return An Optional containing the Assessment object if found, or an empty Optional if not found
+     * Find assessments by their due date
+     * @param dueDate The due date for the assessments to find
+     * @return A List containing all Assessment objects with matching due date in the Database table
      * @throws SQLException if there is an error executing the query
      */
-    public static Optional<Assessment> findByDueDate(final Date dueDate) throws SQLException {
-        final String sql = "SELECT * FROM assessments WHERE due date = ?";
-        Optional<Assessment> assessment = Optional.empty();
+    public static List<Assessment> findByDueDate(final Date dueDate) throws SQLException {
+        final String sql = "SELECT * FROM assessments WHERE due_date = ?";
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             findSqlStatement.setDate(1, dueDate);
             ResultSet resultSet = findSqlStatement.executeQuery();
-            return getAssessmentFromResultSet(resultSet);
+            return getAllAssessmentsFromResultSet(resultSet);
         } catch (SQLException e) {
             throw new SQLException(String.format("Failed to find assessment with due date: %s", dueDate), e);
         }
     }
 
     /**
-     * Finds an assessment by its module ID
+     * Finds assessments by their module ID
      * @param moduleId The module ID of the assessment to find
-     * @return An optional containing the Assessment object if found, or an empty Optional if not found
+     * @return A List containing all Assessment objects with matching module ID in the Database table
      * @throws SQLException if there is an error executing the query
      */
-    public static Optional<Assessment> findByModuleId(final int moduleId) throws SQLException {
-        final String sql = "SELECT * FROM modules WHERE module_id = ?";
-        Optional<Assessment> assessment = Optional.empty();
+    public static List<Assessment> findByModuleId(final int moduleId) throws SQLException {
+        final String sql = "SELECT * FROM assessments WHERE module_id = ?";
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             findSqlStatement.setInt(1, moduleId);
             ResultSet resultSet = findSqlStatement.executeQuery();
-            return getAssessmentFromResultSet(resultSet);
+            return getAllAssessmentsFromResultSet(resultSet);
         } catch (SQLException e) {
-            throw new SQLException(String.format("Failed to find all assessments with module_Id: %d", moduleId), e);
+            throw new SQLException(String.format("Failed to find all assessments with module ID: %d", moduleId), e);
         }
     }
+
     /**
      * Finds all the assessments within the Database table
      * @return A List containing all Assessment objects in the database
@@ -169,8 +168,7 @@ public final class AssessmentDAO {
      * @throws SQLException if there is an error executing the update operation
      */
     public static int update(final Assessment assessment) throws SQLException {
-        final String sql =
-                "UPDATE assessments SET name = ?, description = ?, due_date = ?, module_id = ?, WHERE id = ?";
+        final String sql = "UPDATE assessments SET name = ?, description = ?, due_date = ?, module_id = ? WHERE id = ?";
         try (PreparedStatement updateSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             updateSqlStatement.setString(1, assessment.getName());

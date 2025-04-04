@@ -38,7 +38,7 @@ public class AssessmentDAOTest {
     @Mock
     private ResultSet mockResultSet;
 
-    private final Date dueDate = java.sql.Date.valueOf("2025-10-10");
+    private final Date dueDate = java.sql.Date.valueOf("2025-10-30");
 
     @BeforeEach
     public void setUp() {
@@ -129,32 +129,47 @@ public class AssessmentDAOTest {
 
     @Test
     public void testFindByDueDate() throws SQLException {
-        Date dueDate = this.dueDate;
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
-        when(mockResultSet.next()).thenReturn(true);
+        when(mockResultSet.next()).thenReturn(true, false);
         when(mockResultSet.getInt("id")).thenReturn(1);
-        when(mockResultSet.getString("name")).thenReturn("Test Module");
+        when(mockResultSet.getString("name")).thenReturn("Test Assessment");
         when(mockResultSet.getString("description")).thenReturn("Test Description");
         when(mockResultSet.getDate("due_date")).thenReturn(dueDate);
         when(mockResultSet.getInt("module_id")).thenReturn(2);
 
-        Optional<Assessment> result = AssessmentDAO.findByDueDate(dueDate);
+        List<Assessment> result = AssessmentDAO.findByDueDate(dueDate);
 
         verify(mockPreparedStatement).setDate(1, dueDate);
-        verify(mockResultSet).next();
+        verify(mockResultSet, times(2)).next(); // Verify we checked for more results
         verify(mockResultSet).getInt("id");
         verify(mockResultSet).getString("name");
         verify(mockResultSet).getString("description");
         verify(mockResultSet).getDate("due_date");
         verify(mockResultSet).getInt("module_id");
 
-        assertTrue(result.isPresent());
-        assertEquals(1, result.get().getId());
-        assertEquals("Test Module", result.get().getName());
-        assertEquals("Test Description", result.get().getDescription());
-        assertEquals(dueDate, result.get().getDueDate());
-        assertEquals(2, result.get().getModuleId());
+        Assessment assessment = result.get(0);
+
+        assertEquals(1, result.size());
+        assertEquals(1, assessment.getId());
+        assertEquals("Test Assessment", assessment.getName());
+        assertEquals("Test Description", assessment.getDescription());
+        assertEquals(dueDate, assessment.getDueDate());
+        assertEquals(2, assessment.getModuleId());
+    }
+
+    @Test
+    public void testFindByDueDateNoResults() throws SQLException {
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
+        when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
+        when(mockResultSet.next()).thenReturn(false);
+
+        List<Assessment> result = AssessmentDAO.findByDueDate(dueDate);
+
+        verify(mockPreparedStatement).setDate(1, dueDate);
+        verify(mockResultSet).next();
+
+        assertTrue(result.isEmpty());
     }
 
     @Test
@@ -162,29 +177,46 @@ public class AssessmentDAOTest {
         int moduleId = 2;
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
-        when(mockResultSet.next()).thenReturn(true);
+        when(mockResultSet.next()).thenReturn(true, false);
         when(mockResultSet.getInt("id")).thenReturn(1);
         when(mockResultSet.getString("name")).thenReturn("Test Assessment");
         when(mockResultSet.getString("description")).thenReturn("Test Description");
         when(mockResultSet.getDate("due_date")).thenReturn(dueDate);
-        when(mockResultSet.getInt("module_id")).thenReturn(moduleId);
+        when(mockResultSet.getInt("module_id")).thenReturn(2);
 
-        Optional<Assessment> result = AssessmentDAO.findByModuleId(moduleId);
+        List<Assessment> result = AssessmentDAO.findByModuleId(moduleId);
 
         verify(mockPreparedStatement).setInt(1, moduleId);
-        verify(mockResultSet).next();
+        verify(mockResultSet, times(2)).next();
         verify(mockResultSet).getInt("id");
         verify(mockResultSet).getString("name");
         verify(mockResultSet).getString("description");
         verify(mockResultSet).getDate("due_date");
         verify(mockResultSet).getInt("module_id");
 
-        assertTrue(result.isPresent());
-        assertEquals(1, result.get().getId());
-        assertEquals("Test Assessment", result.get().getName());
-        assertEquals("Test Description", result.get().getDescription());
-        assertEquals(dueDate, result.get().getDueDate());
-        assertEquals(moduleId, result.get().getModuleId());
+        Assessment assessment = result.get(0);
+
+        assertEquals(1, result.size());
+        assertEquals(1, assessment.getId());
+        assertEquals("Test Assessment", assessment.getName());
+        assertEquals("Test Description", assessment.getDescription());
+        assertEquals(dueDate, assessment.getDueDate());
+        assertEquals(2, assessment.getModuleId());
+    }
+
+    @Test
+    public void testFindByModuleIdNoResults() throws SQLException {
+        int moduleId = 2;
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
+        when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
+        when(mockResultSet.next()).thenReturn(false);
+
+        List<Assessment> result = AssessmentDAO.findByModuleId(moduleId);
+
+        verify(mockPreparedStatement).setInt(1, moduleId);
+        verify(mockResultSet).next();
+
+        assertTrue(result.isEmpty());
     }
 
     @Test
