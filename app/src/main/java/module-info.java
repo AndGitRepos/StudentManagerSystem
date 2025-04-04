@@ -9,6 +9,7 @@ module sms.gradle {
     exports sms.gradle;
     exports sms.gradle.model.dao;
     exports sms.gradle.model.entities;
+    exports sms.gradle.view;
 
     opens sms.gradle to
             javafx.graphics;
