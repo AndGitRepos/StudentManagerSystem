@@ -3,6 +3,7 @@ package sms.gradle.view.Frames;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -22,6 +23,7 @@ public class LoginUI extends VBox implements CoreViewInterface {
     private TextField usernameField;
     private PasswordField passwordField;
     private Label titleLabel;
+    private ComboBox<String> roleComboBox;
 
     public LoginUI() {
         initialiseCoreUIComponents();
@@ -43,6 +45,11 @@ public class LoginUI extends VBox implements CoreViewInterface {
         passwordField.setPromptText("Please enter your password");
         passwordField.setMaxWidth(250);
         passwordField.setTooltip(new Tooltip("Enter your password"));
+
+        roleComboBox = new ComboBox<>();
+        roleComboBox.getItems().addAll("Student", "Staff");
+        roleComboBox.setValue("Student");
+        roleComboBox.setMaxWidth(250);
 
         loginButton = new Button("Log In");
         loginButton.setMaxWidth(200);
@@ -69,7 +76,11 @@ public class LoginUI extends VBox implements CoreViewInterface {
         Label passwordLabel = new Label("Password");
         passwordSection.getChildren().addAll(passwordLabel, passwordField);
 
-        getChildren().addAll(titleLabel, usernameSection, passwordSection, loginErrorLabel, loginButton);
+        VBox roleSection = new VBox(5);
+        Label roleLabel = new Label("Role");
+        roleSection.getChildren().addAll(roleLabel, roleComboBox);
+
+        getChildren().addAll(titleLabel, roleSection, usernameSection, passwordSection, loginErrorLabel, loginButton);
     }
 
     @Override
@@ -81,12 +92,13 @@ public class LoginUI extends VBox implements CoreViewInterface {
 
         usernameField.getStyleClass().add("text-input-field");
         passwordField.getStyleClass().add("text-input-field");
+        roleComboBox.getStyleClass().add("role-combo-box");
     }
 
     public void completelyClearFields() {
-
         usernameField.clear();
         passwordField.clear();
+        roleComboBox.setValue("Student");
         loginErrorLabel.setVisible(false);
     }
 
@@ -100,6 +112,10 @@ public class LoginUI extends VBox implements CoreViewInterface {
 
     public Button getLoginButton() {
         return loginButton;
+    }
+
+    public ComboBox<String> getRoleComboBox() {
+        return roleComboBox;
     }
 
     public void displayLoginError(String errorMessage) {

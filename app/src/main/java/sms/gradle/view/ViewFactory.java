@@ -3,6 +3,7 @@ package sms.gradle.view;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sms.gradle.view.Frames.LoginUI;
+import sms.gradle.view.Frames.StaffDashboardView;
 import sms.gradle.view.Frames.StudentDashboardView;
 
 /*
@@ -14,6 +15,7 @@ public class ViewFactory {
     private static final ViewFactory instance = new ViewFactory();
     private Stage loginStage;
     private Stage studentDashboardStage;
+    private Stage staffDashboardStage;
 
     private ViewFactory() {}
 
@@ -28,7 +30,14 @@ public class ViewFactory {
 
     public void changeToStudentDashboardStage(String username) {
         closeLoginStage();
+        closeStaffDashboardStage();
         initialiseStudentDashboardStage(username);
+    }
+
+    public void changeToStaffDashboardStage(String username) {
+        closeLoginStage();
+        closeStudentDashboardStage();
+        initialiseStaffDashboardStage(username);
     }
 
     private void initialiseLoginStage() {
@@ -62,10 +71,28 @@ public class ViewFactory {
     }
 
     private void closeStudentDashboardStage() {
-
         if (studentDashboardStage != null) {
             studentDashboardStage.hide();
             studentDashboardStage = null;
+        }
+    }
+
+    private void initialiseStaffDashboardStage(String username) {
+        StaffDashboardView staffDashboardView = new StaffDashboardView();
+        staffDashboardView.displayWelcomeMessage(username);
+
+        staffDashboardStage = new Stage();
+        staffDashboardStage.setMinHeight(600);
+        staffDashboardStage.setMinWidth(800);
+        staffDashboardStage.setTitle("SMS - Staff Dashboard");
+        staffDashboardStage.setScene(new Scene(staffDashboardView));
+        staffDashboardStage.show();
+    }
+
+    private void closeStaffDashboardStage() {
+        if (staffDashboardStage != null) {
+            staffDashboardStage.hide();
+            staffDashboardStage = null;
         }
     }
 }
