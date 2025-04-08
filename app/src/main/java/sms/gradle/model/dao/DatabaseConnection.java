@@ -1,10 +1,9 @@
 package sms.gradle.model.dao;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.sql.ResultSet;
+import sms.gradle.model.entities.*;
 import sms.gradle.utils.DatabaseScripts;
 
 public final class DatabaseConnection {
@@ -63,6 +62,19 @@ public final class DatabaseConnection {
             System.out.println("Tables created successfully (or already existed)");
         } catch (SQLException e) {
             System.out.println("Failed to create database tables: " + e.getMessage());
+        }
+    }
+
+    public boolean isPopulated() {
+
+        try (Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM students");
+            resultSet.next();
+            int count = resultSet.getInt(1);
+            return count > 0;
+        } catch (SQLException e) {
+            System.out.println("Failed to check if database is populated: " + e.getMessage());
+            return false;
         }
     }
 }
