@@ -127,29 +127,29 @@ public class ModuleDAOTest {
         String lecturerName = "Test Lecturer";
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
-        when(mockResultSet.next()).thenReturn(true);
+        when(mockResultSet.next()).thenReturn(true, false);
         when(mockResultSet.getInt("id")).thenReturn(1);
         when(mockResultSet.getString("name")).thenReturn("Test Module");
         when(mockResultSet.getString("description")).thenReturn("Test Description");
         when(mockResultSet.getString("lecturer")).thenReturn(lecturerName);
         when(mockResultSet.getInt("course_id")).thenReturn(2);
 
-        Optional<Module> result = ModuleDAO.findByLecturer(lecturerName);
+        List<Module> result = ModuleDAO.findByLecturer(lecturerName);
 
         verify(mockPreparedStatement).setString(1, lecturerName);
-        verify(mockResultSet).next();
+        verify(mockResultSet, times(2)).next();
         verify(mockResultSet).getInt("id");
         verify(mockResultSet).getString("name");
         verify(mockResultSet).getString("description");
         verify(mockResultSet).getString("lecturer");
         verify(mockResultSet).getInt("course_id");
 
-        assertTrue(result.isPresent());
-        assertEquals(1, result.get().getId());
-        assertEquals("Test Module", result.get().getName());
-        assertEquals("Test Description", result.get().getDescription());
-        assertEquals(lecturerName, result.get().getLecturer());
-        assertEquals(2, result.get().getCourseId());
+        assertEquals(1, result.size());
+        assertEquals(1, result.get(0).getId());
+        assertEquals("Test Module", result.get(0).getName());
+        assertEquals("Test Description", result.get(0).getDescription());
+        assertEquals(lecturerName, result.get(0).getLecturer());
+        assertEquals(2, result.get(0).getCourseId());
     }
 
     @Test
@@ -157,29 +157,29 @@ public class ModuleDAOTest {
         int courseId = 2;
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
-        when(mockResultSet.next()).thenReturn(true);
+        when(mockResultSet.next()).thenReturn(true, false);
         when(mockResultSet.getInt("id")).thenReturn(1);
         when(mockResultSet.getString("name")).thenReturn("Test Module");
         when(mockResultSet.getString("description")).thenReturn("Test Description");
         when(mockResultSet.getString("lecturer")).thenReturn("Test Lecturer");
         when(mockResultSet.getInt("course_id")).thenReturn(courseId);
 
-        Optional<Module> result = ModuleDAO.findByCourseId(courseId);
+        List<Module> result = ModuleDAO.findByCourseId(courseId);
 
         verify(mockPreparedStatement).setInt(1, courseId);
-        verify(mockResultSet).next();
+        verify(mockResultSet, times(2)).next();
         verify(mockResultSet).getInt("id");
         verify(mockResultSet).getString("name");
         verify(mockResultSet).getString("description");
         verify(mockResultSet).getString("lecturer");
         verify(mockResultSet).getInt("course_id");
 
-        assertTrue(result.isPresent());
-        assertEquals(1, result.get().getId());
-        assertEquals("Test Module", result.get().getName());
-        assertEquals("Test Description", result.get().getDescription());
-        assertEquals("Test Lecturer", result.get().getLecturer());
-        assertEquals(courseId, result.get().getCourseId());
+        assertEquals(1, result.size());
+        assertEquals(1, result.get(0).getId());
+        assertEquals("Test Module", result.get(0).getName());
+        assertEquals("Test Description", result.get(0).getDescription());
+        assertEquals("Test Lecturer", result.get(0).getLecturer());
+        assertEquals(courseId, result.get(0).getCourseId());
     }
 
     @Test

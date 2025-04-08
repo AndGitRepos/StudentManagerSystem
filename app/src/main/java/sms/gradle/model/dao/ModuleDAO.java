@@ -97,7 +97,6 @@ public final class ModuleDAO {
      */
     public static Optional<Module> findByName(final String name) throws SQLException {
         final String sql = "SELECT * FROM modules WHERE name = ?";
-        Optional<Module> module = Optional.empty();
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             findSqlStatement.setString(1, name);
@@ -109,38 +108,37 @@ public final class ModuleDAO {
     }
 
     /**
-     * Finds a module by its lecturer
+     * Finds a list of modules by its lecturer
      * @param lecturer The lecturer of the module to find
-     * @return An Optional containing the Module object if found, or an empty Optional if not found
+     * @return A list of all the modules taught by the lecturer
      * @throws SQLException if there is an error executing the query
      */
-    public static Optional<Module> findByLecturer(final String lecturer) throws SQLException {
+    public static List<Module> findByLecturer(final String lecturer) throws SQLException {
         final String sql = "SELECT * FROM modules WHERE lecturer = ?";
-        Optional<Module> module = Optional.empty();
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             findSqlStatement.setString(1, lecturer);
             ResultSet resultSet = findSqlStatement.executeQuery();
-            return getModuleFromResultSet(resultSet);
+            return getAllModulesFromResultSet(resultSet);
         } catch (SQLException e) {
             throw new SQLException(String.format("Failed to find module with lecturer: %s", lecturer), e);
         }
     }
 
     /**
-     * Finds a module by its course ID
+     * Finds a list of modules by its course ID
      * @param courseId The course ID of the module to find
-     * @return An Optional containing the Module object if found, or an empty Optional if not found
+     * @return A list of all the modules in the course
      * @throws SQLException if there is an error executing the query
      */
-    public static Optional<Module> findByCourseId(final int courseId) throws SQLException {
+    public static List<Module> findByCourseId(final int courseId) throws SQLException {
         final String sql = "SELECT * FROM modules WHERE course_id = ?";
         Optional<Module> module = Optional.empty();
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             findSqlStatement.setInt(1, courseId);
             ResultSet resultSet = findSqlStatement.executeQuery();
-            return getModuleFromResultSet(resultSet);
+            return getAllModulesFromResultSet(resultSet);
         } catch (SQLException e) {
             throw new SQLException(String.format("Failed to find module with course_Id: %d", courseId), e);
         }
