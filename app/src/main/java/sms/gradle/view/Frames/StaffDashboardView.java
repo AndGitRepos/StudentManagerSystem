@@ -7,12 +7,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import sms.gradle.view.CoreViewInterface;
 
-@Data
-@AllArgsConstructor
+@Getter
 public class StaffDashboardView extends VBox implements CoreViewInterface {
 
     private Label welcomeLabel;
