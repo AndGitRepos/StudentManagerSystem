@@ -52,15 +52,17 @@ public final class AdminDAO {
     /**
      * Adds an admin to the database with the given password.
      * @param admin the admin to add
+     * @param hashedPassword the hashed password of the admin
      * @throws SQLException if a database access error occurs or the connection is closed
      */
-    public static void addAdmin(final Admin admin) throws SQLException {
-        final String sql = "INSERT INTO admins (first_name, last_name, email) VALUES (?, ?, ?)";
+    public static void addAdmin(final Admin admin, final String hashedPassword) throws SQLException {
+        final String sql = "INSERT INTO admins (first_name, last_name, email, password) VALUES (?, ?, ?, ?)";
         try (PreparedStatement addSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             addSqlStatement.setString(1, admin.getFirstName());
             addSqlStatement.setString(2, admin.getLastName());
             addSqlStatement.setString(3, admin.getEmail());
+            addSqlStatement.setString(4, hashedPassword);
             addSqlStatement.executeUpdate();
         } catch (SQLException e) {
             throw new SQLException(String.format("Failed to add admin: %s", admin.toString()), e);
@@ -153,6 +155,29 @@ public final class AdminDAO {
             return deleteSqlStatement.executeUpdate();
         } catch (SQLException e) {
             throw new SQLException(String.format("Failed to delete admin with Id: %d", id), e);
+        }
+    }
+
+    /**
+     * Verifies the password for an admin by their email address
+     * @param email The email address of the admin
+     * @param hashedPassword The hashed password to verify
+     * @return true if the password matches, false otherwise
+     * @throws SQLException if there is an error executing the query
+     */
+    public static boolean verifyPassword(final String email, final String hashedPassword) throws SQLException {
+        final String sql = "SELECT password FROM admins WHERE email = ?";
+        try (PreparedStatement findSqlStatement =
+                DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            findSqlStatement.setString(1, email);
+            ResultSet results = findSqlStatement.executeQuery();
+            if (results.next()) {
+                String storedPassword = results.getString("password");
+                return hashedPassword.equals(storedPassword);
+            }
+            return false;
+        } catch (SQLException e) {
+            throw new SQLException(String.format("Failed to verify password for admin with email: %s", email), e);
         }
     }
 }

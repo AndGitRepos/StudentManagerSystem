@@ -57,11 +57,12 @@ public class AdminDAOTest {
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
         when(mockPreparedStatement.executeUpdate()).thenReturn(1);
 
-        AdminDAO.addAdmin(admin);
+        AdminDAO.addAdmin(admin, "AHashedPassword");
 
         verify(mockPreparedStatement).setString(1, admin.getFirstName());
         verify(mockPreparedStatement).setString(2, admin.getLastName());
         verify(mockPreparedStatement).setString(3, admin.getEmail());
+        verify(mockPreparedStatement).setString(4, "AHashedPassword");
     }
 
     @Test

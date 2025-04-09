@@ -56,10 +56,10 @@ public final class StudentDAO {
     /**
      * Adds a student to the database with the given password.
      * @param student the student to add
-     * @param password the password of the student
+     * @param hashedPassword the hashed password of the student
      * @throws SQLException if a database access error occurs or the connection is closed
      */
-    public static void addStudent(final Student student, final String password) throws SQLException {
+    public static void addStudent(final Student student, final String hashedPassword) throws SQLException {
         final String sql =
                 "INSERT INTO students (first_name, last_name, email, password, date_of_birth, join_date) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement addSqlStatement =
@@ -67,7 +67,7 @@ public final class StudentDAO {
             addSqlStatement.setString(1, student.getFirstName());
             addSqlStatement.setString(2, student.getLastName());
             addSqlStatement.setString(3, student.getEmail());
-            addSqlStatement.setString(4, password);
+            addSqlStatement.setString(4, hashedPassword);
             addSqlStatement.setDate(5, student.getDateOfBirth());
             addSqlStatement.setDate(6, student.getJoinDate());
             addSqlStatement.executeUpdate();
@@ -165,6 +165,29 @@ public final class StudentDAO {
             return deleteSqlStatement.executeUpdate();
         } catch (SQLException e) {
             throw new SQLException(String.format("Failed to delete student with Id: %d", id), e);
+        }
+    }
+
+    /**
+     * Verifies the password for a student by their email address
+     * @param email The email address of the student
+     * @param hashedPassword The hashed password to verify
+     * @return true if the password matches, false otherwise
+     * @throws SQLException if there is an error executing the query
+     */
+    public static boolean verifyPassword(final String email, final String hashedPassword) throws SQLException {
+        final String sql = "SELECT password FROM students WHERE email = ?";
+        try (PreparedStatement findSqlStatement =
+                DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            findSqlStatement.setString(1, email);
+            ResultSet results = findSqlStatement.executeQuery();
+            if (results.next()) {
+                String storedPassword = results.getString("password");
+                return hashedPassword.equals(storedPassword);
+            }
+            return false;
+        } catch (SQLException e) {
+            throw new SQLException(String.format("Failed to verify password for student with email: %s", email), e);
         }
     }
 }
