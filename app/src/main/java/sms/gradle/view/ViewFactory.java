@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sms.gradle.utils.Session.Session;
 import sms.gradle.view.Frames.LoginUI;
+import sms.gradle.view.Frames.ManageStudentView;
 import sms.gradle.view.Frames.StaffDashboardView;
 import sms.gradle.view.Frames.StudentDashboardView;
 
@@ -17,11 +18,13 @@ public class ViewFactory {
     private Stage loginStage;
     private Stage studentDashboardStage;
     private Stage staffDashboardStage;
+    private Stage manageStudentStage;
 
     private ViewFactory() {
         initialiseLoginStage();
         initialiseStudentDashboardStage();
         initialiseStaffDashboardStage();
+        initialiseManageStudentStage();
     }
 
     public static ViewFactory getInstance() {
@@ -43,6 +46,11 @@ public class ViewFactory {
     public void changeToStaffDashboardStage() {
         loginStage.hide();
         staffDashboardStage.show();
+    }
+
+    public void changeToManageStudentStage() {
+        staffDashboardStage.hide();
+        manageStudentStage.show();
     }
 
     private void initialiseLoginStage() {
@@ -73,5 +81,16 @@ public class ViewFactory {
         staffDashboardStage.setMinWidth(750);
         staffDashboardStage.setTitle("SMS - Staff Dashboard");
         staffDashboardStage.setScene(new Scene(staffDashboardView));
+    }
+
+    private void initialiseManageStudentStage() {
+
+        ManageStudentView manageStudentView = new ManageStudentView();
+
+        manageStudentStage = new Stage();
+        manageStudentStage.setMinHeight(550);
+        manageStudentStage.setMinWidth(750);
+        manageStudentStage.setTitle("SMS - Manage Students");
+        manageStudentStage.setScene(new Scene(manageStudentView));
     }
 }
