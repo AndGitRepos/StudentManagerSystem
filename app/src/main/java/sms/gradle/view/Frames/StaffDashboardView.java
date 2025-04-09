@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
+import sms.gradle.controller.StaffDashboardController;
 import sms.gradle.view.CoreViewInterface;
 
 @Getter
@@ -28,6 +29,17 @@ public class StaffDashboardView extends VBox implements CoreViewInterface {
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
+        assignButtonActions();
+    }
+
+    private void assignButtonActions() {
+        viewCourseButton.setOnAction(StaffDashboardController::handleViewCourseButton);
+        manageAssessmentsButton.setOnAction(StaffDashboardController::handleManageAssessmentsButton);
+        manageModulesButton.setOnAction(StaffDashboardController::handleManageModulesButton);
+        manageCoursesButton.setOnAction(StaffDashboardController::handleManageCoursesButton);
+        manageStudentsButton.setOnAction(StaffDashboardController::handleManageStudentsButton);
+        manageStaffButton.setOnAction(StaffDashboardController::handleManageStaffButton);
+        logoutButton.setOnAction(StaffDashboardController::handleLogoutButton);
     }
 
     @Override
