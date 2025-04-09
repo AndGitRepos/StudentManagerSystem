@@ -22,7 +22,7 @@ public class Session {
         this.user = Optional.of(user);
     }
 
-    void clearSession() {
+    public void clearSession() {
         user = Optional.empty();
     }
 }

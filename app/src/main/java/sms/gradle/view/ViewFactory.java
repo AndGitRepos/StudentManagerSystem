@@ -2,6 +2,7 @@ package sms.gradle.view;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sms.gradle.utils.Session.Session;
 import sms.gradle.view.Frames.LoginUI;
 import sms.gradle.view.Frames.StaffDashboardView;
 import sms.gradle.view.Frames.StudentDashboardView;
@@ -28,7 +29,9 @@ public class ViewFactory {
     }
 
     public void changeToLoginStage() {
+        Session.getInstance().clearSession();
         studentDashboardStage.hide();
+        staffDashboardStage.hide();
         loginStage.show();
     }
 
