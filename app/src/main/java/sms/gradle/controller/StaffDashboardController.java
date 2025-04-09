@@ -6,7 +6,8 @@ import sms.gradle.view.ViewFactory;
 public final class StaffDashboardController {
 
     public static void handleViewCourseButton(ActionEvent event) {
-        ViewFactory.getInstance().changeToManageCourseStage();
+        // TODO - Once view courses page has been implemented add call to change to and remove print
+        System.out.print("Handle View Courses Button called");
     }
 
     public static void handleManageAssessmentsButton(ActionEvent event) {
@@ -20,8 +21,7 @@ public final class StaffDashboardController {
     }
 
     public static void handleManageCoursesButton(ActionEvent event) {
-        // TODO - Once Manage courses page has been implemented add call to change to and remove print
-        System.out.print("Handle Manage Courses Button called");
+        ViewFactory.getInstance().changeToManageCourseStage();
     }
 
     public static void handleManageStudentsButton(ActionEvent event) {
