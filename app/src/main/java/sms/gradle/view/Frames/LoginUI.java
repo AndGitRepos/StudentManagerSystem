@@ -8,6 +8,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
+import sms.gradle.controller.LoginControllers.LoginController;
 import sms.gradle.view.CoreViewInterface;
 
 /*
@@ -27,6 +28,9 @@ public class LoginUI extends VBox implements CoreViewInterface {
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
+
+        LoginController controller = new LoginController(this);
+        loginButton.setOnAction(event -> controller.handleLoginAttempt());
     }
 
     @Override

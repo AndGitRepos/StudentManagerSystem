@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import sms.gradle.controller.StaffDashboardController;
+import sms.gradle.controller.AdminControllers.StaffDashboardController;
 import sms.gradle.view.CoreViewInterface;
 
 @Getter
