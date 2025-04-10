@@ -179,4 +179,40 @@ public final class CourseEnrollmentDAO {
             throw new SQLException(String.format("Failed to delete course enrollment with Id: %d", id), e);
         }
     }
+
+    /**
+     * Deletes course enrollments from the database by student ID
+     * @param studentId The ID of the student to delete course enrollments for
+     * @return The number of rows affected (number of course enrollments deleted)
+     * @throws SQLException if there is an error executing the delete operation
+     */
+    public static int deleteByStudentId(final int studentId) throws SQLException {
+        final String sql = "DELETE FROM course_enrollments WHERE student_id = ?";
+        try (PreparedStatement deleteSqlStatement =
+                DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            deleteSqlStatement.setInt(1, studentId);
+            return deleteSqlStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(
+                    String.format("Failed to delete course enrollments for student with Id: %d", studentId), e);
+        }
+    }
+
+    /**
+     * Deletes course enrollments from the database by course ID
+     * @param courseId The ID of the course to delete enrollments for
+     * @return The number of rows affected (number of course enrollments deleted)
+     * @throws SQLException if there is an error executing the delete operation
+     */
+    public static int deleteByCourseId(final int courseId) throws SQLException {
+        final String sql = "DELETE FROM course_enrollments WHERE course_id = ?";
+        try (PreparedStatement deleteSqlStatement =
+                DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            deleteSqlStatement.setInt(1, courseId);
+            return deleteSqlStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(
+                    String.format("Failed to delete course enrollments for course with Id: %d", courseId), e);
+        }
+    }
 }

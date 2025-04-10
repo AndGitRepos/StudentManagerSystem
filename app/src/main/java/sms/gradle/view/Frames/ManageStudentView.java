@@ -14,12 +14,16 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
+import sms.gradle.controller.ManageStudentController;
+import sms.gradle.model.entities.Course;
 import sms.gradle.model.entities.Student;
 import sms.gradle.view.CoreViewInterface;
+import sms.gradle.view.ViewFactory;
 
 @Getter
 public class ManageStudentView extends BorderPane implements CoreViewInterface {
     private ListView<Student> studentListView;
+    private Button refreshButton;
     private Button selectButton;
     private Button createNewButton;
     private VBox leftPanel;
@@ -36,45 +40,71 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
     private Button deleteButton;
     private VBox centerPanel;
 
-    private ListView<String> enrolledCoursesListView;
-    private ListView<String> availableCoursesListView;
+    private ListView<Course> enrolledCoursesListView;
+    private ListView<Course> availableCoursesListView;
     private Button moveUpButton;
     private Button moveDownButton;
     private Button backButton;
-    private Button logoutButton;
     private VBox rightPanel;
 
     public ManageStudentView() {
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
+        assignButtonActions();
+    }
+
+    private void assignButtonActions() {
+        refreshButton.setOnAction(ManageStudentController::updateListOfStudents);
+        selectButton.setOnAction(ManageStudentController::selectStudent);
+        deleteButton.setOnAction(ManageStudentController::deleteStudent);
+        createNewButton.setOnAction(ManageStudentController::createNewStudent);
+        backButton.setOnAction(event -> ViewFactory.getInstance().changeToStaffDashboardStage());
     }
 
     @Override
     public void initialiseCoreUIComponents() {
         studentListView = new ListView<>();
+        studentListView.setId("studentListView");
+        refreshButton = new Button("Refresh");
+        refreshButton.setId("refreshButton");
         selectButton = new Button("Select");
-        createNewButton = new Button("Create New");
+        selectButton.setId("selectButton");
+        deleteButton = new Button("Delete");
+        deleteButton.setId("deleteButton");
         leftPanel = new VBox(10);
 
         studentDetailsPane = new GridPane();
         studentIdField = new TextField();
+        studentIdField.setId("studentIdField");
         firstNameField = new TextField();
+        firstNameField.setId("firstNameField");
         lastNameField = new TextField();
+        lastNameField.setId("lastNameField");
         dateOfBirthPicker = new DatePicker();
+        dateOfBirthPicker.setId("dateOfBirthPicker");
         joinDatePicker = new DatePicker();
+        joinDatePicker.setId("joinDatePicker");
         emailField = new TextField();
+        emailField.setId("emailField");
         passwordField = new PasswordField();
+        passwordField.setId("passwordField");
+        createNewButton = new Button("Create New");
+        createNewButton.setId("createNewButton");
         updateButton = new Button("Update");
-        deleteButton = new Button("Delete");
+        updateButton.setId("updateButton");
         centerPanel = new VBox(10);
 
         enrolledCoursesListView = new ListView<>();
+        enrolledCoursesListView.setId("enrolledCoursesListView");
         availableCoursesListView = new ListView<>();
+        availableCoursesListView.setId("availableCoursesListView");
         moveUpButton = new Button("Move Up");
+        moveUpButton.setId("moveUpButton");
         moveDownButton = new Button("Move Down");
+        moveDownButton.setId("moveDownButton");
         backButton = new Button("Back");
-        logoutButton = new Button("Logout");
+        backButton.setId("backButton");
         rightPanel = new VBox(10);
     }
 
@@ -82,7 +112,10 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
     public void layoutCoreUIComponents() {
         leftPanel
                 .getChildren()
-                .addAll(new Label("Students"), studentListView, new HBox(10, selectButton, createNewButton));
+                .addAll(
+                        new HBox(10, new Label("Students"), refreshButton),
+                        studentListView,
+                        new HBox(10, selectButton, deleteButton));
         leftPanel.setPadding(new Insets(10));
         setLeft(leftPanel);
 
@@ -96,7 +129,7 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
         studentDetailsPane.addRow(5, new Label("Email:"), emailField);
         studentDetailsPane.addRow(6, new Label("Password:"), passwordField);
 
-        HBox buttonBox = new HBox(10, updateButton, deleteButton);
+        HBox buttonBox = new HBox(10, createNewButton, updateButton);
         buttonBox.setAlignment(CENTER);
 
         centerPanel.getChildren().addAll(new Label("Student Details"), studentDetailsPane, buttonBox);
@@ -111,7 +144,7 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
                 new Label("Available Courses"),
                 availableCoursesListView);
 
-        HBox controlButtons = new HBox(10, backButton, logoutButton);
+        HBox controlButtons = new HBox(10, backButton);
         controlButtons.setAlignment(CENTER);
 
         rightPanel.getChildren().addAll(coursesBox, controlButtons);
@@ -131,5 +164,9 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
         studentDetailsPane.getStyleClass().add("details-pane");
         enrolledCoursesListView.getStyleClass().add("courses-list");
         availableCoursesListView.getStyleClass().add("courses-list");
+    }
+
+    public void addStudentToList(Student student) {
+        studentListView.getItems().add(student);
     }
 }
