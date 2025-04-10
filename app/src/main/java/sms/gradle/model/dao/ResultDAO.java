@@ -190,4 +190,41 @@ public class ResultDAO {
             throw new SQLException(String.format("Failed to delete result with Id: %d", id), e);
         }
     }
+
+    /**
+     * Deletes results from the database by student ID
+     *
+     * @param studentId The ID of the student whose results to delete
+     * @return The number of rows affected (number of results deleted)
+     * @throws SQLException if there is an error executing the delete operation
+     */
+    public static int deleteByStudentId(final int studentId) throws SQLException {
+        final String sql = "DELETE FROM results WHERE student_id = ?";
+        try (PreparedStatement deleteSqlStatement =
+                DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            deleteSqlStatement.setInt(1, studentId);
+            return deleteSqlStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(String.format("Failed to delete results for student with Id: %d", studentId), e);
+        }
+    }
+
+    /**
+     * Deletes results from the database by assessment ID
+     *
+     * @param assessmentId The ID of the assessment whose results to delete
+     * @return The number of rows affected (number of results deleted)
+     * @throws SQLException if there is an error executing the delete operation
+     */
+    public static int deleteByAssessmentId(final int assessmentId) throws SQLException {
+        final String sql = "DELETE FROM results WHERE assessment_id = ?";
+        try (PreparedStatement deleteSqlStatement =
+                DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            deleteSqlStatement.setInt(1, assessmentId);
+            return deleteSqlStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(
+                    String.format("Failed to delete results for assessment with Id: %d", assessmentId), e);
+        }
+    }
 }

@@ -69,22 +69,21 @@ public final class Common {
                     moduleId));
         }
 
-        for (int enrollmentNum = 1;
-                enrollmentNum <= NUMBER_OF_ENROLLMENTS_PER_STUDENT * NUMBER_OF_STUDENTS;
-                enrollmentNum++) {
-            int studentId = Math.ceilDiv(enrollmentNum, NUMBER_OF_ENROLLMENTS_PER_STUDENT);
-            int courseId = random.nextInt(NUMBER_OF_COURSES) + 1;
-            CourseEnrollmentDAO.addCourseEnrollment(
-                    new CourseEnrollment(0, studentId, courseId, new Date(System.currentTimeMillis())));
+        for (Student student : StudentDAO.findAll()) {
+            for (int enrollmentNum = 1; enrollmentNum <= NUMBER_OF_ENROLLMENTS_PER_STUDENT; enrollmentNum++) {
+                int courseId = random.nextInt(NUMBER_OF_COURSES) + 1;
+                CourseEnrollmentDAO.addCourseEnrollment(
+                        new CourseEnrollment(0, student.getId(), courseId, new Date(System.currentTimeMillis())));
 
-            List<sms.gradle.model.entities.Module> modules = ModuleDAO.findByCourseId(courseId);
-            for (Module module : modules) {
-                List<Assessment> assessments = AssessmentDAO.findByModuleId(module.getId());
-                for (Assessment assessment : assessments) {
-                    if (random.nextInt(10) > 3) {
-                        continue;
+                List<Module> modules = ModuleDAO.findByCourseId(courseId);
+                for (Module module : modules) {
+                    List<Assessment> assessments = AssessmentDAO.findByModuleId(module.getId());
+                    for (Assessment assessment : assessments) {
+                        if (random.nextInt(10) > 3) {
+                            continue;
+                        }
+                        ResultDAO.addResult(new Result(0, student.getId(), assessment.getId(), random.nextInt(100)));
                     }
-                    ResultDAO.addResult(new Result(0, studentId, assessment.getId(), random.nextInt(100)));
                 }
             }
         }

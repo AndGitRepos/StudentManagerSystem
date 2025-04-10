@@ -26,8 +26,7 @@ public final class StaffDashboardController {
     }
 
     public static void handleManageStudentsButton(ActionEvent event) {
-        // TODO - Once Manage students page has been implemented add call to change to and remove print
-        System.out.print("Handle Manage Students Button called");
+        ViewFactory.getInstance().changeToManageStudentStage();
     }
 
     public static void handleManageStaffButton(ActionEvent event) {
