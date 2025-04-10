@@ -2,6 +2,7 @@ package sms.gradle.view;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import lombok.Getter;
 import sms.gradle.utils.Session.Session;
 import sms.gradle.view.Frames.LoginUI;
 import sms.gradle.view.Frames.ManageStudentView;
@@ -12,6 +13,7 @@ import sms.gradle.view.Frames.StudentDashboardView;
  * Co-ordinates creating & interchanging between applicaton views using Singleton design pattern
  */
 
+@Getter
 public class ViewFactory {
 
     private static final ViewFactory instance = new ViewFactory();

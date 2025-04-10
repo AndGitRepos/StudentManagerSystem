@@ -8,6 +8,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
+import sms.gradle.controller.LoginController;
 import sms.gradle.view.CoreViewInterface;
 
 /*
@@ -19,7 +20,7 @@ public class LoginUI extends VBox implements CoreViewInterface {
 
     private Label loginErrorLabel;
     private Button loginButton;
-    private TextField usernameField;
+    private TextField emailField;
     private PasswordField passwordField;
     private Label titleLabel;
 
@@ -27,6 +28,8 @@ public class LoginUI extends VBox implements CoreViewInterface {
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
+
+        loginButton.setOnAction(LoginController::handleLoginButton);
     }
 
     @Override
@@ -34,22 +37,26 @@ public class LoginUI extends VBox implements CoreViewInterface {
 
         titleLabel = new Label("Student Management System");
 
-        usernameField = new TextField();
-        usernameField.setPromptText("Example: johnsmith@qmul.ac.uk ");
-        usernameField.setMaxWidth(250);
-        usernameField.setTooltip(new Tooltip("Enter your university email address"));
+        emailField = new TextField();
+        emailField.setPromptText("Example: johnsmith@qmul.ac.uk ");
+        emailField.setMaxWidth(250);
+        emailField.setTooltip(new Tooltip("Enter your university email address"));
+        emailField.setId("email-field");
 
         passwordField = new PasswordField();
         passwordField.setPromptText("Example: GitHub123 ");
         passwordField.setMaxWidth(250);
         passwordField.setTooltip(new Tooltip("Enter your password"));
+        passwordField.setId("password-field");
 
         loginButton = new Button("Log In");
         loginButton.setMaxWidth(200);
+        loginButton.setId("login-button");
 
         loginErrorLabel = new Label();
         loginErrorLabel.setVisible(false);
         loginErrorLabel.getStyleClass().add("login-error-label");
+        loginErrorLabel.setId("login-error-label");
     }
 
     @Override
@@ -62,8 +69,8 @@ public class LoginUI extends VBox implements CoreViewInterface {
         titleLabel.getStyleClass().add("title-label");
 
         VBox usernameSection = new VBox(5);
-        Label usernameLabel = new Label("Username");
-        usernameSection.getChildren().addAll(usernameLabel, usernameField);
+        Label emailLabel = new Label("Email");
+        usernameSection.getChildren().addAll(emailLabel, emailField);
 
         VBox passwordSection = new VBox(5);
         Label passwordLabel = new Label("Password");
@@ -79,27 +86,15 @@ public class LoginUI extends VBox implements CoreViewInterface {
         loginButton.getStyleClass().add("login-button");
         loginErrorLabel.getStyleClass().add("login-error-label");
 
-        usernameField.getStyleClass().add("text-input-field");
+        emailField.getStyleClass().add("text-input-field");
         passwordField.getStyleClass().add("text-input-field");
     }
 
     public void completelyClearFields() {
 
-        usernameField.clear();
+        emailField.clear();
         passwordField.clear();
         loginErrorLabel.setVisible(false);
-    }
-
-    public TextField getUsernameField() {
-        return usernameField;
-    }
-
-    public PasswordField getPasswordField() {
-        return passwordField;
-    }
-
-    public Button getLoginButton() {
-        return loginButton;
     }
 
     public void displayLoginError(String errorMessage) {
