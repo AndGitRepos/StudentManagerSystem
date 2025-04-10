@@ -96,3 +96,6 @@ git merge main
 3. Pull changes from main regularly
 4. Create feature branches for new work
 5. Use meaningful branch names (e.g., feature/, bugfix/, etc.)
+
+
+If you see this, the demo works
