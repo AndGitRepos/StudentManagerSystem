@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import sms.gradle.utils.Session.Session;
 import sms.gradle.view.Frames.LoginUI;
+import sms.gradle.view.Frames.ManageCourseView;
 import sms.gradle.view.Frames.ManageStudentView;
 import sms.gradle.view.Frames.StaffDashboardView;
 import sms.gradle.view.Frames.StudentDashboardView;
@@ -21,12 +22,14 @@ public class ViewFactory {
     private Stage studentDashboardStage;
     private Stage staffDashboardStage;
     private Stage manageStudentStage;
+    private Stage manageCourseStage;
 
     private ViewFactory() {
         initialiseLoginStage();
         initialiseStudentDashboardStage();
         initialiseStaffDashboardStage();
         initialiseManageStudentStage();
+        initialiseManageCourseStage();
     }
 
     public static ViewFactory getInstance() {
@@ -54,6 +57,11 @@ public class ViewFactory {
     public void changeToManageStudentStage() {
         staffDashboardStage.hide();
         manageStudentStage.show();
+    }
+
+    public void changeToManageCourseStage() {
+        staffDashboardStage.hide();
+        manageCourseStage.show();
     }
 
     private void initialiseLoginStage() {
@@ -95,5 +103,16 @@ public class ViewFactory {
         manageStudentStage.setMinWidth(750);
         manageStudentStage.setTitle("SMS - Manage Students");
         manageStudentStage.setScene(new Scene(manageStudentView));
+    }
+
+    private void initialiseManageCourseStage() {
+
+        ManageCourseView manageCourseView = new ManageCourseView();
+
+        manageCourseStage = new Stage();
+        manageCourseStage.setMinHeight(550);
+        manageCourseStage.setMinWidth(750);
+        manageCourseStage.setTitle("SMS - Manage Courses");
+        manageCourseStage.setScene(new Scene(manageCourseView));
     }
 }
