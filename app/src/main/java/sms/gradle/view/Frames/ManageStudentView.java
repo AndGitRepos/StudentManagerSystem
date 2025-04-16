@@ -14,6 +14,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import sms.gradle.controller.ManageStudentController;
 import sms.gradle.model.entities.Course;
 import sms.gradle.model.entities.Student;
@@ -22,6 +24,8 @@ import sms.gradle.view.ViewFactory;
 
 @Getter
 public class ManageStudentView extends BorderPane implements CoreViewInterface {
+    private static final Logger LOGGER = LogManager.getLogger();
+
     private ListView<Student> studentListView;
     private Button refreshButton;
     private Button selectButton;
@@ -48,10 +52,12 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
     private VBox rightPanel;
 
     public ManageStudentView() {
+        LOGGER.debug("Initialising Manage Student View");
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
         assignButtonActions();
+        LOGGER.debug("Manage Student View initialised");
     }
 
     private void assignButtonActions() {

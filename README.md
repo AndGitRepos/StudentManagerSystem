@@ -3,7 +3,7 @@
 ## Description
 A Java-based student management system built with JavaFX for the GUI. The application uses modern Java features and follows best practices for code organization and testing.
 
-Within this application you can login as an Student to view: courses, modules, assessments and grades.
+Within this application you can login as a Student to view: courses, modules, assessments and grades.
 You can also login as an Admin to: create student accounts, enroll students in courses and track overall course metrics.
 
 ## Prerequisites
@@ -43,6 +43,25 @@ java -jar app/build/libs/StudentManagementSystem-fat.jar
 # Run tests with detailed output
 ./gradlew test --info
 ```
+
+### Logging
+
+This application uses Log4j2 for processing logs.
+Log4j2 allows for filtering logs through a hierarchy of levels: `TRACE -> DEBUG -> INFO -> WARN -> ERROR`
+By default this filtering level is set to `WARN` for our application.
+To modify this when testing you can modify the value stored within src/main/resources/log4j2.xml
+```xml
+<!-- Filtering any logs below WARN (INFO, DEBUG and TRACE logs not shown) -->
+<Root level="warn">
+</Root>
+```
+```xml
+<!-- Filtering any logs below DEBUG (TRACE logs not shown) -->
+<Root level="debug">
+</Root>
+```
+
+Before implementing any logs please review the [Logging Best practices](https://logging.apache.org/log4j/2.x/manual/api.html#best-practice)
 
 ## Code Formatting
 This project uses Spotless with Palantir Java Format for consistent code formatting. The formatter is automatically integrated into the build process.

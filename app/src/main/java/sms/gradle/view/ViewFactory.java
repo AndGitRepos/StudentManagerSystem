@@ -3,6 +3,8 @@ package sms.gradle.view;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import sms.gradle.utils.Session.Session;
 import sms.gradle.view.Frames.LoginUI;
 import sms.gradle.view.Frames.ManageCourseView;
@@ -16,6 +18,7 @@ import sms.gradle.view.Frames.StudentDashboardView;
 
 @Getter
 public class ViewFactory {
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private static final ViewFactory instance = new ViewFactory();
     private Stage loginStage;
@@ -25,11 +28,13 @@ public class ViewFactory {
     private Stage manageCourseStage;
 
     private ViewFactory() {
+        LOGGER.info("Initialising View Factory");
         initialiseLoginStage();
         initialiseStudentDashboardStage();
         initialiseStaffDashboardStage();
         initialiseManageStudentStage();
         initialiseManageCourseStage();
+        LOGGER.info("View Factory initialised");
     }
 
     public static ViewFactory getInstance() {
@@ -37,6 +42,7 @@ public class ViewFactory {
     }
 
     public void changeToLoginStage() {
+        LOGGER.debug("Changing to login stage");
         Session.getInstance().clearSession();
         studentDashboardStage.hide();
         staffDashboardStage.hide();
@@ -44,27 +50,32 @@ public class ViewFactory {
     }
 
     public void changeToStudentDashboardStage() {
+        LOGGER.debug("Changing to student dashboard stage");
         loginStage.hide();
         studentDashboardStage.show();
     }
 
     public void changeToStaffDashboardStage() {
+        LOGGER.debug("Changing to staff dashboard stage");
         loginStage.hide();
         manageStudentStage.hide();
         staffDashboardStage.show();
     }
 
     public void changeToManageStudentStage() {
+        LOGGER.debug("Changing to manage student stage");
         staffDashboardStage.hide();
         manageStudentStage.show();
     }
 
     public void changeToManageCourseStage() {
+        LOGGER.debug("Changing to manage course stage");
         staffDashboardStage.hide();
         manageCourseStage.show();
     }
 
     private void initialiseLoginStage() {
+        LOGGER.debug("Initialising login stage");
         LoginUI login = new LoginUI();
         loginStage = new Stage();
         loginStage.setScene(new Scene(login, 450, 350));
@@ -73,6 +84,7 @@ public class ViewFactory {
     }
 
     private void initialiseStudentDashboardStage() {
+        LOGGER.debug("Initialising student dashboard stage");
 
         StudentDashboardView studentDashboardView = new StudentDashboardView();
 
@@ -84,6 +96,7 @@ public class ViewFactory {
     }
 
     private void initialiseStaffDashboardStage() {
+        LOGGER.debug("Initialising staff dashboard stage");
 
         StaffDashboardView staffDashboardView = new StaffDashboardView();
 
@@ -95,6 +108,7 @@ public class ViewFactory {
     }
 
     private void initialiseManageStudentStage() {
+        LOGGER.debug("Initialising manage student stage");
 
         ManageStudentView manageStudentView = new ManageStudentView();
 
@@ -106,6 +120,7 @@ public class ViewFactory {
     }
 
     private void initialiseManageCourseStage() {
+        LOGGER.debug("Initialising manage course stage");
 
         ManageCourseView manageCourseView = new ManageCourseView();
 

@@ -6,11 +6,15 @@ import java.security.SecureRandom;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import sms.gradle.model.dao.*;
 import sms.gradle.model.entities.*;
 import sms.gradle.model.entities.Module;
 
 public final class Common {
+    private static final Logger LOGGER = LogManager.getLogger();
+
     private static final int NUMBER_OF_MODULES_PER_COURSE = 5;
     private static final int NUMBER_OF_ASSESSMENTS_PER_MODULE = 3;
     private static final int NUMBER_OF_ENROLLMENTS_PER_STUDENT = 2;
@@ -25,10 +29,12 @@ public final class Common {
     }
 
     public static String generateSha256Hash(final String input) {
+        LOGGER.debug("Generating SHA-256 hash for input: {}", input);
         return Hashing.sha256().hashString(input, StandardCharsets.UTF_8).toString();
     }
 
     public static void populateTables() throws SQLException {
+        LOGGER.info("Populating tables");
         SecureRandom random = new SecureRandom();
         for (int studentNum = 0; studentNum < NUMBER_OF_STUDENTS; studentNum++) {
             String firstName = DatabaseTableData.FIRST_NAMES.get(random.nextInt(DatabaseTableData.FIRST_NAMES.size()));
@@ -43,11 +49,13 @@ public final class Common {
                             new Date(System.currentTimeMillis())),
                     Common.generateSha256Hash(firstName + lastName));
         }
+        LOGGER.debug("Populated students table");
 
         for (int courseNum = 0; courseNum < NUMBER_OF_COURSES; courseNum++) {
             CourseDAO.addCourse(
                     new Course(0, DatabaseTableData.COURSE_NAMES.get(courseNum), "Description" + courseNum));
         }
+        LOGGER.debug("Populated courses table");
 
         for (int moduleNum = 1; moduleNum <= NUMBER_OF_MODULES; moduleNum++) {
             int courseId = Math.ceilDiv(moduleNum, NUMBER_OF_MODULES_PER_COURSE);
@@ -58,6 +66,7 @@ public final class Common {
                     DatabaseTableData.LAST_NAMES.get(random.nextInt(DatabaseTableData.LAST_NAMES.size())),
                     courseId));
         }
+        LOGGER.debug("Populated modules table");
 
         for (int assessmentNum = 1; assessmentNum <= NUMBER_OF_ASSESSMENTS; assessmentNum++) {
             int moduleId = Math.ceilDiv(assessmentNum, NUMBER_OF_ASSESSMENTS_PER_MODULE);
@@ -68,6 +77,7 @@ public final class Common {
                     new Date(System.currentTimeMillis()),
                     moduleId));
         }
+        LOGGER.debug("Populated assessments table");
 
         for (Student student : StudentDAO.findAll()) {
             for (int enrollmentNum = 1; enrollmentNum <= NUMBER_OF_ENROLLMENTS_PER_STUDENT; enrollmentNum++) {
@@ -87,5 +97,9 @@ public final class Common {
                 }
             }
         }
+        LOGGER.debug("Populated course enrollments table");
+        LOGGER.debug("Populated results table");
+
+        LOGGER.info("Finished populating tables");
     }
 }

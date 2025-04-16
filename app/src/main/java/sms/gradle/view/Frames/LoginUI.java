@@ -8,6 +8,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import sms.gradle.view.CoreViewInterface;
 
 /*
@@ -16,6 +18,7 @@ import sms.gradle.view.CoreViewInterface;
  */
 
 public class LoginUI extends VBox implements CoreViewInterface {
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private Label loginErrorLabel;
     private Button loginButton;
@@ -24,9 +27,11 @@ public class LoginUI extends VBox implements CoreViewInterface {
     private Label titleLabel;
 
     public LoginUI() {
+        LOGGER.debug("Initialising Login View");
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
+        LOGGER.debug("Login View initialised");
     }
 
     @Override

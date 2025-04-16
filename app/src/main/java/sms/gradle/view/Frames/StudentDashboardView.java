@@ -8,6 +8,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import sms.gradle.view.CoreViewInterface;
 
 /*
@@ -15,6 +17,7 @@ import sms.gradle.view.CoreViewInterface;
  */
 
 public class StudentDashboardView extends BorderPane implements CoreViewInterface {
+    private static final Logger LOGGER = LogManager.getLogger();
 
     // Containers for Layout
     private VBox profileSection;
@@ -29,15 +32,15 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
     private Button signoutButton;
 
     public StudentDashboardView() {
-
+        LOGGER.debug("Initialising Student Dashboard View");
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
+        LOGGER.debug("Student Dashboard View Initialised");
     }
 
     @Override
     public void initialiseCoreUIComponents() {
-
         initialiseKeyContainers();
         initialiseStudentDetails();
         initialiseSignoutControl();
@@ -50,21 +53,18 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
     }
 
     private void initialiseStudentDetails() {
-
         studentNameLabel = new Label("Student Name");
         studentEmailLabel = new Label("student@email.com");
         studentEntryYearLabel = new Label("2025");
     }
 
     private void initialiseSignoutControl() {
-
         signoutButton = new Button("Sign Out");
         signoutButton.setTooltip(new Tooltip("Please Click to Sign Out"));
     }
 
     @Override
     public void layoutCoreUIComponents() {
-
         setupAcademiaSection();
         setupProfileSection();
         setLeft(profileSection);
@@ -72,7 +72,6 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
     }
 
     private void setupProfileSection() {
-
         Label profileHeader = new Label("PROFILE");
         Circle profilePhoto = new Circle(50, Color.GRAY);
 
@@ -86,13 +85,11 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
     }
 
     private void setupAcademiaSection() {
-
         Label academiaHeader = new Label("ACADEMIA");
         VBox facultyInformation = createFacultyInformationSection();
         Label modulesHeader = new Label("MODULES");
 
         // Input data for modules
-
         academiaSection
                 .getChildren()
                 .addAll(academiaHeader, facultyInformation, modulesHeader, moduleBase, signoutButton);

@@ -1,39 +1,45 @@
 package sms.gradle.controller;
 
 import javafx.event.ActionEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import sms.gradle.view.ViewFactory;
 
 public final class StaffDashboardController {
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static void handleViewCourseButton(ActionEvent event) {
-        // TODO - Once view courses page has been implemented add call to change to and remove print
-        System.out.print("Handle View Courses Button called");
+        LOGGER.debug("View Course button clicked");
+        // TODO - Once view courses page has been implemented add call to change to
     }
 
     public static void handleManageAssessmentsButton(ActionEvent event) {
-        // TODO - Once Manage assessments page has been implemented add call to change to and remove print
-        System.out.print("Handle Manage Assessment Button called");
+        LOGGER.debug("Manage Assessments button clicked");
+        // TODO - Once Manage assessments page has been implemented add call to change to
     }
 
     public static void handleManageModulesButton(ActionEvent event) {
-        // TODO - Once Manage modules page has been implemented add call to change to and remove print
-        System.out.print("Handle Manage Modules Button called");
+        LOGGER.debug("Manage Modules button clicked");
+        // TODO - Once Manage modules page has been implemented add call to change to
     }
 
     public static void handleManageCoursesButton(ActionEvent event) {
+        LOGGER.debug("Manage Courses button clicked");
         ViewFactory.getInstance().changeToManageCourseStage();
     }
 
     public static void handleManageStudentsButton(ActionEvent event) {
+        LOGGER.debug("Manage Students button clicked");
         ViewFactory.getInstance().changeToManageStudentStage();
     }
 
     public static void handleManageStaffButton(ActionEvent event) {
-        // TODO - Once Manage staff page has been implemented add call to change to and remove print
-        System.out.print("Handle Manage Staff Button called");
+        LOGGER.debug("Manage Staff button clicked");
+        // TODO - Once Manage staff page has been implemented add call to change to
     }
 
     public static void handleLogoutButton(ActionEvent event) {
+        LOGGER.debug("Logout button clicked");
         ViewFactory.getInstance().changeToLoginStage();
     }
 }

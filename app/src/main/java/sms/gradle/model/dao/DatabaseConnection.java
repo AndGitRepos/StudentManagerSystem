@@ -3,10 +3,13 @@ package sms.gradle.model.dao;
 import java.io.File;
 import java.sql.*;
 import java.sql.ResultSet;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import sms.gradle.model.entities.*;
 import sms.gradle.utils.DatabaseScripts;
 
 public final class DatabaseConnection {
+    private static final Logger LOGGER = LogManager.getLogger();
 
     // Static instance for singleton pattern
     private static DatabaseConnection instance;
@@ -14,9 +17,11 @@ public final class DatabaseConnection {
     private static final String DB_PATH = "jdbc:h2:./data/sms";
 
     private DatabaseConnection() {
+        LOGGER.debug("Creating database connection");
         createDataFolder();
         connectToDatabase();
         setupTables();
+        LOGGER.debug("Database connection established");
     }
 
     public static DatabaseConnection getInstance() {
@@ -27,18 +32,26 @@ public final class DatabaseConnection {
     }
 
     private void createDataFolder() {
+        LOGGER.debug("Creating data folder if it doesn't exist");
         File dataDir = new File("data");
-        if (!dataDir.exists()) {
-            dataDir.mkdir();
-            System.out.println("Creating data folder");
+        if (dataDir.exists()) {
+            LOGGER.info("Data folder already exists");
+            return;
         }
+        LOGGER.debug("Data folder doesn't exist, creating it");
+        if (!dataDir.mkdir()) {
+            LOGGER.error("Failed to create data folder");
+            throw new RuntimeException("Failed to create data folder");
+        }
+        LOGGER.debug("Data folder created successfully");
     }
 
     private void connectToDatabase() {
+        LOGGER.debug("Connecting to database");
         try {
             connection = DriverManager.getConnection(DB_PATH);
         } catch (SQLException e) {
-            System.out.println("Failed to establish database connection: " + e.getMessage());
+            LOGGER.error("Failed to connect to database: {}", DB_PATH, e);
         }
     }
 
@@ -47,6 +60,7 @@ public final class DatabaseConnection {
     }
 
     private void setupTables() {
+        LOGGER.debug("Setting up database tables");
         try (Statement statement = connection.createStatement()) {
             // Create tables
             statement.execute(DatabaseScripts.CREATE_STUDENTS_TABLE);
@@ -59,21 +73,24 @@ public final class DatabaseConnection {
 
             // Add default admin account to admin table
             statement.execute(DatabaseScripts.CREATE_DEFAULT_ADMIN);
-            System.out.println("Tables created successfully (or already existed)");
+            LOGGER.info("Tables created successfully (or already existed)");
         } catch (SQLException e) {
-            System.out.println("Failed to create database tables: " + e.getMessage());
+            LOGGER.error("Failed to create database tables", e);
         }
     }
 
     public boolean isPopulated() {
-
+        LOGGER.debug("Checking if database is populated");
         try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM students");
-            resultSet.next();
+            if (!resultSet.next()) {
+                LOGGER.error("Failed to check if database is populated: ResultSet is empty");
+                return false;
+            }
             int count = resultSet.getInt(1);
             return count > 0;
         } catch (SQLException e) {
-            System.out.println("Failed to check if database is populated: " + e.getMessage());
+            LOGGER.error("Failed to check if database is populated", e);
             return false;
         }
     }
