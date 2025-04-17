@@ -27,7 +27,7 @@ public class AdminDAOTest {
     @Mock
     private DatabaseConnection mockDbConnection;
 
-    private MockedStatic<DatabaseConnection> mockedStatic;
+    private MockedStatic<DatabaseConnection> mockStaticDbConnection;
 
     @Mock
     private Connection mockConnection;
@@ -41,14 +41,14 @@ public class AdminDAOTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        mockedStatic = mockStatic(DatabaseConnection.class);
-        mockedStatic.when(DatabaseConnection::getInstance).thenReturn(mockDbConnection);
+        mockStaticDbConnection = mockStatic(DatabaseConnection.class);
+        mockStaticDbConnection.when(DatabaseConnection::getInstance).thenReturn(mockDbConnection);
         when(mockDbConnection.getConnection()).thenReturn(mockConnection);
     }
 
     @AfterEach
     public void tearDown() {
-        mockedStatic.close();
+        mockStaticDbConnection.close();
     }
 
     @Test
@@ -158,6 +158,11 @@ public class AdminDAOTest {
     @Test
     public void testDeleteAdmin() throws SQLException {
         int adminId = 1;
+        when(mockConnection.prepareStatement("SELECT COUNT(*) FROM admins")).thenReturn(mockPreparedStatement);
+        when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
+        when(mockResultSet.next()).thenReturn(true);
+        when(mockResultSet.getInt(1)).thenReturn(2);
+
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
         when(mockPreparedStatement.executeUpdate()).thenReturn(1);
 

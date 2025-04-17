@@ -2,6 +2,7 @@ package sms.gradle.model.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.times;
@@ -27,7 +28,9 @@ public class AssessmentDAOTest {
     @Mock
     private DatabaseConnection mockDbConnection;
 
-    private MockedStatic<DatabaseConnection> mockedStatic;
+    private MockedStatic<DatabaseConnection> mockStaticDbConnection;
+
+    private MockedStatic<ResultDAO> mockResultDAO;
 
     @Mock
     private Connection mockConnection;
@@ -43,14 +46,18 @@ public class AssessmentDAOTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        mockedStatic = mockStatic(DatabaseConnection.class);
-        mockedStatic.when(DatabaseConnection::getInstance).thenReturn(mockDbConnection);
+        mockStaticDbConnection = mockStatic(DatabaseConnection.class);
+        mockStaticDbConnection.when(DatabaseConnection::getInstance).thenReturn(mockDbConnection);
         when(mockDbConnection.getConnection()).thenReturn(mockConnection);
+
+        mockResultDAO = mockStatic(ResultDAO.class);
+        mockResultDAO.when(() -> ResultDAO.deleteByAssessmentId(anyInt())).thenReturn(1);
     }
 
     @AfterEach
     public void tearDown() {
-        mockedStatic.close();
+        mockStaticDbConnection.close();
+        mockResultDAO.close();
     }
 
     @Test

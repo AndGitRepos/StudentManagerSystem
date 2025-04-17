@@ -20,7 +20,7 @@ public class CourseEnrollmentDAOTest {
     @Mock
     private DatabaseConnection mockDbConnection;
 
-    private MockedStatic<DatabaseConnection> mockedStatic;
+    private MockedStatic<DatabaseConnection> mockStaticDbConnection;
 
     @Mock
     private Connection mockConnection;
@@ -34,14 +34,14 @@ public class CourseEnrollmentDAOTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        mockedStatic = mockStatic(DatabaseConnection.class);
-        mockedStatic.when(DatabaseConnection::getInstance).thenReturn(mockDbConnection);
+        mockStaticDbConnection = mockStatic(DatabaseConnection.class);
+        mockStaticDbConnection.when(DatabaseConnection::getInstance).thenReturn(mockDbConnection);
         when(mockDbConnection.getConnection()).thenReturn(mockConnection);
     }
 
     @AfterEach
     public void tearDown() {
-        mockedStatic.close();
+        mockStaticDbConnection.close();
     }
 
     @Test

@@ -209,16 +209,12 @@ public final class CourseEnrollmentDAO {
      */
     public static int deleteByStudentId(final int studentId) throws SQLException {
         LOGGER.debug("Deleting course enrollments for student with ID: {}", studentId);
-        final String sql = "DELETE FROM course_enrollments WHERE student_id = ?";
-        try (PreparedStatement deleteSqlStatement =
-                DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
-            deleteSqlStatement.setInt(1, studentId);
-            return deleteSqlStatement.executeUpdate();
-        } catch (SQLException e) {
-            LOGGER.error("Failed to delete course enrollments for student with ID: {}", studentId, e);
-            throw new SQLException(
-                    String.format("Failed to delete course enrollments for student with Id: %d", studentId), e);
+        List<CourseEnrollment> courseEnrollments = findByStudentId(studentId);
+        for (CourseEnrollment courseEnrollment : courseEnrollments) {
+            delete(courseEnrollment.getId());
         }
+        LOGGER.info("Deleted {} course enrollments for student with ID: {}", courseEnrollments.size(), studentId);
+        return courseEnrollments.size();
     }
 
     /**
@@ -229,15 +225,11 @@ public final class CourseEnrollmentDAO {
      */
     public static int deleteByCourseId(final int courseId) throws SQLException {
         LOGGER.debug("Deleting course enrollments for course with ID: {}", courseId);
-        final String sql = "DELETE FROM course_enrollments WHERE course_id = ?";
-        try (PreparedStatement deleteSqlStatement =
-                DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
-            deleteSqlStatement.setInt(1, courseId);
-            return deleteSqlStatement.executeUpdate();
-        } catch (SQLException e) {
-            LOGGER.error("Failed to delete course enrollments for course with ID: {}", courseId, e);
-            throw new SQLException(
-                    String.format("Failed to delete course enrollments for course with Id: %d", courseId), e);
+        List<CourseEnrollment> courseEnrollments = findByCourseId(courseId);
+        for (CourseEnrollment courseEnrollment : courseEnrollments) {
+            delete(courseEnrollment.getId());
         }
+        LOGGER.info("Deleted {} course enrollments for course with ID: {}", courseEnrollments.size(), courseId);
+        return courseEnrollments.size();
     }
 }
