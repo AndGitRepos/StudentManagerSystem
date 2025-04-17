@@ -218,16 +218,13 @@ public class ResultDAO {
      * @throws SQLException if there is an error executing the delete operation
      */
     public static int deleteByStudentId(final int studentId) throws SQLException {
-        LOGGER.debug("Deleting results for student with ID: {}", studentId);
-        final String sql = "DELETE FROM results WHERE student_id = ?";
-        try (PreparedStatement deleteSqlStatement =
-                DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
-            deleteSqlStatement.setInt(1, studentId);
-            return deleteSqlStatement.executeUpdate();
-        } catch (SQLException e) {
-            LOGGER.error("Failed to delete results for student with ID: {}", studentId, e);
-            throw new SQLException(String.format("Failed to delete results for student with Id: %d", studentId), e);
+        LOGGER.debug("Deleting results by student id: {}", studentId);
+        List<Result> results = findByStudentId(studentId);
+        for (Result result : results) {
+            delete(result.getId());
         }
+        LOGGER.info("Deleted {} results for student id: {}", results.size(), studentId);
+        return results.size();
     }
 
     /**
@@ -238,16 +235,12 @@ public class ResultDAO {
      * @throws SQLException if there is an error executing the delete operation
      */
     public static int deleteByAssessmentId(final int assessmentId) throws SQLException {
-        LOGGER.debug("Deleting results for assessment with ID: {}", assessmentId);
-        final String sql = "DELETE FROM results WHERE assessment_id = ?";
-        try (PreparedStatement deleteSqlStatement =
-                DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
-            deleteSqlStatement.setInt(1, assessmentId);
-            return deleteSqlStatement.executeUpdate();
-        } catch (SQLException e) {
-            LOGGER.error("Failed to delete results for assessment with ID: {}", assessmentId, e);
-            throw new SQLException(
-                    String.format("Failed to delete results for assessment with Id: %d", assessmentId), e);
+        LOGGER.debug("Deleting results by assessment id: {}", assessmentId);
+        List<Result> results = findByAssessmentId(assessmentId);
+        for (Result result : results) {
+            delete(result.getId());
         }
+        LOGGER.info("Deleted {} results for assessment id: {}", results.size(), assessmentId);
+        return results.size();
     }
 }

@@ -9,7 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.model.dao.CourseDAO;
 import sms.gradle.model.dao.CourseEnrollmentDAO;
-import sms.gradle.model.dao.ResultDAO;
 import sms.gradle.model.dao.StudentDAO;
 import sms.gradle.model.entities.Course;
 import sms.gradle.model.entities.CourseEnrollment;
@@ -153,8 +152,6 @@ public final class ManageStudentController {
         if (selectedStudent != null) {
             LOGGER.debug("Deleting student: {}", selectedStudent);
             try {
-                ResultDAO.deleteByStudentId(selectedStudent.getId());
-                CourseEnrollmentDAO.deleteByStudentId(selectedStudent.getId());
                 StudentDAO.delete(selectedStudent.getId());
                 studentList.getItems().remove(selectedStudent);
             } catch (SQLException e) {

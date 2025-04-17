@@ -165,6 +165,10 @@ public final class AdminDAO {
      */
     public static int delete(final int id) throws SQLException {
         LOGGER.debug("Deleting admin with ID: {}", id);
+        if (AdminDAO.getTableSize() == 1) {
+            throw new SQLException("Cannot delete the last admin");
+        }
+
         final String sql = "DELETE FROM admins WHERE id = ?";
         try (PreparedStatement deleteSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -199,6 +203,22 @@ public final class AdminDAO {
         } catch (SQLException e) {
             LOGGER.error("Failed to verify password for admin with email: {}", email, e);
             throw new SQLException(String.format("Failed to verify password for admin with email: %s", email), e);
+        }
+    }
+
+    public static int getTableSize() throws SQLException {
+        LOGGER.debug("Getting table size");
+        final String sql = "SELECT COUNT(*) FROM admins";
+        try (PreparedStatement findSqlStatement =
+                DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            ResultSet results = findSqlStatement.executeQuery();
+            if (results.next()) {
+                return results.getInt(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            LOGGER.error("Failed to get table size", e);
+            throw new SQLException("Failed to get table size", e);
         }
     }
 }

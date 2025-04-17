@@ -211,6 +211,7 @@ public final class AssessmentDAO {
      */
     public static int delete(final int id) throws SQLException {
         LOGGER.debug("Deleting assessment with ID: {}", id);
+        ResultDAO.deleteByAssessmentId(id);
         final String sql = "DELETE FROM assessments WHERE id = ?";
         try (PreparedStatement deleteSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -218,7 +219,17 @@ public final class AssessmentDAO {
             return deleteSqlStatement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error("Failed to delete assessment with ID: {}", id, e);
-            throw new SQLException(String.format("Failed to delete module Id: %d", id), e);
+            throw new SQLException(String.format("Failed to delete assessment with Id: %d", id), e);
         }
+    }
+
+    public static int deleteByModuleId(final int moduleId) throws SQLException {
+        LOGGER.debug("Deleting assessments by module ID: {}", moduleId);
+        List<Assessment> assessments = AssessmentDAO.findByModuleId(moduleId);
+        for (Assessment assessment : assessments) {
+            AssessmentDAO.delete(assessment.getId());
+        }
+        LOGGER.info("Deleted {} assessments for module ID: {}", assessments.size(), moduleId);
+        return assessments.size();
     }
 }

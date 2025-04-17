@@ -24,7 +24,9 @@ public class ModuleDAOTest {
     @Mock
     private DatabaseConnection mockDbConnection;
 
-    private MockedStatic<DatabaseConnection> mockedStatic;
+    private MockedStatic<DatabaseConnection> mockStaticDbConnection;
+
+    private MockedStatic<AssessmentDAO> mockAssessmentDAO;
 
     @Mock
     private Connection mockConnection;
@@ -38,14 +40,18 @@ public class ModuleDAOTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        mockedStatic = mockStatic(DatabaseConnection.class);
-        mockedStatic.when(DatabaseConnection::getInstance).thenReturn(mockDbConnection);
+        mockStaticDbConnection = mockStatic(DatabaseConnection.class);
+        mockStaticDbConnection.when(DatabaseConnection::getInstance).thenReturn(mockDbConnection);
         when(mockDbConnection.getConnection()).thenReturn(mockConnection);
+
+        mockAssessmentDAO = mockStatic(AssessmentDAO.class);
+        mockAssessmentDAO.when(() -> AssessmentDAO.deleteByModuleId(anyInt())).thenReturn(1);
     }
 
     @AfterEach
     public void tearDown() {
-        mockedStatic.close();
+        mockStaticDbConnection.close();
+        mockAssessmentDAO.close();
     }
 
     @Test

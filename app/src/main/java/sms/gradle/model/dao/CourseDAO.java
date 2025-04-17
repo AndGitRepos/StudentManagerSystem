@@ -156,6 +156,7 @@ public final class CourseDAO {
      */
     public static int delete(final int id) throws SQLException {
         LOGGER.debug("Deleting course with ID: {}", id);
+        ModuleDAO.deleteByCourseId(id);
         final String sql = "DELETE FROM courses WHERE id = ?";
         try (PreparedStatement deleteSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {

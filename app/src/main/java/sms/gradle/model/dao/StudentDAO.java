@@ -174,6 +174,8 @@ public final class StudentDAO {
      * @throws SQLException if there is an error executing the delete operation
      */
     public static int delete(final int id) throws SQLException {
+        ResultDAO.deleteByStudentId(id);
+        CourseEnrollmentDAO.deleteByStudentId(id);
         LOGGER.debug("Deleting student with ID: {}", id);
         final String sql = "DELETE FROM students WHERE id = ?";
         try (PreparedStatement deleteSqlStatement =
@@ -184,6 +186,22 @@ public final class StudentDAO {
             LOGGER.error("Failed to delete student with ID: {}", id, e);
             throw new SQLException(String.format("Failed to delete student with Id: %d", id), e);
         }
+    }
+
+    /**
+     * Deletes a student from the database by its email address
+     * @param email The email address of the student to delete
+     * @return The number of rows affected (1 if successful, 0 if student not found)
+     * @throws SQLException if there is an error executing the delete operation
+     */
+    public static int deleteByEmail(final String email) throws SQLException {
+        LOGGER.debug("Deleting student with email: {}", email);
+        Optional<Student> student = findByEmail(email);
+        if (student.isPresent()) {
+            return delete(student.get().getId());
+        }
+        LOGGER.info("No student found with email: {}", email);
+        return 0;
     }
 
     /**

@@ -210,6 +210,7 @@ public final class ModuleDAO {
      */
     public static int delete(final int id) throws SQLException {
         LOGGER.debug("Deleting module with ID: {}", id);
+        AssessmentDAO.deleteByModuleId(id);
         final String sql = "DELETE FROM modules WHERE id = ?";
         try (PreparedStatement deleteSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -219,5 +220,21 @@ public final class ModuleDAO {
             LOGGER.error("Failed to delete module with ID: {}", id, e);
             throw new SQLException(String.format("Failed to delete module with Id: %d", id), e);
         }
+    }
+
+    /**
+     * Deletes all modules associated with a course ID
+     * @param courseId The course ID of the modules to delete
+     * @return The number of modules deleted
+     * @throws SQLException if there is an error executing the delete operation
+     */
+    public static int deleteByCourseId(final int courseId) throws SQLException {
+        LOGGER.debug("Deleting all modules associated with course ID: {}", courseId);
+        List<Module> modules = findByCourseId(courseId);
+        for (Module module : modules) {
+            delete(module.getId());
+        }
+        LOGGER.info("Deleted {} modules associated with course ID: {}", modules.size(), courseId);
+        return modules.size();
     }
 }
