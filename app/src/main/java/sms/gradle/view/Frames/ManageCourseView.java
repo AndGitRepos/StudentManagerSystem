@@ -15,11 +15,15 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import sms.gradle.model.entities.Course;
 import sms.gradle.view.CoreViewInterface;
 
 @Getter
 public class ManageCourseView extends BorderPane implements CoreViewInterface {
+    private static final Logger LOGGER = LogManager.getLogger();
+
     private GridPane courseDetailsPane;
     private ListView<Course> courseListView;
     private Button selectButton;
@@ -34,9 +38,11 @@ public class ManageCourseView extends BorderPane implements CoreViewInterface {
     private VBox centerPanel;
 
     public ManageCourseView() {
+        LOGGER.debug("Initialising Manage Course View");
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
+        LOGGER.debug("Manage Course View initialised");
     }
 
     @Override

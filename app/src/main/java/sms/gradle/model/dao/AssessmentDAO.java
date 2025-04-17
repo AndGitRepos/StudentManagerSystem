@@ -7,9 +7,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import sms.gradle.model.entities.Assessment;
 
 public final class AssessmentDAO {
+    private static final Logger LOGGER = LogManager.getLogger();
+
     private AssessmentDAO() {
         throw new UnsupportedOperationException("This is a DAO class and cannot be instantiated");
     }
@@ -21,6 +25,7 @@ public final class AssessmentDAO {
      * @throws SQLException if there is an error accessing the ResultSet data
      */
     private static List<Assessment> getAllAssessmentsFromResultSet(final ResultSet resultSet) throws SQLException {
+        LOGGER.debug("Converting ResultSet to List<Assessment>");
         List<Assessment> assessments = new ArrayList<>();
         while (resultSet.next()) {
             assessments.add(new Assessment(
@@ -40,6 +45,7 @@ public final class AssessmentDAO {
      * @throws SQLException if there is an error accessing the ResultSet data
      */
     private static Optional<Assessment> getAssessmentFromResultSet(final ResultSet resultSet) throws SQLException {
+        LOGGER.debug("Converting ResultSet to Optional<Assessment>");
         if (resultSet.next()) {
             return Optional.of(new Assessment(
                     resultSet.getInt("id"),
@@ -48,6 +54,7 @@ public final class AssessmentDAO {
                     resultSet.getDate("due_date"),
                     resultSet.getInt("module_id")));
         }
+        LOGGER.info("No assessment found in ResultSet");
         return Optional.empty();
     }
 
@@ -57,6 +64,7 @@ public final class AssessmentDAO {
      * @throws SQLException if there is an error executing the query
      */
     public static void addAssessment(final Assessment assessment) throws SQLException {
+        LOGGER.debug("Adding assessment to database {}", assessment);
         final String sql = "INSERT INTO assessments (name, description, due_date, module_id) VALUES (?, ? , ?, ?)";
         try (PreparedStatement addSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -67,6 +75,7 @@ public final class AssessmentDAO {
             addSqlStatement.executeUpdate();
 
         } catch (SQLException e) {
+            LOGGER.error("Failed to add assessment to database {}", assessment, e);
             throw new SQLException(String.format("Failed to add assessment: %s", assessment.toString()), e);
         }
     }
@@ -78,6 +87,7 @@ public final class AssessmentDAO {
      * @throws SQLException if there is an error executing the query
      */
     public static Optional<Assessment> findById(final int id) throws SQLException {
+        LOGGER.debug("Finding assessment by ID: {}", id);
         final String sql = "SELECT * FROM assessments WHERE id = ?";
         Optional<Assessment> assessment = Optional.empty();
         try (PreparedStatement findSqlStatement =
@@ -86,6 +96,7 @@ public final class AssessmentDAO {
             ResultSet resultSet = findSqlStatement.executeQuery();
             return getAssessmentFromResultSet(resultSet);
         } catch (SQLException e) {
+            LOGGER.error("Failed to find assessment by ID: {}", id, e);
             throw new SQLException(String.format("Failed to find assessment with Id: %d", id), e);
         }
     }
@@ -97,6 +108,7 @@ public final class AssessmentDAO {
      * @throws SQLException if there is an error executing the query
      */
     public static Optional<Assessment> findByName(final String name) throws SQLException {
+        LOGGER.debug("Finding assessment by name: {}", name);
         final String sql = "SELECT * FROM assessments WHERE name = ?";
         Optional<Assessment> assessment = Optional.empty();
         try (PreparedStatement findSqlStatement =
@@ -105,6 +117,7 @@ public final class AssessmentDAO {
             ResultSet resultSet = findSqlStatement.executeQuery();
             return getAssessmentFromResultSet(resultSet);
         } catch (SQLException e) {
+            LOGGER.error("Failed to find assessment by name: {}", name, e);
             throw new SQLException(String.format("Failed to find assessment with name: %s", name), e);
         }
     }
@@ -116,6 +129,7 @@ public final class AssessmentDAO {
      * @throws SQLException if there is an error executing the query
      */
     public static List<Assessment> findByDueDate(final Date dueDate) throws SQLException {
+        LOGGER.debug("Finding assessment by due date: {}", dueDate);
         final String sql = "SELECT * FROM assessments WHERE due_date = ?";
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -123,6 +137,7 @@ public final class AssessmentDAO {
             ResultSet resultSet = findSqlStatement.executeQuery();
             return getAllAssessmentsFromResultSet(resultSet);
         } catch (SQLException e) {
+            LOGGER.error("Failed to find assessment by due date: {}", dueDate, e);
             throw new SQLException(String.format("Failed to find assessment with due date: %s", dueDate), e);
         }
     }
@@ -134,6 +149,7 @@ public final class AssessmentDAO {
      * @throws SQLException if there is an error executing the query
      */
     public static List<Assessment> findByModuleId(final int moduleId) throws SQLException {
+        LOGGER.debug("Finding assessment by module ID: {}", moduleId);
         final String sql = "SELECT * FROM assessments WHERE module_id = ?";
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -141,6 +157,7 @@ public final class AssessmentDAO {
             ResultSet resultSet = findSqlStatement.executeQuery();
             return getAllAssessmentsFromResultSet(resultSet);
         } catch (SQLException e) {
+            LOGGER.error("Failed to find assessment by module ID: {}", moduleId, e);
             throw new SQLException(String.format("Failed to find all assessments with module ID: %d", moduleId), e);
         }
     }
@@ -151,12 +168,14 @@ public final class AssessmentDAO {
      * @throws SQLException if there is an error executing the query
      */
     public static List<Assessment> findAll() throws SQLException {
+        LOGGER.debug("Finding all assessments");
         final String sql = "SELECT * FROM assessments";
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             ResultSet resultSet = findSqlStatement.executeQuery();
             return getAllAssessmentsFromResultSet(resultSet);
         } catch (SQLException e) {
+            LOGGER.error("Failed to find all assessments", e);
             throw new SQLException("Failed to find all assessments", e);
         }
     }
@@ -168,6 +187,7 @@ public final class AssessmentDAO {
      * @throws SQLException if there is an error executing the update operation
      */
     public static int update(final Assessment assessment) throws SQLException {
+        LOGGER.debug("Updating assessment: {}", assessment);
         final String sql = "UPDATE assessments SET name = ?, description = ?, due_date = ?, module_id = ? WHERE id = ?";
         try (PreparedStatement updateSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -178,6 +198,7 @@ public final class AssessmentDAO {
             updateSqlStatement.setInt(5, assessment.getId());
             return updateSqlStatement.executeUpdate();
         } catch (SQLException e) {
+            LOGGER.error("Failed to update assessment: {}", assessment, e);
             throw new SQLException(String.format("Failed to update assessment with Id: %d", assessment.getId()), e);
         }
     }
@@ -189,12 +210,14 @@ public final class AssessmentDAO {
      * @throws SQLException if there is an error executing the delete operation
      */
     public static int delete(final int id) throws SQLException {
+        LOGGER.debug("Deleting assessment with ID: {}", id);
         final String sql = "DELETE FROM assessments WHERE id = ?";
         try (PreparedStatement deleteSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             deleteSqlStatement.setInt(1, id);
             return deleteSqlStatement.executeUpdate();
         } catch (SQLException e) {
+            LOGGER.error("Failed to delete assessment with ID: {}", id, e);
             throw new SQLException(String.format("Failed to delete module Id: %d", id), e);
         }
     }

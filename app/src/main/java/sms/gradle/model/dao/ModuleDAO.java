@@ -6,9 +6,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import sms.gradle.model.entities.Module;
 
 public final class ModuleDAO {
+    private static final Logger LOGGER = LogManager.getLogger();
+
     private ModuleDAO() {
         throw new UnsupportedOperationException("This is a DAO class and cannot be instantiated");
     }
@@ -20,6 +24,7 @@ public final class ModuleDAO {
      * @throws SQLException if there is an error accessing the ResultSet data
      */
     private static List<Module> getAllModulesFromResultSet(final ResultSet resultSet) throws SQLException {
+        LOGGER.debug("Converting ResultSet to List<Module>");
         List<Module> modules = new ArrayList<>();
         while (resultSet.next()) {
             modules.add(new Module(
@@ -39,6 +44,7 @@ public final class ModuleDAO {
      * @throws SQLException if there is an error accessing the ResultSet data
      */
     private static Optional<Module> getModuleFromResultSet(final ResultSet resultSet) throws SQLException {
+        LOGGER.debug("Converting ResultSet to Optional<Module>");
         if (resultSet.next()) {
             return Optional.of(new Module(
                     resultSet.getInt("id"),
@@ -47,6 +53,7 @@ public final class ModuleDAO {
                     resultSet.getString("lecturer"),
                     resultSet.getInt("course_id")));
         }
+        LOGGER.info("No module found in ResultSet");
         return Optional.empty();
     }
 
@@ -56,6 +63,7 @@ public final class ModuleDAO {
      * @throws SQLException if there is an error executing the query
      */
     public static void addModule(final Module module) throws SQLException {
+        LOGGER.debug("Adding module to database {}", module);
         final String sql = "INSERT INTO modules (name, description, lecturer, course_id) VALUES (?, ?, ?, ?)";
         try (PreparedStatement addSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -66,6 +74,7 @@ public final class ModuleDAO {
             addSqlStatement.executeUpdate();
 
         } catch (SQLException e) {
+            LOGGER.error("Failed to add module to database {}", module, e);
             throw new SQLException(String.format("Failed to add module: %s", module.toString()), e);
         }
     }
@@ -77,6 +86,7 @@ public final class ModuleDAO {
      * @throws SQLException if there is an error executing the query
      */
     public static Optional<Module> findById(final int id) throws SQLException {
+        LOGGER.debug("Finding module by ID: {}", id);
         final String sql = "SELECT * FROM modules WHERE id = ?";
         Optional<Module> module = Optional.empty();
         try (PreparedStatement findSqlStatement =
@@ -85,6 +95,7 @@ public final class ModuleDAO {
             ResultSet resultSet = findSqlStatement.executeQuery();
             return getModuleFromResultSet(resultSet);
         } catch (SQLException e) {
+            LOGGER.error("Failed to find module by ID: {}", id, e);
             throw new SQLException(String.format("Failed to find module with Id: %d", id), e);
         }
     }
@@ -96,6 +107,7 @@ public final class ModuleDAO {
      * @throws SQLException if there is an error executing the query
      */
     public static Optional<Module> findByName(final String name) throws SQLException {
+        LOGGER.debug("Finding module by name: {}", name);
         final String sql = "SELECT * FROM modules WHERE name = ?";
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -103,6 +115,7 @@ public final class ModuleDAO {
             ResultSet resultSet = findSqlStatement.executeQuery();
             return getModuleFromResultSet(resultSet);
         } catch (SQLException e) {
+            LOGGER.error("Failed to find module by name: {}", name, e);
             throw new SQLException(String.format("Failed to find module with name: %s", name), e);
         }
     }
@@ -114,6 +127,7 @@ public final class ModuleDAO {
      * @throws SQLException if there is an error executing the query
      */
     public static List<Module> findByLecturer(final String lecturer) throws SQLException {
+        LOGGER.debug("Finding module by lecturer: {}", lecturer);
         final String sql = "SELECT * FROM modules WHERE lecturer = ?";
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -121,6 +135,7 @@ public final class ModuleDAO {
             ResultSet resultSet = findSqlStatement.executeQuery();
             return getAllModulesFromResultSet(resultSet);
         } catch (SQLException e) {
+            LOGGER.error("Failed to find module by lecturer: {}", lecturer, e);
             throw new SQLException(String.format("Failed to find module with lecturer: %s", lecturer), e);
         }
     }
@@ -132,6 +147,7 @@ public final class ModuleDAO {
      * @throws SQLException if there is an error executing the query
      */
     public static List<Module> findByCourseId(final int courseId) throws SQLException {
+        LOGGER.debug("Finding module by course ID: {}", courseId);
         final String sql = "SELECT * FROM modules WHERE course_id = ?";
         Optional<Module> module = Optional.empty();
         try (PreparedStatement findSqlStatement =
@@ -140,6 +156,7 @@ public final class ModuleDAO {
             ResultSet resultSet = findSqlStatement.executeQuery();
             return getAllModulesFromResultSet(resultSet);
         } catch (SQLException e) {
+            LOGGER.error("Failed to find module by course ID: {}", courseId, e);
             throw new SQLException(String.format("Failed to find module with course_Id: %d", courseId), e);
         }
     }
@@ -150,12 +167,14 @@ public final class ModuleDAO {
      * @throws SQLException if there is an error executing the query
      */
     public static List<Module> findAll() throws SQLException {
+        LOGGER.debug("Finding all modules");
         final String sql = "SELECT * FROM modules";
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             ResultSet resultSet = findSqlStatement.executeQuery();
             return getAllModulesFromResultSet(resultSet);
         } catch (SQLException e) {
+            LOGGER.error("Failed to find all modules", e);
             throw new SQLException("Failed to find all modules", e);
         }
     }
@@ -167,6 +186,7 @@ public final class ModuleDAO {
      * @throws SQLException if there is an error executing the update operation
      */
     public static int update(final Module module) throws SQLException {
+        LOGGER.debug("Updating module: {}", module);
         final String sql = "UPDATE modules SET name = ?, description = ?, lecturer = ?, course_id = ? WHERE id = ?";
         try (PreparedStatement updateSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -177,6 +197,7 @@ public final class ModuleDAO {
             updateSqlStatement.setInt(5, module.getId());
             return updateSqlStatement.executeUpdate();
         } catch (SQLException e) {
+            LOGGER.error("Failed to update module: {}", module, e);
             throw new SQLException(String.format("Failed to update module with Id: %d", module.getId()), e);
         }
     }
@@ -188,12 +209,14 @@ public final class ModuleDAO {
      * @throws SQLException if there is an error executing the delete operation
      */
     public static int delete(final int id) throws SQLException {
+        LOGGER.debug("Deleting module with ID: {}", id);
         final String sql = "DELETE FROM modules WHERE id = ?";
         try (PreparedStatement deleteSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             deleteSqlStatement.setInt(1, id);
             return deleteSqlStatement.executeUpdate();
         } catch (SQLException e) {
+            LOGGER.error("Failed to delete module with ID: {}", id, e);
             throw new SQLException(String.format("Failed to delete module with Id: %d", id), e);
         }
     }

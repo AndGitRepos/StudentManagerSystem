@@ -8,11 +8,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import sms.gradle.controller.StaffDashboardController;
 import sms.gradle.view.CoreViewInterface;
 
 @Getter
 public class StaffDashboardView extends VBox implements CoreViewInterface {
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private Label welcomeLabel;
     private Button manageAssessmentsButton;
@@ -26,10 +29,12 @@ public class StaffDashboardView extends VBox implements CoreViewInterface {
     private VBox courseListContainer;
 
     public StaffDashboardView() {
+        LOGGER.debug("Initialising Staff Dashboard View");
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
         assignButtonActions();
+        LOGGER.debug("Staff Dashboard View initialised");
     }
 
     private void assignButtonActions() {

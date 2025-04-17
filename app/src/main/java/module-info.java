@@ -1,10 +1,11 @@
 module sms.gradle {
     requires javafx.controls;
     requires javafx.fxml;
-    requires java.sql;
     requires static lombok;
     requires com.google.common;
     requires com.h2database;
+    requires org.apache.logging.log4j;
+    requires java.sql;
 
     exports sms.gradle;
     exports sms.gradle.model.dao;

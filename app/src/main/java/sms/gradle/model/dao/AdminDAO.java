@@ -6,9 +6,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import sms.gradle.model.entities.Admin;
 
 public final class AdminDAO {
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private AdminDAO() {
         throw new UnsupportedOperationException("This is a DAO class and cannot be instantiated");
@@ -21,6 +24,7 @@ public final class AdminDAO {
      * @throws SQLException if there is an error accessing the ResultSet data
      */
     private static List<Admin> getAllAdminsFromResultSet(final ResultSet resultSet) throws SQLException {
+        LOGGER.debug("Converting ResultSet to List<Admin>");
         List<Admin> admins = new ArrayList<>();
         while (resultSet.next()) {
             admins.add(new Admin(
@@ -39,6 +43,7 @@ public final class AdminDAO {
      * @throws SQLException if there is an error accessing the ResultSet data
      */
     private static Optional<Admin> getAdminFromResultSet(final ResultSet resultSet) throws SQLException {
+        LOGGER.debug("Converting ResultSet to Optional<Admin>");
         if (resultSet.next()) {
             return Optional.of(new Admin(
                     resultSet.getInt("id"),
@@ -46,6 +51,7 @@ public final class AdminDAO {
                     resultSet.getString("last_name"),
                     resultSet.getString("email")));
         }
+        LOGGER.info("No admin found in ResultSet");
         return Optional.empty();
     }
 
@@ -56,6 +62,7 @@ public final class AdminDAO {
      * @throws SQLException if a database access error occurs or the connection is closed
      */
     public static void addAdmin(final Admin admin, final String hashedPassword) throws SQLException {
+        LOGGER.debug("Adding admin to database {}", admin);
         final String sql = "INSERT INTO admins (first_name, last_name, email, password) VALUES (?, ?, ?, ?)";
         try (PreparedStatement addSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -65,6 +72,7 @@ public final class AdminDAO {
             addSqlStatement.setString(4, hashedPassword);
             addSqlStatement.executeUpdate();
         } catch (SQLException e) {
+            LOGGER.error("Failed to add admin to database {}", admin, e);
             throw new SQLException(String.format("Failed to add admin: %s", admin.toString()), e);
         }
     }
@@ -76,6 +84,7 @@ public final class AdminDAO {
      * @throws SQLException if there is an error executing the query
      */
     public static Optional<Admin> findById(final int id) throws SQLException {
+        LOGGER.debug("Finding admin by ID: {}", id);
         final String sql = "SELECT * FROM admins WHERE id = ?";
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -83,6 +92,7 @@ public final class AdminDAO {
             ResultSet results = findSqlStatement.executeQuery();
             return getAdminFromResultSet(results);
         } catch (SQLException e) {
+            LOGGER.error("Failed to find admin by ID: {}", id, e);
             throw new SQLException(String.format("Failed to find admin with Id: %d", id), e);
         }
     }
@@ -94,6 +104,7 @@ public final class AdminDAO {
      * @throws SQLException if there is an error executing the query
      */
     public static Optional<Admin> findByEmail(final String email) throws SQLException {
+        LOGGER.debug("Finding admin by email: {}", email);
         final String sql = "SELECT * FROM admins WHERE email = ?";
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -101,6 +112,7 @@ public final class AdminDAO {
             ResultSet results = findSqlStatement.executeQuery();
             return getAdminFromResultSet(results);
         } catch (SQLException e) {
+            LOGGER.error("Failed to find admin by email: {}", email, e);
             throw new SQLException(String.format("Failed to find admin with email: %s", email), e);
         }
     }
@@ -111,12 +123,14 @@ public final class AdminDAO {
      * @throws SQLException if there is an error executing the query
      */
     public static List<Admin> findAll() throws SQLException {
+        LOGGER.debug("Finding all admins");
         final String sql = "SELECT * FROM admins";
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             ResultSet results = findSqlStatement.executeQuery();
             return getAllAdminsFromResultSet(results);
         } catch (SQLException e) {
+            LOGGER.error("Failed to find all admins", e);
             throw new SQLException("Failed to find all admins", e);
         }
     }
@@ -128,6 +142,7 @@ public final class AdminDAO {
      * @throws SQLException if there is an error executing the update operation
      */
     public static int update(final Admin admin) throws SQLException {
+        LOGGER.debug("Updating admin: {}", admin);
         final String sql = "UPDATE admins SET first_name = ?, last_name = ?, email = ? WHERE id = ?";
         try (PreparedStatement updateSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
@@ -137,6 +152,7 @@ public final class AdminDAO {
             updateSqlStatement.setInt(4, admin.getId());
             return updateSqlStatement.executeUpdate();
         } catch (SQLException e) {
+            LOGGER.error("Failed to update admin: {}", admin, e);
             throw new SQLException(String.format("Failed to update admin with Id: %d", admin.getId()), e);
         }
     }
@@ -148,12 +164,14 @@ public final class AdminDAO {
      * @throws SQLException if there is an error executing the delete operation
      */
     public static int delete(final int id) throws SQLException {
+        LOGGER.debug("Deleting admin with ID: {}", id);
         final String sql = "DELETE FROM admins WHERE id = ?";
         try (PreparedStatement deleteSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             deleteSqlStatement.setInt(1, id);
             return deleteSqlStatement.executeUpdate();
         } catch (SQLException e) {
+            LOGGER.error("Failed to delete admin with ID: {}", id, e);
             throw new SQLException(String.format("Failed to delete admin with Id: %d", id), e);
         }
     }
@@ -166,17 +184,20 @@ public final class AdminDAO {
      * @throws SQLException if there is an error executing the query
      */
     public static boolean verifyPassword(final String email, final String hashedPassword) throws SQLException {
+        LOGGER.debug("Verifying password for admin with email: {}", email);
         final String sql = "SELECT password FROM admins WHERE email = ?";
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             findSqlStatement.setString(1, email);
             ResultSet results = findSqlStatement.executeQuery();
             if (results.next()) {
+                LOGGER.debug("Found admin with email: {}", email);
                 String storedPassword = results.getString("password");
                 return hashedPassword.equals(storedPassword);
             }
             return false;
         } catch (SQLException e) {
+            LOGGER.error("Failed to verify password for admin with email: {}", email, e);
             throw new SQLException(String.format("Failed to verify password for admin with email: %s", email), e);
         }
     }

@@ -16,6 +16,10 @@ dependencies {
     testImplementation("org.mockito:mockito-inline:5.2.0")
     implementation(libs.guava)
     implementation("com.h2database:h2:2.2.224")
+
+    implementation("org.apache.logging.log4j:log4j-api:2.20.0")
+    implementation("org.apache.logging.log4j:log4j-core:2.20.0")
+    implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.20.0")
 }
 
 java {
