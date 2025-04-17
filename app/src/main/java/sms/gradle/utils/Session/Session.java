@@ -14,7 +14,7 @@ public class Session {
         user = Optional.empty();
     }
 
-    public static Session getInstance() {
+    public static final Session getInstance() {
         return instance;
     }
 

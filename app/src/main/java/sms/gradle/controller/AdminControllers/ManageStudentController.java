@@ -1,4 +1,4 @@
-package sms.gradle.controller;
+package sms.gradle.controller.AdminControllers;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -21,6 +21,7 @@ public final class ManageStudentController {
 
     /**
      * Updates the list of students with all the students in the database
+     *
      * @param event The action event that triggered this method
      */
     public static void updateListOfStudents(ActionEvent event) {
