@@ -6,6 +6,7 @@ module sms.gradle {
     requires com.h2database;
     requires org.apache.logging.log4j;
     requires java.sql;
+    requires javafx.graphics;
 
     exports sms.gradle;
     exports sms.gradle.model.dao;
