@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sms.gradle.controller.StaffDashboardController;
+import sms.gradle.controller.AdminControllers.StaffDashboardController;
 import sms.gradle.view.CoreViewInterface;
 
 @Getter
