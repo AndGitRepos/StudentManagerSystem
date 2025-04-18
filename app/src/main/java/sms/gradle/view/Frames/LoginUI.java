@@ -18,6 +18,7 @@ import sms.gradle.view.CoreViewInterface;
  */
 
 public class LoginUI extends VBox implements CoreViewInterface {
+
     private static final Logger LOGGER = LogManager.getLogger();
 
     private Label loginErrorLabel;
@@ -28,6 +29,7 @@ public class LoginUI extends VBox implements CoreViewInterface {
 
     public LoginUI() {
         LOGGER.debug("Initialising Login View");
+        getStylesheets().add(getClass().getResource("/styles/login.css").toExternalForm());
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();

@@ -1,0 +1,58 @@
+/* Dashboard.css*/
+
+@import "common.css";
+
+/* Containers*/
+.staff-dashboard-container,
+.student-dashboard-container {
+    -fx-background-color: white;
+    -fx-padding: 20;
+    -fx-spacing: 10;
+}
+
+/* Headers*/
+.welcome-label {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 22 0;
+    -fx-text-fill: #334335;
+}
+
+/* Navigate*/
+.menu-button {
+    -fx-min-width: 200px;
+    -fx-margin: 5 0;
+}
+
+/* Course Elements*/
+.course-scroll-pane {
+    -fx-background-color: white;
+    -fx-border-color: #cccccf;
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
+}
+
+.course-list-container {
+    -fx-spacing: 10px;
+    -fx-padding: 10px;
+}
+
+/*
+For Student Dashboard
+*/
+.profile-section {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-padding: 20px;
+    -fx-spacing: 15px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
+}
+
+
+.academia-section {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-padding: 20px;
+    -fx-spacing: 15px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 5, 0, 0, 0);
+}

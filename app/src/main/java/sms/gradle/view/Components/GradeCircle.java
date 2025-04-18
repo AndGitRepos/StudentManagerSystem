@@ -19,6 +19,8 @@ public class GradeCircle extends StackPane {
 
     public GradeCircle(final int grade) {
 
+        getStylesheets().add(getClass().getResource("/styles/components.css").toExternalForm());
+
         gradeValidation(grade);
         circle = new Circle(30);
 
