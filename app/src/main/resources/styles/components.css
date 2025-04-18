@@ -1,0 +1,38 @@
+/* Components */
+
+@import "common.css";
+
+/* Grade Circle Components */
+
+.grade-circle {
+    -fx-stroke: white;
+    -fx-stroke-width: 3px;
+}
+
+.grade-label {
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+/* Module Row Elements */
+.module-row {
+    -fx-background-color: white;
+    -fx-padding: 10px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #cccccf;
+
+}
+
+.module-row:hover {
+    -fx-background-color: #f8f8f8;
+}
+
+.module-name {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.module-details {
+    -fx-font-size: 13px;
+}

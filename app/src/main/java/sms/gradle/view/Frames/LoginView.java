@@ -29,6 +29,7 @@ public class LoginView extends VBox implements CoreViewInterface {
 
     public LoginView() {
         LOGGER.debug("Initialising Login View");
+        getStylesheets().add(getClass().getResource("/styles/login.css").toExternalForm());
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();

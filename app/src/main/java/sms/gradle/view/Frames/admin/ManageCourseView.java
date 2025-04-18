@@ -39,6 +39,7 @@ public class ManageCourseView extends BorderPane implements CoreViewInterface {
 
     public ManageCourseView() {
         LOGGER.debug("Initialising Manage Course View");
+        getStylesheets().add(getClass().getResource("/styles/manager.css").toExternalForm());
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
@@ -64,6 +65,7 @@ public class ManageCourseView extends BorderPane implements CoreViewInterface {
     @Override
     public void layoutCoreUIComponents() {
         VBox courseListSection = new VBox(10);
+        courseListSection.getStyleClass().add("left-panel");
         Label coursesLabel = new Label("Courses");
         coursesLabel.getStyleClass().add("section-header");
         courseListSection.getChildren().addAll(coursesLabel, courseListView, selectButton);
@@ -108,6 +110,15 @@ public class ManageCourseView extends BorderPane implements CoreViewInterface {
         courseListView.setPrefWidth(150);
 
         getStyleClass().add("manage-course-view");
+        centerPanel.getStyleClass().add("center-panel");
+
+        selectButton.getStyleClass().add("action-button");
+        deleteButton.getStyleClass().add("action-button");
+        createNewButton.getStyleClass().add("action-button");
+        updateButton.getStyleClass().add("action-button");
+        backButton.getStyleClass().add("navigate-button");
+        logoutButton.getStyleClass().add("navigate-button");
+
         courseListView.getStyleClass().add("course-list");
         courseDetailsPane.getStyleClass().add("details-pane");
     }

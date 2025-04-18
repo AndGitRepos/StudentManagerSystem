@@ -1,6 +1,7 @@
 package sms.gradle;
 
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,6 +10,7 @@ import sms.gradle.utils.Common;
 import sms.gradle.view.ViewFactory;
 
 public class App extends Application {
+
     private static final Logger LOGGER = LogManager.getLogger();
 
     @Override
@@ -27,6 +29,11 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
         LOGGER.debug("Starting application");
+
+        Scene scene = new Scene(new javafx.scene.layout.StackPane(), 800, 600);
+        scene.getStylesheets().add(getClass().getResource("/styles/common.css").toExternalForm());
+        stage.setScene(scene);
+
         ViewFactory.getInstance().changeToLoginStage();
     }
 

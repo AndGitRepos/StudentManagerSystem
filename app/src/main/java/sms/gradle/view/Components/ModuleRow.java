@@ -19,6 +19,8 @@ public class ModuleRow extends HBox {
             final String moduleRoomNumber,
             final int moduleGrade) {
 
+        getStylesheets().add(getClass().getResource("/styles/components.css").toExternalForm());
+
         setUpModuleRowLayout();
 
         gradeCircle = new GradeCircle(moduleGrade);

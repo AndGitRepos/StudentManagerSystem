@@ -53,6 +53,7 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
 
     public ManageStudentView() {
         LOGGER.debug("Initialising Manage Student View");
+        getStylesheets().add(getClass().getResource("/styles/manager.css").toExternalForm());
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
@@ -160,16 +161,37 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
 
     @Override
     public void styleCoreUIComponents() {
-        setPrefSize(750, 550);
+
+        setMinWidth(850);
+        setPrefSize(900, 550);
+        getStyleClass().add("manage-view-container");
+
+        leftPanel.getStyleClass().add("left-panel");
         studentListView.setPrefWidth(150);
+
         enrolledCoursesListView.setPrefWidth(150);
         availableCoursesListView.setPrefWidth(200);
 
+        // Style containers
         getStyleClass().add("manage-student-view");
+
+        centerPanel.getStyleClass().add("center-panel");
+        rightPanel.getStyleClass().add("right-panel");
+
         studentListView.getStyleClass().add("student-list");
-        studentDetailsPane.getStyleClass().add("details-pane");
         enrolledCoursesListView.getStyleClass().add("courses-list");
         availableCoursesListView.getStyleClass().add("courses-list");
+
+        studentDetailsPane.getStyleClass().add("details-pane");
+
+        refreshButton.getStyleClass().add("action-button");
+        selectButton.getStyleClass().add("action-button");
+        deleteButton.getStyleClass().add("action-button");
+        createNewButton.getStyleClass().add("action-button");
+        updateButton.getStyleClass().add("action-button");
+        moveUpButton.getStyleClass().add("action-button");
+        moveDownButton.getStyleClass().add("action-button");
+        backButton.getStyleClass().add("navigate-button");
     }
 
     public void addStudentToList(Student student) {
