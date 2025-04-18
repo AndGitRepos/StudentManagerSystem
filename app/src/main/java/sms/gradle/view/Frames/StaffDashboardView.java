@@ -30,6 +30,7 @@ public class StaffDashboardView extends VBox implements CoreViewInterface {
 
     public StaffDashboardView() {
         LOGGER.debug("Initialising Staff Dashboard View");
+        getStylesheets().add(getClass().getResource("/styles/dashboard.css").toExternalForm());
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();

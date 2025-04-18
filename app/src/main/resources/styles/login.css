@@ -1,0 +1,35 @@
+/* # Login.css */
+
+@import "common.css";
+
+.login-container {
+    -fx-background-color: white;
+    -fx-padding: 20px;
+    -fx-spacing: 10px;
+    -fx-alignment: center;
+}
+
+
+.title-label {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: rgba(140, 128, 128, 0.843);
+    -fx-padding: 0 0 15 0;
+}
+
+.text-input-field {
+    -fx-pref-width: 300px;
+    -fx-padding: 10px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+}
+
+.login-button {
+    -fx-min-width: 175px;
+    -fx-transition: -fx-background-color 0.5s;
+}
+
+.login-error-label {
+    -fx-text-fill: red;
+    -fx-font-size: 14px;
+}
