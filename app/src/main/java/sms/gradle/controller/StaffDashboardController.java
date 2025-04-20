@@ -33,9 +33,9 @@ public final class StaffDashboardController {
         ViewFactory.getInstance().changeToManageStudentStage();
     }
 
-    public static void handleManageStaffButton(ActionEvent event) {
-        LOGGER.debug("Manage Staff button clicked");
-        // TODO - Once Manage staff page has been implemented add call to change to
+    public static void handleManageAdminButton(ActionEvent event) {
+        LOGGER.debug("Manage Admin button clicked");
+        ViewFactory.getInstance().changeToManageAdminStage();
     }
 
     public static void handleLogoutButton(ActionEvent event) {

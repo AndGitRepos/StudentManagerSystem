@@ -22,7 +22,7 @@ public class StaffDashboardView extends VBox implements CoreViewInterface {
     private Button manageModulesButton;
     private Button manageCoursesButton;
     private Button manageStudentsButton;
-    private Button manageStaffButton;
+    private Button manageAdminButton;
     private Button viewCourseButton;
     private Button logoutButton;
     private ScrollPane courseScrollPane;
@@ -43,7 +43,7 @@ public class StaffDashboardView extends VBox implements CoreViewInterface {
         manageModulesButton.setOnAction(StaffDashboardController::handleManageModulesButton);
         manageCoursesButton.setOnAction(StaffDashboardController::handleManageCoursesButton);
         manageStudentsButton.setOnAction(StaffDashboardController::handleManageStudentsButton);
-        manageStaffButton.setOnAction(StaffDashboardController::handleManageStaffButton);
+        manageAdminButton.setOnAction(StaffDashboardController::handleManageAdminButton);
         logoutButton.setOnAction(StaffDashboardController::handleLogoutButton);
     }
 
@@ -62,7 +62,7 @@ public class StaffDashboardView extends VBox implements CoreViewInterface {
         manageModulesButton = new Button("Manage Modules");
         manageCoursesButton = new Button("Manage Courses");
         manageStudentsButton = new Button("Manage Students");
-        manageStaffButton = new Button("Manage Staff");
+        manageAdminButton = new Button("Manage Staff");
         logoutButton = new Button("Logout");
 
         viewCourseButton.setPrefWidth(200);
@@ -70,7 +70,7 @@ public class StaffDashboardView extends VBox implements CoreViewInterface {
         manageModulesButton.setPrefWidth(200);
         manageCoursesButton.setPrefWidth(200);
         manageStudentsButton.setPrefWidth(200);
-        manageStaffButton.setPrefWidth(200);
+        manageAdminButton.setPrefWidth(200);
         logoutButton.setPrefWidth(200);
     }
 
@@ -87,7 +87,7 @@ public class StaffDashboardView extends VBox implements CoreViewInterface {
         manageModulesButton.getStyleClass().add("menu-button");
         manageCoursesButton.getStyleClass().add("menu-button");
         manageStudentsButton.getStyleClass().add("menu-button");
-        manageStaffButton.getStyleClass().add("menu-button");
+        manageAdminButton.getStyleClass().add("menu-button");
         logoutButton.getStyleClass().add("menu-button");
     }
 
@@ -106,7 +106,7 @@ public class StaffDashboardView extends VBox implements CoreViewInterface {
                         manageModulesButton,
                         manageAssessmentsButton,
                         manageStudentsButton,
-                        manageStaffButton,
+                        manageAdminButton,
                         logoutButton);
 
         this.getChildren().add(menu);
