@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.utils.Session.Session;
 import sms.gradle.view.Frames.LoginUI;
+import sms.gradle.view.Frames.ManageAdminView;
 import sms.gradle.view.Frames.ManageCourseView;
 import sms.gradle.view.Frames.ManageStudentView;
 import sms.gradle.view.Frames.StaffDashboardView;
@@ -26,6 +27,7 @@ public class ViewFactory {
     private Stage staffDashboardStage;
     private Stage manageStudentStage;
     private Stage manageCourseStage;
+    private Stage manageAdminStage;
 
     private ViewFactory() {
         LOGGER.info("Initialising View Factory");
@@ -34,6 +36,7 @@ public class ViewFactory {
         initialiseStaffDashboardStage();
         initialiseManageStudentStage();
         initialiseManageCourseStage();
+        initialiseManageAdminStage();
         LOGGER.info("View Factory initialised");
     }
 
@@ -72,6 +75,12 @@ public class ViewFactory {
         LOGGER.debug("Changing to manage course stage");
         staffDashboardStage.hide();
         manageCourseStage.show();
+    }
+
+    public void changeToManageAdminStage() {
+        LOGGER.debug("Changing to manage admin stage");
+        staffDashboardStage.hide();
+        manageAdminStage.show();
     }
 
     private void initialiseLoginStage() {
@@ -129,5 +138,16 @@ public class ViewFactory {
         manageCourseStage.setMinWidth(750);
         manageCourseStage.setTitle("SMS - Manage Courses");
         manageCourseStage.setScene(new Scene(manageCourseView));
+    }
+
+    private void initialiseManageAdminStage() {
+        LOGGER.debug("Initialising manage admin stage");
+        ManageAdminView manageAdminView = new ManageAdminView();
+
+        manageAdminStage = new Stage();
+        manageAdminStage.setMinHeight(550);
+        manageAdminStage.setMinWidth(750);
+        manageAdminStage.setScene(new Scene(manageAdminView));
+        manageAdminStage.setTitle("SMS - Manage Admins");
     }
 }
