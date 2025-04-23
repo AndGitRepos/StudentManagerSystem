@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sms.gradle.controller.ManageAdminsController;
 import sms.gradle.model.entities.Admin;
 import sms.gradle.view.CoreViewInterface;
 
@@ -64,12 +65,15 @@ public class ManageAdminView extends BorderPane implements CoreViewInterface {
 
         refreshAdminListButton = new Button("Refresh");
         refreshAdminListButton.setId("refreshAdminListButton");
+        refreshAdminListButton.setOnAction(ManageAdminsController::refreshListOfAdmins);
 
         deleteAdminButton = new Button("Delete");
         deleteAdminButton.setId("deleteAdminButton");
+        deleteAdminButton.setOnAction(ManageAdminsController::deleteAdmin);
 
         selectAdminButton = new Button("Select");
         selectAdminButton.setId("selectAdminButton");
+        selectAdminButton.setOnAction(ManageAdminsController::selectAdmin);
     }
 
     private void initialiseAdminDetailsComponents() {
@@ -101,15 +105,19 @@ public class ManageAdminView extends BorderPane implements CoreViewInterface {
 
         createNewAdminButton = new Button("Create New Admin");
         createNewAdminButton.setId("createNewAdminButton");
+        createNewAdminButton.setOnAction(ManageAdminsController::createNewAdmin);
 
         updateAdminButton = new Button("Update Admin");
         updateAdminButton.setId("updateAdminButton");
+        updateAdminButton.setOnAction(ManageAdminsController::updateAdmin);
 
         backButton = new Button("Back");
         backButton.setId("backButton");
+        backButton.setOnAction(ManageAdminsController::handleBack);
 
         logoutButton = new Button("Logout");
         logoutButton.setId("logoutButton");
+        logoutButton.setOnAction(ManageAdminsController::handleLogout);
     }
 
     @Override
@@ -126,10 +134,14 @@ public class ManageAdminView extends BorderPane implements CoreViewInterface {
         adminListLabel.getStyleClass().add("section-header");
 
         HBox displayActions = new HBox(10, selectAdminButton, deleteAdminButton);
-
         HBox displayControls = new HBox(10, refreshAdminListButton);
 
         leftPanel.getChildren().addAll(adminListLabel, displayActions, displayControls, adminListView);
+
+        leftPanel.setMinWidth(350);
+        leftPanel.setPrefWidth(450);
+        leftPanel.setPadding(new Insets(20));
+
         setLeft(leftPanel);
     }
 
