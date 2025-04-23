@@ -16,7 +16,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sms.gradle.controller.ManageStudentController;
+import sms.gradle.controller.AdminControllers.ManageStudentController;
 import sms.gradle.model.entities.Course;
 import sms.gradle.model.entities.Student;
 import sms.gradle.view.CoreViewInterface;

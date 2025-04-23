@@ -1,4 +1,4 @@
-package sms.gradle.controller;
+package sms.gradle.controller.AdminControllers;
 
 import javafx.event.ActionEvent;
 import org.apache.logging.log4j.LogManager;

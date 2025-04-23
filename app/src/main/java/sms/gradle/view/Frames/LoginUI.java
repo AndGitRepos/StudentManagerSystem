@@ -10,6 +10,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sms.gradle.controller.LoginControllers.LoginController;
 import sms.gradle.view.CoreViewInterface;
 
 /*
@@ -31,7 +32,12 @@ public class LoginUI extends VBox implements CoreViewInterface {
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
+        setupHandlersForEvent();
         LOGGER.debug("Login View initialised");
+    }
+
+    private void setupHandlersForEvent() {
+        loginButton.setOnAction(event -> LoginController.handleLoginAttempt());
     }
 
     @Override
@@ -40,19 +46,23 @@ public class LoginUI extends VBox implements CoreViewInterface {
         titleLabel = new Label("Student Management System");
 
         usernameField = new TextField();
+        usernameField.setId("username_field");
         usernameField.setPromptText("Example: johnsmith@qmul.ac.uk ");
         usernameField.setMaxWidth(250);
-        usernameField.setTooltip(new Tooltip("Enter your university email address"));
+        usernameField.setTooltip(new Tooltip("Enter your email address"));
 
         passwordField = new PasswordField();
+        passwordField.setId("password_field");
         passwordField.setPromptText("Example: GitHub123 ");
         passwordField.setMaxWidth(250);
         passwordField.setTooltip(new Tooltip("Enter your password"));
 
         loginButton = new Button("Log In");
         loginButton.setMaxWidth(200);
+        loginButton.setId("login_button");
 
         loginErrorLabel = new Label();
+        loginErrorLabel.setId("error_label");
         loginErrorLabel.setVisible(false);
         loginErrorLabel.getStyleClass().add("login-error-label");
     }
@@ -86,29 +96,5 @@ public class LoginUI extends VBox implements CoreViewInterface {
 
         usernameField.getStyleClass().add("text-input-field");
         passwordField.getStyleClass().add("text-input-field");
-    }
-
-    public void completelyClearFields() {
-
-        usernameField.clear();
-        passwordField.clear();
-        loginErrorLabel.setVisible(false);
-    }
-
-    public TextField getUsernameField() {
-        return usernameField;
-    }
-
-    public PasswordField getPasswordField() {
-        return passwordField;
-    }
-
-    public Button getLoginButton() {
-        return loginButton;
-    }
-
-    public void displayLoginError(String errorMessage) {
-        loginErrorLabel.setText(errorMessage);
-        loginErrorLabel.setVisible(true);
     }
 }
