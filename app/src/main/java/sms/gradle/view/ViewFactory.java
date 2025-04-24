@@ -6,12 +6,13 @@ import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.utils.Session.Session;
-import sms.gradle.view.Frames.LoginUI;
-import sms.gradle.view.Frames.ManageAdminView;
-import sms.gradle.view.Frames.ManageCourseView;
-import sms.gradle.view.Frames.ManageStudentView;
-import sms.gradle.view.Frames.StaffDashboardView;
-import sms.gradle.view.Frames.StudentDashboardView;
+import sms.gradle.view.Frames.LoginView;
+import sms.gradle.view.Frames.admin.ManageAdminView;
+import sms.gradle.view.Frames.admin.ManageCourseView;
+import sms.gradle.view.Frames.admin.ManageModulesView;
+import sms.gradle.view.Frames.admin.ManageStudentView;
+import sms.gradle.view.Frames.admin.StaffDashboardView;
+import sms.gradle.view.Frames.student.StudentDashboardView;
 
 /*
  * Co-ordinates creating & interchanging between application views using Singleton design pattern
@@ -27,6 +28,7 @@ public class ViewFactory {
     private Stage staffDashboardStage;
     private Stage manageStudentStage;
     private Stage manageCourseStage;
+    private Stage manageModulesStage;
     private Stage manageAdminStage;
 
     private ViewFactory() {
@@ -36,6 +38,7 @@ public class ViewFactory {
         initialiseStaffDashboardStage();
         initialiseManageStudentStage();
         initialiseManageCourseStage();
+        initialiseManageModulesStage();
         initialiseManageAdminStage();
         LOGGER.info("View Factory initialised");
     }
@@ -62,6 +65,9 @@ public class ViewFactory {
         LOGGER.debug("Changing to staff dashboard stage");
         loginStage.hide();
         manageStudentStage.hide();
+        manageCourseStage.hide();
+        manageModulesStage.hide();
+        manageAdminStage.hide();
         staffDashboardStage.show();
     }
 
@@ -77,6 +83,12 @@ public class ViewFactory {
         manageCourseStage.show();
     }
 
+    public void changeToManageModulesStage() {
+        LOGGER.debug("Changing to manage modules stage");
+        staffDashboardStage.hide();
+        manageModulesStage.show();
+    }
+
     public void changeToManageAdminStage() {
         LOGGER.debug("Changing to manage admin stage");
         staffDashboardStage.hide();
@@ -85,7 +97,7 @@ public class ViewFactory {
 
     private void initialiseLoginStage() {
         LOGGER.debug("Initialising login stage");
-        LoginUI login = new LoginUI();
+        LoginView login = new LoginView();
         loginStage = new Stage();
         loginStage.setScene(new Scene(login, 450, 350));
         loginStage.setTitle("Student Management System - Login");
@@ -138,6 +150,18 @@ public class ViewFactory {
         manageCourseStage.setMinWidth(750);
         manageCourseStage.setTitle("SMS - Manage Courses");
         manageCourseStage.setScene(new Scene(manageCourseView));
+    }
+
+    private void initialiseManageModulesStage() {
+        LOGGER.debug("Initialising manage modules stage");
+
+        ManageModulesView manageModulesView = new ManageModulesView();
+
+        manageModulesStage = new Stage();
+        manageModulesStage.setMinHeight(550);
+        manageModulesStage.setMinWidth(750);
+        manageModulesStage.setTitle("SMS - Manage Modules");
+        manageModulesStage.setScene(new Scene(manageModulesView));
     }
 
     private void initialiseManageAdminStage() {
