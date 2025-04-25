@@ -1,4 +1,4 @@
-package sms.gradle.utils.Session;
+package sms.gradle.utils.session;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

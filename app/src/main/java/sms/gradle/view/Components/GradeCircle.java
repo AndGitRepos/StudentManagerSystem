@@ -1,4 +1,4 @@
-package sms.gradle.view.Components;
+package sms.gradle.view.components;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;

@@ -1,4 +1,4 @@
-package sms.gradle.view.Frames;
+package sms.gradle.view.frames;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,7 +10,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sms.gradle.controller.LoginControllers.LoginController;
+import sms.gradle.controller.login.LoginController;
 import sms.gradle.view.CoreViewInterface;
 
 /*

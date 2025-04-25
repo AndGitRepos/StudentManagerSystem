@@ -1,4 +1,4 @@
-package sms.gradle.utils.Session;
+package sms.gradle.utils.session;
 
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;

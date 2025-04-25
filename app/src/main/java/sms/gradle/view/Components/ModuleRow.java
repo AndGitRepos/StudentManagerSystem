@@ -1,4 +1,4 @@
-package sms.gradle.view.Components;
+package sms.gradle.view.components;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
