@@ -20,7 +20,7 @@ public final class StaffDashboardController {
 
     public static void handleManageModulesButton(ActionEvent event) {
         LOGGER.debug("Manage Modules button clicked");
-        // TODO - Once Manage modules page has been implemented add call to change to
+        ViewFactory.getInstance().changeToManageModulesStage();
     }
 
     public static void handleManageCoursesButton(ActionEvent event) {

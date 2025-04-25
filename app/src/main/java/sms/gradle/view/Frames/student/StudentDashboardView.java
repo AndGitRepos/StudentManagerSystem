@@ -1,4 +1,4 @@
-package sms.gradle.view.Frames;
+package sms.gradle.view.Frames.student;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;

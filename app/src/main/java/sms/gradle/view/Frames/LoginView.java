@@ -18,7 +18,7 @@ import sms.gradle.view.CoreViewInterface;
  * feedback & user authentication
  */
 
-public class LoginUI extends VBox implements CoreViewInterface {
+public class LoginView extends VBox implements CoreViewInterface {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private Label loginErrorLabel;
@@ -27,7 +27,7 @@ public class LoginUI extends VBox implements CoreViewInterface {
     private PasswordField passwordField;
     private Label titleLabel;
 
-    public LoginUI() {
+    public LoginView() {
         LOGGER.debug("Initialising Login View");
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
