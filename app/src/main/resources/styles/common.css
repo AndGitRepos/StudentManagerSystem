@@ -1,0 +1,68 @@
+/* Common.css */
+
+/* Core Components Layout*/
+.base-container {
+    -fx-background-color: white;
+    -fx-padding: 15px;
+    -fx-spacing: 10px;
+}
+
+.panel {
+    -fx-background-color: white;
+    -fx-padding: 15px;
+    -fx-background-radius: 10px;
+}
+
+.panel-with-shadow {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
+
+}
+
+/* Components Display*/
+.base-list {
+    -fx-border-radius: 5px;
+    -fx-border-color: #cccccf;
+    -fx-background-color: white;
+    -fx-padding: 10px;
+}
+
+.list-view {
+    -fx-border-radius: 5px;
+    -fx-border-color: #cccccf;
+    -fx-background-color: white;
+
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+/* User Interactive Components */
+.button {
+    -fx-background-color: #0a8edade;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-min-width: 150px;
+    -fx-padding: 8px 12px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+
+}
+
+.button:hover {
+    -fx-background-color: derive(#0a8edade, -10%);
+}
+
+.text-field,
+.password-field {
+    -fx-background-color: white;
+    -fx-padding: 10px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #cccccf;
+}
+
+.label {
+    -fx-text-fill: #334335;
+    -fx-font-size: 14px;
+}

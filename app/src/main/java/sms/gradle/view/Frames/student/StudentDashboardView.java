@@ -33,6 +33,7 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
 
     public StudentDashboardView() {
         LOGGER.debug("Initialising Student Dashboard View");
+        getStylesheets().add(getClass().getResource("/styles/dashboard.css").toExternalForm());
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
@@ -112,7 +113,12 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
     }
 
     @Override
-    public void styleCoreUIComponents() {}
+    public void styleCoreUIComponents() {
+        getStyleClass().add("student-dashboard-container");
+        profileSection.getStyleClass().add("profile-section");
+        academiaSection.getStyleClass().add("academia-section");
+        signoutButton.getStyleClass().add("menu-button");
+    }
 
     public void updateStudentDetails(String name, String emailAddress, String entryYear) {
         studentNameLabel.setText(name);
