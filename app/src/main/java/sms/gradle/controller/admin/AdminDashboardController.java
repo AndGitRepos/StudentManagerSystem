@@ -1,11 +1,11 @@
-package sms.gradle.controller.AdminControllers;
+package sms.gradle.controller.admin;
 
 import javafx.event.ActionEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.view.ViewFactory;
 
-public final class StaffDashboardController {
+public final class AdminDashboardController {
     private static final Logger LOGGER = LogManager.getLogger();
 
     public static void handleViewCourseButton(ActionEvent event) {

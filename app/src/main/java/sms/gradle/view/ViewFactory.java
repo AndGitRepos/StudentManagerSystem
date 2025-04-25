@@ -5,14 +5,14 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sms.gradle.utils.Session.Session;
-import sms.gradle.view.Frames.LoginView;
-import sms.gradle.view.Frames.admin.ManageAdminView;
-import sms.gradle.view.Frames.admin.ManageCourseView;
-import sms.gradle.view.Frames.admin.ManageModulesView;
-import sms.gradle.view.Frames.admin.ManageStudentView;
-import sms.gradle.view.Frames.admin.StaffDashboardView;
-import sms.gradle.view.Frames.student.StudentDashboardView;
+import sms.gradle.utils.session.Session;
+import sms.gradle.view.frames.LoginView;
+import sms.gradle.view.frames.admin.AdminDashboardView;
+import sms.gradle.view.frames.admin.ManageAdminView;
+import sms.gradle.view.frames.admin.ManageCourseView;
+import sms.gradle.view.frames.admin.ManageModulesView;
+import sms.gradle.view.frames.admin.ManageStudentView;
+import sms.gradle.view.frames.student.StudentDashboardView;
 
 /*
  * Co-ordinates creating & interchanging between application views using Singleton design pattern
@@ -25,7 +25,7 @@ public class ViewFactory {
     private static final ViewFactory instance = new ViewFactory();
     private Stage loginStage;
     private Stage studentDashboardStage;
-    private Stage staffDashboardStage;
+    private Stage adminDashboardStage;
     private Stage manageStudentStage;
     private Stage manageCourseStage;
     private Stage manageModulesStage;
@@ -35,7 +35,7 @@ public class ViewFactory {
         LOGGER.info("Initialising View Factory");
         initialiseLoginStage();
         initialiseStudentDashboardStage();
-        initialiseStaffDashboardStage();
+        initialiseAdminDashboardStage();
         initialiseManageStudentStage();
         initialiseManageCourseStage();
         initialiseManageModulesStage();
@@ -51,7 +51,7 @@ public class ViewFactory {
         LOGGER.debug("Changing to login stage");
         Session.getInstance().clearSession();
         studentDashboardStage.hide();
-        staffDashboardStage.hide();
+        adminDashboardStage.hide();
         loginStage.show();
     }
 
@@ -61,37 +61,37 @@ public class ViewFactory {
         studentDashboardStage.show();
     }
 
-    public void changeToStaffDashboardStage() {
-        LOGGER.debug("Changing to staff dashboard stage");
+    public void changeToAdminDashboardStage() {
+        LOGGER.debug("Changing to admin dashboard stage");
         loginStage.hide();
         manageStudentStage.hide();
         manageCourseStage.hide();
         manageModulesStage.hide();
         manageAdminStage.hide();
-        staffDashboardStage.show();
+        adminDashboardStage.show();
     }
 
     public void changeToManageStudentStage() {
         LOGGER.debug("Changing to manage student stage");
-        staffDashboardStage.hide();
+        adminDashboardStage.hide();
         manageStudentStage.show();
     }
 
     public void changeToManageCourseStage() {
         LOGGER.debug("Changing to manage course stage");
-        staffDashboardStage.hide();
+        adminDashboardStage.hide();
         manageCourseStage.show();
     }
 
     public void changeToManageModulesStage() {
         LOGGER.debug("Changing to manage modules stage");
-        staffDashboardStage.hide();
+        adminDashboardStage.hide();
         manageModulesStage.show();
     }
 
     public void changeToManageAdminStage() {
         LOGGER.debug("Changing to manage admin stage");
-        staffDashboardStage.hide();
+        adminDashboardStage.hide();
         manageAdminStage.show();
     }
 
@@ -116,16 +116,16 @@ public class ViewFactory {
         studentDashboardStage.setScene(new Scene(studentDashboardView));
     }
 
-    private void initialiseStaffDashboardStage() {
-        LOGGER.debug("Initialising staff dashboard stage");
+    private void initialiseAdminDashboardStage() {
+        LOGGER.debug("Initialising admin dashboard stage");
 
-        StaffDashboardView staffDashboardView = new StaffDashboardView();
+        AdminDashboardView adminDashboardView = new AdminDashboardView();
 
-        staffDashboardStage = new Stage();
-        staffDashboardStage.setMinHeight(550);
-        staffDashboardStage.setMinWidth(750);
-        staffDashboardStage.setTitle("SMS - Staff Dashboard");
-        staffDashboardStage.setScene(new Scene(staffDashboardView));
+        adminDashboardStage = new Stage();
+        adminDashboardStage.setMinHeight(550);
+        adminDashboardStage.setMinWidth(750);
+        adminDashboardStage.setTitle("SMS - Admin Dashboard");
+        adminDashboardStage.setScene(new Scene(adminDashboardView));
     }
 
     private void initialiseManageStudentStage() {

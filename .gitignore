@@ -30,3 +30,8 @@ build
 *.class
 
 data/
+
+# Mac
+.DS_Store
+.AppleDouble
+.LSOverride

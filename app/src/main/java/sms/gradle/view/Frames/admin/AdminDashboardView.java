@@ -1,4 +1,4 @@
-package sms.gradle.view.Frames.admin;
+package sms.gradle.view.frames.admin;
 
 import static javafx.geometry.Pos.CENTER;
 
@@ -10,11 +10,11 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sms.gradle.controller.AdminControllers.StaffDashboardController;
+import sms.gradle.controller.admin.AdminDashboardController;
 import sms.gradle.view.CoreViewInterface;
 
 @Getter
-public class StaffDashboardView extends VBox implements CoreViewInterface {
+public class AdminDashboardView extends VBox implements CoreViewInterface {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private Label welcomeLabel;
@@ -28,29 +28,29 @@ public class StaffDashboardView extends VBox implements CoreViewInterface {
     private ScrollPane courseScrollPane;
     private VBox courseListContainer;
 
-    public StaffDashboardView() {
-        LOGGER.debug("Initialising Staff Dashboard View");
+    public AdminDashboardView() {
+        LOGGER.debug("Initialising Admin Dashboard View");
         getStylesheets().add(getClass().getResource("/styles/dashboard.css").toExternalForm());
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
         assignButtonActions();
-        LOGGER.debug("Staff Dashboard View initialised");
+        LOGGER.debug("Admin Dashboard View initialised");
     }
 
     private void assignButtonActions() {
-        viewCourseButton.setOnAction(StaffDashboardController::handleViewCourseButton);
-        manageAssessmentsButton.setOnAction(StaffDashboardController::handleManageAssessmentsButton);
-        manageModulesButton.setOnAction(StaffDashboardController::handleManageModulesButton);
-        manageCoursesButton.setOnAction(StaffDashboardController::handleManageCoursesButton);
-        manageStudentsButton.setOnAction(StaffDashboardController::handleManageStudentsButton);
-        manageAdminButton.setOnAction(StaffDashboardController::handleManageAdminButton);
-        logoutButton.setOnAction(StaffDashboardController::handleLogoutButton);
+        viewCourseButton.setOnAction(AdminDashboardController::handleViewCourseButton);
+        manageAssessmentsButton.setOnAction(AdminDashboardController::handleManageAssessmentsButton);
+        manageModulesButton.setOnAction(AdminDashboardController::handleManageModulesButton);
+        manageCoursesButton.setOnAction(AdminDashboardController::handleManageCoursesButton);
+        manageStudentsButton.setOnAction(AdminDashboardController::handleManageStudentsButton);
+        manageAdminButton.setOnAction(AdminDashboardController::handleManageAdminButton);
+        logoutButton.setOnAction(AdminDashboardController::handleLogoutButton);
     }
 
     @Override
     public void initialiseCoreUIComponents() {
-        welcomeLabel = new Label("Welcome to Staff Dashboard");
+        welcomeLabel = new Label("Welcome to Admin Dashboard");
 
         courseListContainer = new VBox(5);
         courseScrollPane = new ScrollPane(courseListContainer);
@@ -63,7 +63,7 @@ public class StaffDashboardView extends VBox implements CoreViewInterface {
         manageModulesButton = new Button("Manage Modules");
         manageCoursesButton = new Button("Manage Courses");
         manageStudentsButton = new Button("Manage Students");
-        manageAdminButton = new Button("Manage Staff");
+        manageAdminButton = new Button("Manage Admin");
         logoutButton = new Button("Logout");
 
         viewCourseButton.setPrefWidth(200);
@@ -77,7 +77,7 @@ public class StaffDashboardView extends VBox implements CoreViewInterface {
 
     @Override
     public void styleCoreUIComponents() {
-        getStyleClass().add("staff-dashboard-container");
+        getStyleClass().add("admin-dashboard-container");
         welcomeLabel.getStyleClass().add("welcome-label");
 
         courseScrollPane.getStyleClass().add("course-scroll-pane");

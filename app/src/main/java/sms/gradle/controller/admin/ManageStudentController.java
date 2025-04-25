@@ -1,4 +1,4 @@
-package sms.gradle.controller.AdminControllers;
+package sms.gradle.controller.admin;
 
 import java.sql.SQLException;
 import java.util.List;

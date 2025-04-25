@@ -1,4 +1,4 @@
-package sms.gradle.view.Frames.admin;
+package sms.gradle.view.frames.admin;
 
 import static javafx.geometry.Pos.CENTER;
 
@@ -16,7 +16,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sms.gradle.controller.AdminControllers.ManageStudentController;
+import sms.gradle.controller.admin.ManageStudentController;
 import sms.gradle.model.entities.Course;
 import sms.gradle.model.entities.Student;
 import sms.gradle.view.CoreViewInterface;
@@ -66,7 +66,7 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
         selectButton.setOnAction(ManageStudentController::selectStudent);
         deleteButton.setOnAction(ManageStudentController::deleteStudent);
         createNewButton.setOnAction(ManageStudentController::createNewStudent);
-        backButton.setOnAction(event -> ViewFactory.getInstance().changeToStaffDashboardStage());
+        backButton.setOnAction(event -> ViewFactory.getInstance().changeToAdminDashboardStage());
     }
 
     @Override

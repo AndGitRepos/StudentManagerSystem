@@ -1,4 +1,4 @@
-package sms.gradle.view.Frames.admin;
+package sms.gradle.view.frames.admin;
 
 import static javafx.geometry.Pos.CENTER;
 
@@ -162,7 +162,7 @@ public class ManageModulesView extends BorderPane implements CoreViewInterface {
     }
 
     private void setupEventHandlers() {
-        backButton.setOnAction(event -> ViewFactory.getInstance().changeToStaffDashboardStage());
+        backButton.setOnAction(event -> ViewFactory.getInstance().changeToAdminDashboardStage());
     }
 
     private static class ModuleListCell extends ListCell<Module> {

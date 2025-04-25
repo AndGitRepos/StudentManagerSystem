@@ -1,4 +1,4 @@
-package sms.gradle.controller.LoginControllers;
+package sms.gradle.controller.login;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -12,9 +12,9 @@ import sms.gradle.model.dao.StudentDAO;
 import sms.gradle.model.entities.Admin;
 import sms.gradle.model.entities.Student;
 import sms.gradle.utils.Common;
-import sms.gradle.utils.Session.Session;
-import sms.gradle.utils.Session.User;
-import sms.gradle.utils.Session.UserType;
+import sms.gradle.utils.session.Session;
+import sms.gradle.utils.session.User;
+import sms.gradle.utils.session.UserType;
 import sms.gradle.view.ViewFactory;
 
 public final class LoginController {
@@ -79,7 +79,7 @@ public final class LoginController {
 
     private static void changeToUserDashboard(User user) {
         if (user.getType() == UserType.ADMIN) {
-            ViewFactory.getInstance().changeToStaffDashboardStage();
+            ViewFactory.getInstance().changeToAdminDashboardStage();
         } else {
             ViewFactory.getInstance().changeToStudentDashboardStage();
         }
