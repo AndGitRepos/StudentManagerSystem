@@ -10,7 +10,7 @@ public final class AdminDashboardController {
 
     public static void handleViewCourseButton(ActionEvent event) {
         LOGGER.debug("View Course button clicked");
-        // TODO - Once view courses page has been implemented add call to change to
+        ViewFactory.getInstance().changeToCourseDetailStage();
     }
 
     public static void handleManageAssessmentsButton(ActionEvent event) {

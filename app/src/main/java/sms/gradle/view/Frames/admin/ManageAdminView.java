@@ -15,7 +15,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sms.gradle.controller.ManageAdminsController;
+import sms.gradle.controller.admin.ManageAdminsController;
 import sms.gradle.model.entities.Admin;
 import sms.gradle.view.CoreViewInterface;
 

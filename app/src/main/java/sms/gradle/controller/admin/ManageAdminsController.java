@@ -1,4 +1,4 @@
-package sms.gradle.controller;
+package sms.gradle.controller.admin;
 
 import java.sql.SQLException;
 import javafx.event.ActionEvent;
@@ -181,7 +181,7 @@ public final class ManageAdminsController {
 
     public static void handleBack(ActionEvent event) {
         LOGGER.debug("Returning to Main Admin Dashboard");
-        ViewFactory.getInstance().changeToStaffDashboardStage();
+        ViewFactory.getInstance().changeToAdminDashboardStage();
     }
 
     public static void handleLogout(ActionEvent event) {

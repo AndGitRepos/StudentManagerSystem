@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import sms.gradle.utils.session.Session;
 import sms.gradle.view.frames.LoginView;
 import sms.gradle.view.frames.admin.AdminDashboardView;
+import sms.gradle.view.frames.admin.CourseDetailView;
 import sms.gradle.view.frames.admin.ManageAdminView;
 import sms.gradle.view.frames.admin.ManageCourseView;
 import sms.gradle.view.frames.admin.ManageModulesView;
@@ -30,6 +31,7 @@ public class ViewFactory {
     private Stage manageCourseStage;
     private Stage manageModulesStage;
     private Stage manageAdminStage;
+    private Stage courseDetailStage;
 
     private ViewFactory() {
         LOGGER.info("Initialising View Factory");
@@ -40,6 +42,7 @@ public class ViewFactory {
         initialiseManageCourseStage();
         initialiseManageModulesStage();
         initialiseManageAdminStage();
+        initialieCourseDetailStage();
         LOGGER.info("View Factory initialised");
     }
 
@@ -52,6 +55,7 @@ public class ViewFactory {
         Session.getInstance().clearSession();
         studentDashboardStage.hide();
         adminDashboardStage.hide();
+        courseDetailStage.hide();
         loginStage.show();
     }
 
@@ -68,6 +72,7 @@ public class ViewFactory {
         manageCourseStage.hide();
         manageModulesStage.hide();
         manageAdminStage.hide();
+        courseDetailStage.hide();
         adminDashboardStage.show();
     }
 
@@ -93,6 +98,12 @@ public class ViewFactory {
         LOGGER.debug("Changing to manage admin stage");
         adminDashboardStage.hide();
         manageAdminStage.show();
+    }
+
+    public void changeToCourseDetailStage() {
+        LOGGER.debug("Changing to course detail stage");
+        adminDashboardStage.hide();
+        courseDetailStage.show();
     }
 
     private void initialiseLoginStage() {
@@ -173,5 +184,16 @@ public class ViewFactory {
         manageAdminStage.setMinWidth(750);
         manageAdminStage.setScene(new Scene(manageAdminView));
         manageAdminStage.setTitle("SMS - Manage Admins");
+    }
+
+    private void initialieCourseDetailStage() {
+        LOGGER.debug("Initialising course detail stage");
+        CourseDetailView courseDetailView = new CourseDetailView();
+
+        courseDetailStage = new Stage();
+        courseDetailStage.setMinHeight(550);
+        courseDetailStage.setMinWidth(750);
+        courseDetailStage.setScene(new Scene(courseDetailView));
+        courseDetailStage.setTitle("SMS - Course Detail");
     }
 }
