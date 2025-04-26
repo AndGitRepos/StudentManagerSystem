@@ -56,3 +56,14 @@ For Student Dashboard
     -fx-spacing: 15px;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 5, 0, 0, 0);
 }
+
+.list-courses {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 200px;
+}
+
+.action-button {
+    -fx-min-width: 200px;
+    -fx-margin: 5 0;
+    -fx-background-color: #0879bade;
+}
