@@ -67,9 +67,8 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
 
         Tooltip.install(profilePhoto, new Tooltip("Temporary holder for profile photo"));
 
-        profileSection
-                .getChildren()
-                .addAll(profileHeader, profilePhoto, studentEmailLabel, studentEntryYearLabel, studentNameLabel);
+        profileSection.getChildren().addAll(profileHeader, profilePhoto, studentEmailLabel,
+                studentEntryYearLabel, studentNameLabel);
         profileSection.setAlignment(Pos.TOP_CENTER);
         profileSection.setPrefWidth(350);
         profileSection.setPadding(new Insets(20));
@@ -111,7 +110,8 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
 
         selectCourseButton.setOnAction(StudentDashboardController::handleSelectCourseButton);
         viewStatsButton.setOnAction(StudentDashboardController::handleViewStatsButton);
-        accessAssessmentsViewButton.setOnAction(StudentDashboardController::handleViewAssessmentsButton);
+        accessAssessmentsViewButton
+                .setOnAction(StudentDashboardController::handleViewAssessmentsButton);
         signoutButton.setOnAction(StudentDashboardController::handleSignout);
         refreshButton.setOnAction(StudentDashboardController::handleCourseListRefresh);
     }
@@ -159,7 +159,8 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
         setupAcademiaSection();
 
         VBox leftPanelButtons = new VBox(10);
-        leftPanelButtons.getChildren().addAll(viewStatsButton, accessAssessmentsViewButton, signoutButton);
+        leftPanelButtons.getChildren().addAll(viewStatsButton, accessAssessmentsViewButton,
+                signoutButton);
         leftPanelButtons.setAlignment(Pos.BOTTOM_CENTER);
         leftPanelButtons.setPadding(new Insets(20, 0, 20, 0));
 
@@ -201,6 +202,7 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
         studentNameLabel.setText("Student: " + name);
         studentEmailLabel.setText("Email Address: " + emailAddress);
         studentEntryYearLabel.setText("Year of Entry: " + entryYear);
-        LOGGER.debug("Student details updated: Name: {}, Email: {}, Entry Year: {}", name, emailAddress, entryYear);
+        LOGGER.debug("Student details updated: Name: {}, Email: {}, Entry Year: {}", name,
+                emailAddress, entryYear);
     }
 }

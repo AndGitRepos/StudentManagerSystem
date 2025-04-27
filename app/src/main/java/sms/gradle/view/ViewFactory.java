@@ -44,6 +44,7 @@ public class ViewFactory {
         initialiseManageModulesStage();
         initialiseManageAdminStage();
         initialiseCourseDetailStage();
+        initialiseCourseDetailStage();
         LOGGER.info("View Factory initialised");
     }
 
@@ -70,8 +71,7 @@ public class ViewFactory {
 
     public void changeToStudentModulesStage() {
         LOGGER.debug("Changing to access student modules stage");
-        // TODO: After implementing access modules view P/R
-        studentDashboardStage.hide();
+        studentDashboardStage.show();
         studentModulesStage.show();
     }
 

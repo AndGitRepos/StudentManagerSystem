@@ -38,9 +38,7 @@ public class StudentDashboardController {
                 return;
             }
             ListView<Course> courseListView = (ListView<Course>) ViewFactory.getInstance()
-                    .getStudentDashboardStage()
-                    .getScene()
-                    .lookup("#courseListView");
+                    .getStudentDashboardStage().getScene().lookup("#courseListView");
 
             int studentId = Session.getInstance().getUser().get().getId();
             List<CourseEnrollment> enrolledCourses = CourseEnrollmentDAO.findByStudentId(studentId);
@@ -59,8 +57,8 @@ public class StudentDashboardController {
     }
 
     public static void handleSelectCourseButton(ActionEvent event) {
-        ListView<Course> courseList = (ListView<Course>)
-                ViewFactory.getInstance().getStudentDashboardStage().getScene().lookup("#courseListView");
+        ListView<Course> courseList = (ListView<Course>) ViewFactory.getInstance()
+                .getStudentDashboardStage().getScene().lookup("#courseListView");
 
         Course selectedCourse = courseList.getSelectionModel().getSelectedItem();
 
