@@ -202,7 +202,6 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
         studentNameLabel.setText("Student: " + name);
         studentEmailLabel.setText("Email Address: " + emailAddress);
         studentEntryYearLabel.setText("Year of Entry: " + entryYear);
-        LOGGER.debug("Student details updated: Name: {}, Email: {}, Entry Year: {}", name,
-                emailAddress, entryYear);
+        LOGGER.debug("Student details updated: Name: {}, Email: {}, Entry Year: {}", name, emailAddress, entryYear);
     }
 }

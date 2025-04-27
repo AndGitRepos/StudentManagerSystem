@@ -13,6 +13,7 @@ import sms.gradle.view.frames.admin.ManageAdminView;
 import sms.gradle.view.frames.admin.ManageCourseView;
 import sms.gradle.view.frames.admin.ManageModulesView;
 import sms.gradle.view.frames.admin.ManageStudentView;
+import sms.gradle.view.frames.student.AccessStudentModulesView;
 import sms.gradle.view.frames.student.StudentDashboardView;
 
 /*
@@ -32,7 +33,7 @@ public class ViewFactory {
     private Stage manageModulesStage;
     private Stage manageAdminStage;
     private Stage courseDetailStage;
-    private Stage studentModulesStage; // TODO: Access Student Modules Stage
+    private Stage studentModulesStage;
 
     private ViewFactory() {
         LOGGER.info("Initialising View Factory");
@@ -44,7 +45,7 @@ public class ViewFactory {
         initialiseManageModulesStage();
         initialiseManageAdminStage();
         initialiseCourseDetailStage();
-        initialiseCourseDetailStage();
+        initialiseStudentModulesStage();
         LOGGER.info("View Factory initialised");
     }
 
@@ -71,7 +72,7 @@ public class ViewFactory {
 
     public void changeToStudentModulesStage() {
         LOGGER.debug("Changing to access student modules stage");
-        studentDashboardStage.show();
+        studentDashboardStage.hide();
         studentModulesStage.show();
     }
 
@@ -135,6 +136,18 @@ public class ViewFactory {
         studentDashboardStage.setMinWidth(750);
         studentDashboardStage.setTitle("SMS - Student Dashboard");
         studentDashboardStage.setScene(new Scene(studentDashboardView));
+    }
+
+    private void initialiseStudentModulesStage() {
+        LOGGER.debug("Initialising student modules stage");
+
+        AccessStudentModulesView modulesView = new AccessStudentModulesView();
+
+        studentModulesStage = new Stage();
+        studentModulesStage.setMinHeight(550);
+        studentModulesStage.setMinWidth(750);
+        studentModulesStage.setTitle("SMS - Module View");
+        studentModulesStage.setScene(new Scene(modulesView));
     }
 
     private void initialiseAdminDashboardStage() {

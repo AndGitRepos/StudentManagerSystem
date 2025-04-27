@@ -64,6 +64,7 @@ public class StudentDashboardController {
 
         if (selectedCourse != null) {
             LOGGER.debug("Selected course: {}", selectedCourse.getName());
+            Session.getInstance().setSelectedCourseId(selectedCourse.getId());
             ViewFactory.getInstance().changeToStudentModulesStage();
         } else {
             LOGGER.info("No course was selected - alert showing");

@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 public class Session {
     private static final Session instance = new Session();
     private Optional<User> user;
+    private int selectedCourseId;
 
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -31,5 +32,13 @@ public class Session {
     public void clearSession() {
         LOGGER.debug("Clearing session");
         user = Optional.empty();
+    }
+
+    public void setSelectedCourseId(int id) {
+        this.selectedCourseId = id;
+    }
+
+    public int getSelectedCourseId() {
+        return selectedCourseId;
     }
 }
