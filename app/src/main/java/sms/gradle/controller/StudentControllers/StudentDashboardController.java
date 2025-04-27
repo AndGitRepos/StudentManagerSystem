@@ -55,8 +55,8 @@ public class StudentDashboardController {
     }
 
     public static void handleSelectCourseButton(ActionEvent event) {
-        ListView<Course> courseList = (ListView<Course>) ViewFactory.getInstance()
-                .getStudentDashboardStage().getScene().lookup("#courseListView");
+        ListView<Course> courseList = (ListView<Course>)
+                ViewFactory.getInstance().getStudentDashboardStage().getScene().lookup("#courseListView");
 
         Course selectedCourse = courseList.getSelectionModel().getSelectedItem();
 

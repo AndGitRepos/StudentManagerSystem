@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sms.gradle.controller.StudentControllers.AccessStudentModulesController;
 import sms.gradle.model.entities.Module;
 import sms.gradle.view.CoreViewInterface;
 
@@ -33,12 +34,37 @@ public class AccessStudentModulesView extends BorderPane implements CoreViewInte
     private Button backButton;
     private Button signoutButton;
 
+    private VBox createModuleCard(Module module) {
+
+        VBox card = new VBox(10);
+        card.getStyleClass().add("module-card");
+        card.setPadding(new Insets(15));
+
+        Label moduleNameLabel = new Label(module.getName());
+        moduleNameLabel.getStyleClass().add("module-name");
+
+        Label moduleIdLabel = new Label("ID: " + module.getId());
+        Label moduleLecturerLabel = new Label("Lecturer: " + module.getLecturer());
+        Label moduleDescriptionLabel = new Label("Description: " + module.getDescription());
+        moduleDescriptionLabel.setWrapText(true);
+
+        card.getChildren().addAll(moduleNameLabel, moduleIdLabel, moduleLecturerLabel, moduleDescriptionLabel);
+
+        return card;
+    }
+
+    private void setupEventHandler() {
+        backButton.setOnAction(AccessStudentModulesController::handleBackButton);
+        signoutButton.setOnAction(AccessStudentModulesController::handleSignoutButton);
+    }
+
     public void accessStudentModules() {
         LOGGER.debug("Initialising Access Student Modules View");
         getStylesheets().add(getClass().getResource("/styles/dashboard.css").toExternalForm());
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
+        setupEventHandler();
         LOGGER.debug("Access Student Modules View Initialised");
     }
 
@@ -96,30 +122,13 @@ public class AccessStudentModulesView extends BorderPane implements CoreViewInte
 
     public void setCourseNameHeader(String selectedCourseName) {
         courseNameHeading.setText(selectedCourseName + " Modules");
+        LOGGER.debug("Course header set to: {}", selectedCourseName);
     }
 
-    public void upateModuleToGrid(Module module, int row, int column) {
+    public void updateModuleToGrid(Module module, int row, int column) {
         VBox moduleCard = createModuleCard(module);
         modulesGrid.add(moduleCard, column, row);
-    }
-
-    private VBox createModuleCard(Module module) {
-
-        VBox card = new VBox(10);
-        card.getStyleClass().add("module-card");
-        card.setPadding(new Insets(15));
-
-        Label moduleNameLabel = new Label(module.getName());
-        moduleNameLabel.getStyleClass().add("module-name");
-
-        Label moduleIdLabel = new Label("ID: " + module.getId());
-        Label moduleLecturerLabel = new Label("Lecturer: " + module.getLecturer());
-        Label moduleDescriptionLabel = new Label("Description: " + module.getDescription());
-        moduleDescriptionLabel.setWrapText(true);
-
-        card.getChildren().addAll(moduleNameLabel, moduleIdLabel, moduleLecturerLabel, moduleDescriptionLabel);
-
-        return card;
+        LOGGER.debug("Added module {} to grid, positioned: ({}, {})", module.getName(), row, column);
     }
 
     public void clearModules() {
