@@ -12,8 +12,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sms.gradle.controller.StudentControllers.StudentDashboardController;
 import sms.gradle.model.entities.Course;
 import sms.gradle.view.CoreViewInterface;
 
@@ -21,6 +23,7 @@ import sms.gradle.view.CoreViewInterface;
  * Manages StudentDashboard view via CoreViewInterface's Template pattern
  */
 
+@Getter
 public class StudentDashboardView extends BorderPane implements CoreViewInterface {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -99,12 +102,28 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
         academiaSection.setPadding(new Insets(15));
     }
 
+    private void setupEventHandlers() {
+
+        selectCourseButton.setOnAction(StudentDashboardController::handleSelectCourseButton);
+        viewStatsButton.setOnAction(StudentDashboardController::handleViewStatsButton);
+        accessAssessmentsViewButton.setOnAction(StudentDashboardController::handleViewAssessmentsButton);
+        signoutButton.setOnAction(StudentDashboardController::handleSignout);
+    }
+
+    public void loadUserDetails() {
+        LOGGER.debug("Loading user details for Student Dashboard View");
+        StudentDashboardController.loadEnrolledCourses(this);
+    }
+
     public StudentDashboardView() {
         LOGGER.debug("Initialising Student Dashboard View");
         getStylesheets().add(getClass().getResource("/styles/dashboard.css").toExternalForm());
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
+        setupEventHandlers();
+        setupCourseListView();
+
         LOGGER.debug("Student Dashboard View Initialised");
     }
 

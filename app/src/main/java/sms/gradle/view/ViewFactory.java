@@ -32,6 +32,7 @@ public class ViewFactory {
     private Stage manageModulesStage;
     private Stage manageAdminStage;
     private Stage courseDetailStage;
+    private Stage studentModulesStage; // TODO: Access Student Modules Stage
 
     private ViewFactory() {
         LOGGER.info("Initialising View Factory");
@@ -42,7 +43,7 @@ public class ViewFactory {
         initialiseManageCourseStage();
         initialiseManageModulesStage();
         initialiseManageAdminStage();
-        initialieCourseDetailStage();
+        initialiseCourseDetailStage();
         LOGGER.info("View Factory initialised");
     }
 
@@ -61,8 +62,17 @@ public class ViewFactory {
 
     public void changeToStudentDashboardStage() {
         LOGGER.debug("Changing to student dashboard stage");
+        StudentDashboardView view =
+                (StudentDashboardView) studentDashboardStage.getScene().getRoot();
+        view.loadUserDetails();
         loginStage.hide();
         studentDashboardStage.show();
+    }
+
+    public void changeToStudentModulesStage() {
+        LOGGER.debug("Changing to access student modules stage");
+        studentDashboardStage.show();
+        studentModulesStage.show();
     }
 
     public void changeToAdminDashboardStage() {
@@ -186,7 +196,7 @@ public class ViewFactory {
         manageAdminStage.setTitle("SMS - Manage Admins");
     }
 
-    private void initialieCourseDetailStage() {
+    private void initialiseCourseDetailStage() {
         LOGGER.debug("Initialising course detail stage");
         CourseDetailView courseDetailView = new CourseDetailView();
 
