@@ -12,8 +12,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sms.gradle.controller.StudentControllers.StudentDashboardController;
 import sms.gradle.model.entities.Course;
 import sms.gradle.view.CoreViewInterface;
 
@@ -21,6 +23,7 @@ import sms.gradle.view.CoreViewInterface;
  * Manages StudentDashboard view via CoreViewInterface's Template pattern
  */
 
+@Getter
 public class StudentDashboardView extends BorderPane implements CoreViewInterface {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -31,8 +34,9 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
 
     private Button selectCourseButton;
     private Button accessAssessmentsViewButton;
-    private Button viewStatsButton; // TODO: All stats in `Access Assessments View`
+    private Button viewStatsButton;
     private Button signoutButton;
+    private Button refreshButton;
 
     private Label studentNameLabel;
     private Label studentEmailLabel;
@@ -78,14 +82,18 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
 
         academicsHeader.setTranslateX(125 - academicsHeader.getLayoutBounds().getWidth() / 2);
 
-        HBox selectCourseArea = new HBox(20);
-        selectCourseArea.setAlignment(Pos.TOP_CENTER);
+        HBox courseListControls = new HBox(10);
+        courseListControls.getChildren().add(refreshButton);
+        courseListControls.setAlignment(Pos.CENTER_RIGHT);
+        courseListControls.setTranslateY(50);
 
         VBox selectButtonContainer = new VBox(10);
         selectButtonContainer.setAlignment(Pos.CENTER);
         selectButtonContainer.getChildren().add(selectCourseButton);
         VBox.setMargin(selectCourseButton, new Insets(0, 0, 0, 0));
 
+        HBox selectCourseArea = new HBox(20);
+        selectCourseArea.setAlignment(Pos.TOP_CENTER);
         selectCourseArea.getChildren().addAll(courseListView, selectButtonContainer);
 
         courseListView.setMinWidth(400);
@@ -95,8 +103,17 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
         selectCourseButton.setText("Select Course");
         selectCourseButton.setStyle("-fx-font-size: 15px");
 
-        academiaSection.getChildren().addAll(academicsHeader, selectCourseArea);
+        academiaSection.getChildren().addAll(academicsHeader, courseListControls, selectCourseArea);
         academiaSection.setPadding(new Insets(15));
+    }
+
+    private void setupEventHandlers() {
+
+        selectCourseButton.setOnAction(StudentDashboardController::handleSelectCourseButton);
+        viewStatsButton.setOnAction(StudentDashboardController::handleViewStatsButton);
+        accessAssessmentsViewButton.setOnAction(StudentDashboardController::handleViewAssessmentsButton);
+        signoutButton.setOnAction(StudentDashboardController::handleSignout);
+        refreshButton.setOnAction(StudentDashboardController::handleCourseListRefresh);
     }
 
     public StudentDashboardView() {
@@ -105,6 +122,9 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
+        setupEventHandlers();
+        setupCourseListView();
+
         LOGGER.debug("Student Dashboard View Initialised");
     }
 
@@ -122,6 +142,8 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
         viewStatsButton = new Button("View Overall Course Stats");
 
         signoutButton = new Button("Sign Out");
+        refreshButton = new Button("Refresh Courses");
+        refreshButton.setId("refreshButton");
 
         courseListView.setId("courseListView");
         selectCourseButton.setId("selectCourseButton");
@@ -180,9 +202,5 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
         studentEmailLabel.setText("Email Address: " + emailAddress);
         studentEntryYearLabel.setText("Year of Entry: " + entryYear);
         LOGGER.debug("Student details updated: Name: {}, Email: {}, Entry Year: {}", name, emailAddress, entryYear);
-    }
-
-    public Button getSignOutButton() {
-        return signoutButton;
     }
 }
