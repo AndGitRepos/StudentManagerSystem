@@ -14,6 +14,7 @@ import sms.gradle.view.frames.admin.ManageAdminView;
 import sms.gradle.view.frames.admin.ManageCourseView;
 import sms.gradle.view.frames.admin.ManageModulesView;
 import sms.gradle.view.frames.admin.ManageStudentView;
+import sms.gradle.view.frames.student.AccessStudentAssessmentsView;
 import sms.gradle.view.frames.student.AccessStudentModulesView;
 import sms.gradle.view.frames.student.StudentDashboardView;
 
@@ -34,7 +35,8 @@ public class ViewFactory {
     private Stage manageModulesStage;
     private Stage manageAdminStage;
     private Stage courseDetailStage;
-    private Stage studentModulesStage; // TODO: Access Student Modules Stage
+    private Stage studentModulesStage;
+    private Stage studentAssessmentsStage;
 
     private ViewFactory() {
         LOGGER.info("Initialising View Factory");
@@ -47,6 +49,7 @@ public class ViewFactory {
         initialiseManageAdminStage();
         initialiseCourseDetailStage();
         initialiseStudentModulesStage();
+        initialiseStudentAssessmentsStage();
         LOGGER.info("View Factory initialised");
     }
 
@@ -79,6 +82,12 @@ public class ViewFactory {
         AccessStudentModulesController.loadModules(modulesView);
         studentDashboardStage.hide();
         studentModulesStage.show();
+    }
+
+    public void changeToStudentAssessmentsStage() {
+        LOGGER.debug("Changing to access student assessments stage");
+        studentDashboardStage.hide();
+        studentAssessmentsStage.show();
     }
 
     public void changeToAdminDashboardStage() {
@@ -153,6 +162,18 @@ public class ViewFactory {
         studentModulesStage.setMinWidth(750);
         studentModulesStage.setTitle("SMS - Module View");
         studentModulesStage.setScene(new Scene(modulesView));
+    }
+
+    private void initialiseStudentAssessmentsStage() {
+        LOGGER.debug("Initialising student assessments stage");
+
+        AccessStudentAssessmentsView assessmentsView = new AccessStudentAssessmentsView();
+
+        studentAssessmentsStage = new Stage();
+        studentAssessmentsStage.setMinHeight(550);
+        studentAssessmentsStage.setMinWidth(750);
+        studentAssessmentsStage.setTitle("SMS - Assessments View");
+        studentAssessmentsStage.setScene(new Scene(assessmentsView));
     }
 
     private void initialiseAdminDashboardStage() {

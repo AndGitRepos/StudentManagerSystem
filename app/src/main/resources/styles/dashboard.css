@@ -4,7 +4,7 @@
 
 /* Containers*/
 .staff-dashboard-container,
-.student-dashboard-container {
+.student-dashboard-container .assessment-view-container {
     -fx-background-color: white;
     -fx-padding: 20;
     -fx-spacing: 10;
@@ -48,7 +48,6 @@ For Student Dashboard
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
 }
 
-
 .academia-section {
     -fx-background-color: white;
     -fx-background-radius: 10px;
@@ -66,4 +65,31 @@ For Student Dashboard
     -fx-min-width: 200px;
     -fx-margin: 5 0;
     -fx-background-color: #0879bade;
+}
+
+.assessment-card {
+    -fx-background-color: white;
+    -fx-border-color: #cccccf;
+    -fx-border-radius: 5px;
+    -fx-min-width: 200px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 5, 0, 0, 0);
+}
+
+.assessment-name {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.assessment-id {
+    -fx-font-size: 15px;
+    -fx-text-fill: #666666;
+}
+
+.assessments-grid {
+    -fx-background-color: transparent;
+}
+
+.assessment-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 10px;
 }
