@@ -200,8 +200,4 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
         studentEntryYearLabel.setText("Year of Entry: " + entryYear);
         LOGGER.debug("Student details updated: Name: {}, Email: {}, Entry Year: {}", name, emailAddress, entryYear);
     }
-
-    public Button getSignOutButton() {
-        return signoutButton;
-    }
 }
