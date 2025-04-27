@@ -1,0 +1,214 @@
+package sms.gradle.controller.admin;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import sms.gradle.model.dao.CourseDAO;
+import sms.gradle.model.dao.ModuleDAO;
+import sms.gradle.model.entities.Course;
+import sms.gradle.model.entities.Module;
+import sms.gradle.utils.Common;
+import sms.gradle.view.ViewFactory;
+
+public final class ManageModuleController {
+    private static final Logger LOGGER = LogManager.getLogger();
+
+    private static Stage getViewStage() {
+        return ViewFactory.getInstance().getManageModulesStage();
+    }
+
+    /**
+     * Updates the list of modules with all the modules in the database
+     * @param event The action event that triggered this method
+     */
+    public static void updateListOfModules(ActionEvent event) {
+        LOGGER.debug("Updating list of modules");
+
+        ListView<Module> modulesList = Common.getNode(getViewStage(), "#modulesListView");
+        modulesList.getItems().clear();
+        try {
+            modulesList.getItems().addAll(ModuleDAO.findAll());
+        } catch (SQLException e) {
+            LOGGER.error("Failed to update list of modules: ", e);
+        }
+    }
+
+    /**
+     * Populates form fields with selected module's information and updates module lists.
+     *
+     * @param event The action event that triggered this method
+     */
+    public static void selectModule(ActionEvent event) {
+        LOGGER.debug("Selecting module");
+
+        ListView<Module> modulesListView = Common.getNode(getViewStage(), "#modulesListView");
+        Module selectedModule = modulesListView.getSelectionModel().getSelectedItem();
+        Optional<Course> linkedCourse;
+
+        if (selectedModule == null) {
+            LOGGER.debug("No module selected. Ignoring.");
+            return;
+        }
+
+        LOGGER.debug("Selected module: {}", selectedModule);
+
+        try {
+            int linkedCourseId =
+                    ModuleDAO.findById(selectedModule.getId()).get().getCourseId();
+            linkedCourse = CourseDAO.findById(linkedCourseId);
+        } catch (SQLException e) {
+            LOGGER.error("Failed to get linked course from currently selected module");
+            return;
+        }
+
+        if (linkedCourse.isEmpty()) {
+            LOGGER.debug("Module does not have a linked course");
+            return;
+        }
+
+        updateModuleDetails(selectedModule);
+        updateLinkedCourseDetails(linkedCourse.get());
+        updateUnlinkedCoursesListView();
+    }
+
+    /**
+     * Creates a new module in the database with the provided information.
+     *
+     * @param event The action event that triggered this method
+     */
+    public static void createNewModule(ActionEvent event) {
+        LOGGER.debug("Creating new module");
+
+        TextField nameField = Common.getNode(getViewStage(), "#nameField");
+        TextField descriptionField = Common.getNode(getViewStage(), "#descriptionField");
+        TextField lecturerField = Common.getNode(getViewStage(), "#lecturerField");
+
+        Module newModule = new Module(0, nameField.getText(), descriptionField.getText(), lecturerField.getText(), 1);
+
+        try {
+            ModuleDAO.addModule(newModule);
+            LOGGER.debug("New module created: {}", newModule);
+        } catch (SQLException e) {
+            LOGGER.error("Failed to create new module: ", e);
+        }
+    }
+
+    /**
+     * Deletes the selected module from the database.
+     *
+     * @param event The action event that triggered this method
+     */
+    public static void deleteModule(ActionEvent event) {
+        LOGGER.debug("Deleting module");
+        ListView<Module> modulesListView = Common.getNode(getViewStage(), "#modulesListView");
+        Module selectedModule = modulesListView.getSelectionModel().getSelectedItem();
+
+        if (selectedModule == null) {
+            LOGGER.debug("No module selected. Ignoring.");
+            return;
+        }
+
+        LOGGER.debug("Deleting module: {}", selectedModule);
+        try {
+            ModuleDAO.delete(selectedModule.getId());
+            modulesListView.getItems().remove(selectedModule);
+        } catch (SQLException e) {
+            LOGGER.error("Failed to delete module: ", e);
+        }
+    }
+
+    public static void swapLinkedCourse(ActionEvent event) {
+        LOGGER.debug("Swapping linked module");
+        ListView<Course> unlinkedCoursesListView = Common.getNode(getViewStage(), "#unlinkedCoursesListView");
+        Course selectedCourse = unlinkedCoursesListView.getSelectionModel().getSelectedItem();
+
+        if (selectedCourse == null) {
+            LOGGER.debug("No module selected. Ignoring.");
+            return;
+        }
+
+        LOGGER.debug("Selected course: {}", selectedCourse);
+        updateLinkedCourseDetails(selectedCourse);
+        updateUnlinkedCoursesListView();
+    }
+
+    public static void updateModule(ActionEvent event) {
+        LOGGER.debug("Updating module");
+
+        TextField moduleIdField = Common.getNode(getViewStage(), "#moduleIdField");
+        TextField nameField = Common.getNode(getViewStage(), "#nameField");
+        TextField descriptionField = Common.getNode(getViewStage(), "#descriptionField");
+        TextField lecturerField = Common.getNode(getViewStage(), "#lecturerField");
+
+        Module updatedModule = new Module(
+                Integer.parseInt(moduleIdField.getText()),
+                nameField.getText(),
+                descriptionField.getText(),
+                lecturerField.getText(),
+                getCourseIdFromLinkedCourse());
+
+        try {
+            ModuleDAO.update(updatedModule);
+            updateListOfModules(null);
+            LOGGER.debug("Module updated: {}", updatedModule);
+        } catch (SQLException e) {
+            LOGGER.error("Failed to update module: ", e);
+        }
+    }
+
+    private static void updateModuleDetails(Module selectedModule) {
+        TextField moduleIdField = Common.getNode(getViewStage(), "#moduleIdField");
+        TextField nameField = Common.getNode(getViewStage(), "#nameField");
+        TextField descriptionField = Common.getNode(getViewStage(), "#descriptionField");
+        TextField lecturerField = Common.getNode(getViewStage(), "#lecturerField");
+
+        moduleIdField.setText(String.valueOf(selectedModule.getId()));
+        nameField.setText(selectedModule.getName());
+        descriptionField.setText(selectedModule.getDescription());
+        lecturerField.setText(selectedModule.getLecturer());
+    }
+
+    private static void updateLinkedCourseDetails(Course linkedCourse) {
+        LOGGER.debug("Updating linked course details");
+
+        Label linkedCourseNameLabel = Common.getNode(getViewStage(), "#linkedCourseNameLabel");
+        Label linkedCourseIdLabel = Common.getNode(getViewStage(), "#linkedCourseIdLabel");
+        Label linkedCourseDescriptionLabel = Common.getNode(getViewStage(), "#linkedCourseDescriptionLabel");
+
+        linkedCourseNameLabel.setText(linkedCourse.getName());
+        linkedCourseIdLabel.setText("(" + linkedCourse.getId() + ")");
+        linkedCourseDescriptionLabel.setText(linkedCourse.getDescription());
+    }
+
+    private static void updateUnlinkedCoursesListView() {
+        LOGGER.debug("Updating unlinked modules list");
+
+        ListView<Course> unlinkedCoursesListView = Common.getNode(getViewStage(), "#unlinkedCoursesListView");
+        unlinkedCoursesListView.getItems().clear();
+
+        try {
+            List<Course> allCourses = CourseDAO.findAll();
+            for (Course course : allCourses) {
+                // Don't add the currently linked course to the list
+                if (course.getId() != getCourseIdFromLinkedCourse()) {
+                    unlinkedCoursesListView.getItems().add(course);
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.error("Failed to update unlinked courses list: ", e);
+        }
+    }
+
+    private static int getCourseIdFromLinkedCourse() {
+        Label linkedCourseIdLabel = Common.getNode(getViewStage(), "#linkedCourseIdLabel");
+        String labelText = linkedCourseIdLabel.getText();
+        return Integer.parseInt(labelText.substring(1, labelText.length() - 1));
+    }
+}

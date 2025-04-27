@@ -3,6 +3,7 @@
 @import "common.css";
 
 .manage-student-view,
+manage-modules-view,
 .manage-course-view {
     -fx-background-color: white;
     -fx-padding: 10px;
