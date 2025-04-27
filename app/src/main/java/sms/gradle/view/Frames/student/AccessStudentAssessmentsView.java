@@ -11,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sms.gradle.controller.StudentControllers.AccessStudentAssessmentsController;
 import sms.gradle.model.entities.Assessment;
 import sms.gradle.view.CoreViewInterface;
 import sms.gradle.view.components.GradeCircle;
@@ -48,6 +49,11 @@ public class AccessStudentAssessmentsView extends BorderPane implements CoreView
         return card;
     }
 
+    private void setupEventHandler() {
+        backButton.setOnAction(AccessStudentAssessmentsController::handleBackButton);
+        signoutButton.setOnAction(AccessStudentAssessmentsController::handleSignoutButton);
+    }
+
     public AccessStudentAssessmentsView() {
 
         LOGGER.debug("Initialising Access Student Assessments View");
@@ -55,6 +61,7 @@ public class AccessStudentAssessmentsView extends BorderPane implements CoreView
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
+        setupEventHandler();
         LOGGER.debug("Access Student Assessments View Initialised");
     }
 
@@ -110,10 +117,11 @@ public class AccessStudentAssessmentsView extends BorderPane implements CoreView
         signoutButton.getStyleClass().add("navigation-button");
     }
 
-    public void updateAssessmentToGrid(Assessment assessment, int row, int column, int result) {
+    public void updateAssessmentToGrid(Assessment assessment, int result, int row, int column) {
         VBox assessmentCard = createAssessmentCard(assessment, result);
         assessmentsGrid.add(assessmentCard, column, row);
-        LOGGER.debug("Added assessment {} to grid, positioned: ({}, {})", assessment.getName(), row, column);
+        LOGGER.debug("Added assessment {} to grid, positioned: ({}, {})", assessment.getName(), row,
+                column);
     }
 
     public void clearAssessments() {

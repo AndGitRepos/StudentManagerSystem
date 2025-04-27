@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sms.gradle.controller.StudentControllers.AccessStudentAssessmentsController;
 import sms.gradle.controller.StudentControllers.AccessStudentModulesController;
 import sms.gradle.utils.session.Session;
 import sms.gradle.view.frames.LoginView;
@@ -86,6 +87,9 @@ public class ViewFactory {
 
     public void changeToStudentAssessmentsStage() {
         LOGGER.debug("Changing to access student assessments stage");
+        AccessStudentAssessmentsView assessmentsView = (AccessStudentAssessmentsView)
+                studentAssessmentsStage.getScene().getRoot();
+        AccessStudentAssessmentsController.loadAssessments(assessmentsView);
         studentDashboardStage.hide();
         studentAssessmentsStage.show();
     }

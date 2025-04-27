@@ -59,6 +59,7 @@ public final class AccessStudentModulesController {
             view.updateModuleToGrid(module, row, column);
             column++;
             if (column > 2) {
+                column = 0;
                 row++;
             }
         }
