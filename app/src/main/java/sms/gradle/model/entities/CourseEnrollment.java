@@ -10,5 +10,5 @@ public class CourseEnrollment {
     private final int id;
     private int studentId;
     private int courseId;
-    Date enrollmentDate;
+    private Date enrollmentDate;
 }

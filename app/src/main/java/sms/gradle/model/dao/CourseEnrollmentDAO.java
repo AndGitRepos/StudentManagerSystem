@@ -141,6 +141,34 @@ public final class CourseEnrollmentDAO {
     }
 
     /**
+     * Finds a specific course enrollment linked to a student and course ID
+     * @param studentId The ID of the student to find course enrollments for
+     * @param courseId The ID of the course to find enrollments for
+     * @return A Optional <code>CourseEnrollment</code> object for the specified student and course ID
+     * @throws SQLException if there is an error executing the query
+     */
+    public static Optional<CourseEnrollment> findByStudentAndCourseId(final int studentId, final int courseId)
+            throws SQLException {
+        LOGGER.debug("Finding course enrollments by student id: {} and course id: {}", studentId, courseId);
+        final String sql = "SELECT * FROM course_enrollments WHERE (student_id = ? AND course_id = ?)";
+        try (PreparedStatement findSqlStatement =
+                DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            findSqlStatement.setInt(1, studentId);
+            findSqlStatement.setInt(2, courseId);
+            ResultSet resultSet = findSqlStatement.executeQuery();
+            return getCourseEnrollmentFromResultSet(resultSet);
+        } catch (SQLException e) {
+            LOGGER.error(
+                    "Failed to find course enrollments by student id: {} and course id: {}", studentId, courseId, e);
+            throw new SQLException(
+                    String.format(
+                            "Failed to find course enrollments for student with Id: %d and course Id: %d",
+                            studentId, courseId),
+                    e);
+        }
+    }
+
+    /**
      * Retrieves all course enrollments from the database
      * @return A List containing all <code>CourseEnrollment</code> objects in the database
      * @throws SQLException if there is an error executing the query

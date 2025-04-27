@@ -6,6 +6,8 @@ import java.security.SecureRandom;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
+import javafx.scene.Node;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.model.dao.*;
@@ -101,5 +103,11 @@ public final class Common {
         LOGGER.debug("Populated results table");
 
         LOGGER.info("Finished populating tables");
+    }
+
+    public static <T extends Node> T getNode(Stage stage, String selector) {
+        @SuppressWarnings("unchecked")
+        T node = (T) stage.getScene().lookup(selector);
+        return node;
     }
 }
