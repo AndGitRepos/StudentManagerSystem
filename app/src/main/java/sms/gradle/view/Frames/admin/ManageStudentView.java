@@ -46,8 +46,8 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
 
     private ListView<Course> enrolledCoursesListView;
     private ListView<Course> availableCoursesListView;
-    private Button moveUpButton;
-    private Button moveDownButton;
+    private Button enrollButton;
+    private Button unenrollButton;
     private Button backButton;
     private VBox rightPanel;
 
@@ -55,6 +55,7 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
         LOGGER.debug("Initialising Manage Student View");
         getStylesheets().add(getClass().getResource("/styles/manager.css").toExternalForm());
         initialiseCoreUIComponents();
+        setCoreUiComponentIds();
         layoutCoreUIComponents();
         styleCoreUIComponents();
         assignButtonActions();
@@ -66,52 +67,60 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
         selectButton.setOnAction(ManageStudentController::selectStudent);
         deleteButton.setOnAction(ManageStudentController::deleteStudent);
         createNewButton.setOnAction(ManageStudentController::createNewStudent);
+        enrollButton.setOnAction(ManageStudentController::enrollCourse);
+        unenrollButton.setOnAction(ManageStudentController::unenrollCourse);
         backButton.setOnAction(event -> ViewFactory.getInstance().changeToAdminDashboardStage());
+    }
+
+    private void setCoreUiComponentIds() {
+        studentListView.setId("studentListView");
+        refreshButton.setId("refreshButton");
+        selectButton.setId("selectButton");
+        deleteButton.setId("deleteButton");
+
+        studentIdField.setId("studentIdField");
+        firstNameField.setId("firstNameField");
+        lastNameField.setId("lastNameField");
+        dateOfBirthPicker.setId("dateOfBirthPicker");
+        joinDatePicker.setId("joinDatePicker");
+        emailField.setId("emailField");
+        passwordField.setId("passwordField");
+        createNewButton.setId("createNewButton");
+        updateButton.setId("updateButton");
+
+        enrolledCoursesListView.setId("enrolledCoursesListView");
+        availableCoursesListView.setId("availableCoursesListView");
+        enrollButton.setId("enrollButton");
+        unenrollButton.setId("unenrollButton");
+        backButton.setId("backButton");
     }
 
     @Override
     public void initialiseCoreUIComponents() {
         studentListView = new ListView<>();
-        studentListView.setId("studentListView");
         refreshButton = new Button("Refresh");
-        refreshButton.setId("refreshButton");
         selectButton = new Button("Select");
-        selectButton.setId("selectButton");
         deleteButton = new Button("Delete");
-        deleteButton.setId("deleteButton");
         leftPanel = new VBox(10);
 
         studentDetailsPane = new GridPane();
         studentIdField = new TextField();
-        studentIdField.setId("studentIdField");
+        studentIdField.setEditable(false);
         firstNameField = new TextField();
-        firstNameField.setId("firstNameField");
         lastNameField = new TextField();
-        lastNameField.setId("lastNameField");
         dateOfBirthPicker = new DatePicker();
-        dateOfBirthPicker.setId("dateOfBirthPicker");
         joinDatePicker = new DatePicker();
-        joinDatePicker.setId("joinDatePicker");
         emailField = new TextField();
-        emailField.setId("emailField");
         passwordField = new PasswordField();
-        passwordField.setId("passwordField");
         createNewButton = new Button("Create New");
-        createNewButton.setId("createNewButton");
         updateButton = new Button("Update");
-        updateButton.setId("updateButton");
         centerPanel = new VBox(10);
 
         enrolledCoursesListView = new ListView<>();
-        enrolledCoursesListView.setId("enrolledCoursesListView");
         availableCoursesListView = new ListView<>();
-        availableCoursesListView.setId("availableCoursesListView");
-        moveUpButton = new Button("Move Up");
-        moveUpButton.setId("moveUpButton");
-        moveDownButton = new Button("Move Down");
-        moveDownButton.setId("moveDownButton");
+        enrollButton = new Button("Enroll");
+        unenrollButton = new Button("Un-Enroll");
         backButton = new Button("Back");
-        backButton.setId("backButton");
         rightPanel = new VBox(10);
     }
 
@@ -147,11 +156,11 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
                 10,
                 new Label("Enrolled Courses"),
                 enrolledCoursesListView,
-                new HBox(10, moveUpButton, moveDownButton),
+                new HBox(10, unenrollButton),
                 new Label("Available Courses"),
                 availableCoursesListView);
 
-        HBox controlButtons = new HBox(10, backButton);
+        HBox controlButtons = new HBox(10, enrollButton, backButton);
         controlButtons.setAlignment(CENTER);
 
         rightPanel.getChildren().addAll(coursesBox, controlButtons);
@@ -189,8 +198,8 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
         deleteButton.getStyleClass().add("action-button");
         createNewButton.getStyleClass().add("action-button");
         updateButton.getStyleClass().add("action-button");
-        moveUpButton.getStyleClass().add("action-button");
-        moveDownButton.getStyleClass().add("action-button");
+        enrollButton.getStyleClass().add("action-button");
+        unenrollButton.getStyleClass().add("action-button");
         backButton.getStyleClass().add("navigate-button");
     }
 
