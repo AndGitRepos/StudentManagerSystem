@@ -100,7 +100,7 @@ public class StudentDashboardController {
 
     public static void handleViewAssessmentsButton(ActionEvent event) {
         LOGGER.debug("Clicked 'access assessments' button");
-        // TODO: Implement
+        ViewFactory.getInstance().changeToStudentAssessmentsStage();
     }
 
     public static void handleSignout(ActionEvent event) {

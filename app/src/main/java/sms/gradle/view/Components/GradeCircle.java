@@ -22,12 +22,13 @@ public class GradeCircle extends StackPane {
         getStylesheets().add(getClass().getResource("/styles/components.css").toExternalForm());
 
         gradeValidation(grade);
-        circle = new Circle(30);
+        circle = new Circle(90);
 
         styleCircleColourByGrade(grade);
 
         gradeLabel = new Label(grade + "%");
         gradeLabel.setTextFill(Color.WHITE);
+        gradeLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
         getChildren().addAll(circle, gradeLabel);
 

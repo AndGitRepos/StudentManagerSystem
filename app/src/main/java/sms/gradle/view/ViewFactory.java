@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sms.gradle.controller.StudentControllers.AccessStudentAssessmentsController;
 import sms.gradle.utils.session.Session;
 import sms.gradle.view.frames.LoginView;
 import sms.gradle.view.frames.admin.AdminDashboardView;
@@ -179,6 +180,7 @@ public class ViewFactory {
         AccessStudentAssessmentsView assessmentsView = new AccessStudentAssessmentsView();
 
         studentAssessmentsStage = new Stage();
+        studentAssessmentsStage.setOnShowing(AccessStudentAssessmentsController::handleCourseFilterLoading);
         studentAssessmentsStage.setMinHeight(550);
         studentAssessmentsStage.setMinWidth(750);
         studentAssessmentsStage.setTitle("SMS - Assessments View");
