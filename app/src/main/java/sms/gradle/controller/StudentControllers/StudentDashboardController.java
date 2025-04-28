@@ -6,18 +6,19 @@ import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import lombok.Getter;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.model.dao.CourseDAO;
 import sms.gradle.model.dao.CourseEnrollmentDAO;
+import sms.gradle.model.dao.StudentDAO;
 import sms.gradle.model.entities.Course;
 import sms.gradle.model.entities.CourseEnrollment;
 import sms.gradle.utils.session.Session;
 import sms.gradle.view.ViewFactory;
 
-@Getter
 public class StudentDashboardController {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -42,7 +43,20 @@ public class StudentDashboardController {
                     .getScene()
                     .lookup("#courseListView");
 
+            Stage stage = ViewFactory.getInstance().getStudentDashboardStage();
+            Label nameLabel = (Label) stage.getScene().lookup("#studentNameLabel");
+            Label emailLabel = (Label) stage.getScene().lookup("#studentEmailLabel");
+            Label joinDateLabel = (Label) stage.getScene().lookup("#studentJoinDateLabel");
+
             int studentId = Session.getInstance().getUser().get().getId();
+
+            StudentDAO.findById(studentId).ifPresent(student -> {
+                nameLabel.setText("Student: " + student.getFirstName() + " " + student.getLastName());
+                emailLabel.setText("Email: " + student.getEmail());
+                joinDateLabel.setText("Join Date: " + student.getJoinDate().toString());
+                LOGGER.debug("Loaded student details successfully");
+            });
+
             List<CourseEnrollment> enrolledCourses = CourseEnrollmentDAO.findByStudentId(studentId);
             List<Course> courses = new ArrayList<>();
 
@@ -54,7 +68,7 @@ public class StudentDashboardController {
 
             LOGGER.debug("Displayed {} courses for student ID: {}", courses.size(), studentId);
         } catch (SQLException e) {
-            LOGGER.info("Failed in displaying enrolled courses", e);
+            LOGGER.error("Failed in displaying enrolled courses", e);
         }
     }
 
@@ -68,6 +82,7 @@ public class StudentDashboardController {
             LOGGER.debug("Selected course: {}", selectedCourse.getName());
             Session.getInstance().setSelectedCourseId(selectedCourse.getId());
             ViewFactory.getInstance().changeToStudentModulesStage();
+
         } else {
             LOGGER.info("No course was selected - alert showing");
             Alert alert = new Alert(AlertType.WARNING);

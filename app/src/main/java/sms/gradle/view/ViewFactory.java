@@ -69,8 +69,6 @@ public class ViewFactory {
 
     public void changeToStudentDashboardStage() {
         LOGGER.debug("Changing to student dashboard stage");
-        StudentDashboardView view =
-                (StudentDashboardView) studentDashboardStage.getScene().getRoot();
         loginStage.hide();
         studentModulesStage.hide();
         studentDashboardStage.show();

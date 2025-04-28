@@ -40,7 +40,7 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
 
     private Label studentNameLabel;
     private Label studentEmailLabel;
-    private Label studentEntryYearLabel;
+    private Label studentJoinDateLabel;
 
     private void initialiseKeyContainers() {
         profileSection = new VBox(20);
@@ -49,8 +49,13 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
 
     private void initialiseStudentDetails() {
         studentNameLabel = new Label("Student: ");
+        studentNameLabel.setId("studentNameLabel");
+
         studentEmailLabel = new Label("Email: ");
-        studentEntryYearLabel = new Label("Entry Year: ");
+        studentEmailLabel.setId("studentEmailLabel");
+
+        studentJoinDateLabel = new Label("Join Date: ");
+        studentJoinDateLabel.setId("studentJoinDateLabel");
     }
 
     private void initialiseSignoutControl() {
@@ -69,7 +74,7 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
 
         profileSection
                 .getChildren()
-                .addAll(profileHeader, profilePhoto, studentEmailLabel, studentEntryYearLabel, studentNameLabel);
+                .addAll(profileHeader, profilePhoto, studentEmailLabel, studentJoinDateLabel, studentNameLabel);
         profileSection.setAlignment(Pos.TOP_CENTER);
         profileSection.setPrefWidth(350);
         profileSection.setPadding(new Insets(20));
@@ -198,12 +203,5 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
         selectCourseButton.getStyleClass().add("action-button");
         accessAssessmentsViewButton.getStyleClass().add("action-button");
         viewStatsButton.getStyleClass().add("action-button");
-    }
-
-    public void updateStudentDetails(String name, String emailAddress, String entryYear) {
-        studentNameLabel.setText("Student: " + name);
-        studentEmailLabel.setText("Email Address: " + emailAddress);
-        studentEntryYearLabel.setText("Year of Entry: " + entryYear);
-        LOGGER.debug("Student details updated: Name: {}, Email: {}, Entry Year: {}", name, emailAddress, entryYear);
     }
 }
