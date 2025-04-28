@@ -9,12 +9,17 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import sms.gradle.controller.admin.ManageModuleController;
 import sms.gradle.model.entities.Course;
 import sms.gradle.model.entities.Module;
 import sms.gradle.view.CoreViewInterface;
 import sms.gradle.view.ViewFactory;
 
 public class ManageModulesView extends BorderPane implements CoreViewInterface {
+    private static final Logger LOGGER = LogManager.getLogger();
+
     // Left Panel Components
     private final ListView<Module> modulesListView = new ListView<>();
     private final Button refreshButton = new Button("Refresh");
@@ -43,10 +48,13 @@ public class ManageModulesView extends BorderPane implements CoreViewInterface {
     private final VBox rightPanel = new VBox(10);
 
     public ManageModulesView() {
+        LOGGER.debug("Initialising Manage Modules View");
+        getStylesheets().add(getClass().getResource("/styles/manager.css").toExternalForm());
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
         setupEventHandlers();
+        LOGGER.debug("Manage Modules View initialised");
     }
 
     @Override
@@ -59,13 +67,19 @@ public class ManageModulesView extends BorderPane implements CoreViewInterface {
         refreshButton.setId("refreshButton");
         selectButton.setId("selectButton");
         deleteButton.setId("deleteButton");
+
         moduleIdField.setId("moduleIdField");
+        moduleIdField.setEditable(false);
         nameField.setId("nameField");
         descriptionField.setId("descriptionField");
         lecturerField.setId("lecturerField");
         createNewButton.setId("updateButton");
         updateButton.setId("updateButton");
+
         linkedCourseContainer.setId("linkedCourseContainer");
+        linkedCourseNameLabel.setId("linkedCourseNameLabel");
+        linkedCourseIdLabel.setId("linkedCourseIdLabel");
+        linkedCourseDescriptionLabel.setId("linkedCourseDescriptionLabel");
         unlinkedCoursesListView.setId("unlinkedCoursesListView");
         swapButton.setId("swapButton");
         backButton.setId("backButton");
@@ -142,15 +156,26 @@ public class ManageModulesView extends BorderPane implements CoreViewInterface {
         getStyleClass().add("manage-modules-view");
         modulesListView.getStyleClass().add("modules-list");
         moduleDetailsPane.getStyleClass().add("details-pane");
-        unlinkedCoursesListView.getStyleClass().add("modules-list");
+        unlinkedCoursesListView.getStyleClass().add("courses-list");
 
         applyLabelStyles();
+        applyButtonStyles();
     }
 
     private void applyLabelStyles() {
         linkedCourseNameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
         linkedCourseIdLabel.setStyle("-fx-font-style: italic; -fx-text-fill: grey; -fx-font-size: 12px;");
         linkedCourseDescriptionLabel.setStyle("-fx-font-size: 12px;");
+    }
+
+    private void applyButtonStyles() {
+        refreshButton.getStyleClass().add("action-button");
+        selectButton.getStyleClass().add("action-button");
+        deleteButton.getStyleClass().add("action-button");
+        createNewButton.getStyleClass().add("action-button");
+        updateButton.getStyleClass().add("action-button");
+        swapButton.getStyleClass().add("action-button");
+        backButton.getStyleClass().add("navigate-button");
     }
 
     private void setupModuleListViewCellFactory() {
@@ -162,6 +187,12 @@ public class ManageModulesView extends BorderPane implements CoreViewInterface {
     }
 
     private void setupEventHandlers() {
+        refreshButton.setOnAction(ManageModuleController::updateListOfModules);
+        selectButton.setOnAction(ManageModuleController::selectModule);
+        createNewButton.setOnAction(ManageModuleController::createNewModule);
+        updateButton.setOnAction(ManageModuleController::updateModule);
+        deleteButton.setOnAction(ManageModuleController::deleteModule);
+        swapButton.setOnAction(ManageModuleController::swapLinkedCourse);
         backButton.setOnAction(event -> ViewFactory.getInstance().changeToAdminDashboardStage());
     }
 
