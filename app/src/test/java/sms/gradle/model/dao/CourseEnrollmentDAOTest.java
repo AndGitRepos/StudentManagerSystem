@@ -153,6 +153,37 @@ public class CourseEnrollmentDAOTest {
     }
 
     @Test
+    public void testFindByStudentAndCourseId() throws SQLException {
+        int studentId = 5;
+        int courseId = 3;
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
+        when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
+        when(mockResultSet.next()).thenReturn(true);
+        when(mockResultSet.getInt("id")).thenReturn(1);
+        when(mockResultSet.getInt("student_id")).thenReturn(5);
+        when(mockResultSet.getInt("course_id")).thenReturn(3);
+        when(mockResultSet.getDate("enrollment_date")).thenReturn(new Date(5000), new Date(6000));
+
+        Optional<CourseEnrollment> result = CourseEnrollmentDAO.findByStudentAndCourseId(studentId, courseId);
+
+        verify(mockPreparedStatement).setInt(1, studentId);
+        verify(mockPreparedStatement).setInt(2, courseId);
+        verify(mockPreparedStatement).executeQuery();
+        verify(mockResultSet).next();
+        verify(mockResultSet).getInt("id");
+        verify(mockResultSet).getInt("student_id");
+        verify(mockResultSet).getInt("course_id");
+        verify(mockResultSet).getDate("enrollment_date");
+
+        assertTrue(result.isPresent());
+
+        assertEquals(1, result.get().getId());
+        assertEquals(5, result.get().getStudentId());
+        assertEquals(3, result.get().getCourseId());
+        assertEquals(new Date(5000), result.get().getEnrollmentDate());
+    }
+
+    @Test
     public void testFindAll() throws SQLException {
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);

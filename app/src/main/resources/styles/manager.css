@@ -3,8 +3,9 @@
 @import "common.css";
 
 .manage-student-view,
-manage-modules-view,
-.manage-course-view {
+.manage-modules-view,
+.manage-course-view,
+.manage-assessments-view {
     -fx-background-color: white;
     -fx-padding: 10px;
 }
@@ -33,22 +34,12 @@ manage-modules-view,
 }
 
 .action-button {
-    -fx-background-color: #0879bade;
-    -fx-background-radius: 5;
-    -fx-text-fill: white;
-    -fx-padding: 8px 15px;
+    /* Inherits most styles from .button */
     -fx-min-width: 100px;
-}
-
-.action-button:hover {
-    -fx-background-color: derive(#0879bade, -10%);
 }
 
 .navigate-button {
     -fx-background-color: #5c6469;
-    -fx-background-radius: 5px;
-    -fx-text-fill: white;
-    -fx-padding: 8px 15px;
     -fx-min-width: 100px;
 }
 
