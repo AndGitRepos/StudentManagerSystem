@@ -1,4 +1,4 @@
-package sms.gradle.view.Frames.admin;
+package sms.gradle.view.frames.admin;
 
 import static javafx.geometry.Pos.CENTER;
 
