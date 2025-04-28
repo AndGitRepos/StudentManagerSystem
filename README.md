@@ -63,6 +63,51 @@ To modify this when testing you can modify the value stored within src/main/reso
 
 Before implementing any logs please review the [Logging Best practices](https://logging.apache.org/log4j/2.x/manual/api.html#best-practice)
 
+
+## CSS Styling
+
+This application uses [JavaFX CSS](https://www.tutorialspoint.com/javafx/javafx_css.htm) for styling visual components, with JavaFX-specific properties and prefixes. CSS (Cascading Style Sheets) is a formatting tool used to manage spacing, colours, fonts and other visual components for elements within an application UI. 
+
+### CSS Classes
+
+1. `common.css` - Contains core/base styling implemented by other classes and used across views
+2. `components.css` - Contains styling for grade circle and module row components
+3. `dashboard.css` - Contains styling for student-dashboard and admin-dashboard views
+4. `login.css` - Contains styling for components of login view (input fields, error messages, login form)
+5. `manager.css` - Contains styling for admin management views
+
+### Implementation Guide
+
+#### Populate Views with JavaFX CSS  
+
+````java 
+// Add to the constructor: 
+getStylesheets().add(getClass().getResource("/styles/{inputFileName}.css").toExternalForm());
+
+// Apply to element:
+element.getStyleClass().add("element-class-name");
+
+````
+
+````css
+/* CSS Selector Example: */
+.element-class-name {
+    -fx-background-color: red;
+    -fx-font-size: bold;
+}
+
+````
+
+### Directory Location: 
+CSS Files are located at
+````cs
+StudentManagerSystem/app/src/main/resources/styles
+````
+
+#### Documentation
+
+Full documentation of the CSS Styling selectors and functions syntax can be found in the [JavaFX CSS Reference Guide](https://openjfx.io/javadoc/24/javafx.graphics/javafx/scene/doc-files/cssref.html)
+
 ## Code Formatting
 This project uses Spotless with Palantir Java Format for consistent code formatting. The formatter is automatically integrated into the build process.
 
