@@ -10,6 +10,11 @@
     -fx-spacing: 10;
 }
 
+.assessment-view-container {
+    -fx-background-color: white;
+    -fx-padding: 20;
+}
+
 /* Headers*/
 .welcome-label {
     -fx-font-size: 30px;
@@ -17,6 +22,19 @@
     -fx-padding: 0 0 22 0;
     -fx-text-fill: #334335;
 }
+
+.course-name-label {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+
+.count-label {
+    -fx-font-size: 15px;
+    -fx-text-fill: #7f8c8e;
+}
+
 
 /* Navigate*/
 .menu-button {
@@ -29,6 +47,11 @@
     -fx-background-color: white;
     -fx-border-color: #cccccf;
     -fx-border-radius: 5px;
+    -fx-padding: 10px;
+}
+
+.assessment-scroll-pane {
+    -fx-background-color: white;
     -fx-padding: 10px;
 }
 
@@ -66,4 +89,10 @@ For Student Dashboard
     -fx-min-width: 200px;
     -fx-margin: 5 0;
     -fx-background-color: #0879bade;
+}
+
+.assessments-grid {
+    -fx-alignment: center;
+    -fx-hgap: 40;
+    -fx-vgap: 40;
 }
