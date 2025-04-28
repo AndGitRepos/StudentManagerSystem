@@ -29,6 +29,7 @@ public class ManageAdminView extends BorderPane implements CoreViewInterface {
     private Button selectAdminButton;
     private Button deleteAdminButton;
 
+    VBox leftPanel = new VBox(10);
     private GridPane adminDetailsPane;
 
     private TextField firstNameField;
@@ -46,7 +47,7 @@ public class ManageAdminView extends BorderPane implements CoreViewInterface {
 
     public ManageAdminView() {
         LOGGER.debug("Initialising Manage Admin View");
-
+        getStylesheets().add(getClass().getResource("/styles/manager.css").toExternalForm());
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
@@ -127,7 +128,6 @@ public class ManageAdminView extends BorderPane implements CoreViewInterface {
     }
 
     private void organiseLeftPanel() {
-        VBox leftPanel = new VBox(10);
         leftPanel.setPadding(new Insets(10));
 
         Label adminListLabel = new Label("Admin List");
@@ -139,30 +139,36 @@ public class ManageAdminView extends BorderPane implements CoreViewInterface {
         leftPanel.getChildren().addAll(adminListLabel, displayActions, displayControls, adminListView);
 
         leftPanel.setMinWidth(350);
-        leftPanel.setPrefWidth(450);
+        leftPanel.setPrefWidth(400);
         leftPanel.setPadding(new Insets(20));
+        leftPanel.getStyleClass().add("left-panel");
 
         setLeft(leftPanel);
     }
 
     public void organiseCenterPanel() {
-        adminDetailsPane.setHgap(10);
-        adminDetailsPane.setVgap(10);
-        adminDetailsPane.setPadding(new Insets(10));
 
         Label detailsLabel = new Label("Admin Details");
         detailsLabel.getStyleClass().add("section-header");
 
+        adminDetailsPane.setHgap(10);
+        adminDetailsPane.setVgap(10);
+        adminDetailsPane.setPadding(new Insets(10));
+
         organiseAdminDetailsForm();
 
-        HBox actionButtons = makeActionButtonsContainer();
+        HBox actionButtons = new HBox(10, createNewAdminButton, updateAdminButton);
+        actionButtons.setAlignment(CENTER);
+        actionButtons.setPadding(new Insets(10));
 
-        HBox navigationButtons = makeNavigationButtonsContainer();
+        HBox navigationButtons = new HBox(10, backButton, logoutButton);
+        navigationButtons.setAlignment(CENTER);
+        navigationButtons.setPadding(new Insets(10));
 
         centerPanel.getChildren().addAll(detailsLabel, adminDetailsPane, actionButtons, navigationButtons);
-
-        centerPanel.setPadding(new Insets(10));
+        centerPanel.setPadding(new Insets(20));
         centerPanel.setAlignment(CENTER);
+        centerPanel.getStyleClass().add("center-panel");
 
         setCenter(centerPanel);
     }
@@ -175,55 +181,27 @@ public class ManageAdminView extends BorderPane implements CoreViewInterface {
         adminDetailsPane.addRow(4, new Label("Password:"), passwordField);
     }
 
-    private HBox makeActionButtonsContainer() {
-        HBox actionButtons = new HBox(10, createNewAdminButton, updateAdminButton);
-        actionButtons.setAlignment(CENTER);
-        actionButtons.setPadding(new Insets(10));
-        return actionButtons;
-    }
-
-    private HBox makeNavigationButtonsContainer() {
-        HBox navigationButtons = new HBox(10, backButton, logoutButton);
-        navigationButtons.setAlignment(CENTER);
-        navigationButtons.setPadding(new Insets(10));
-        return navigationButtons;
-    }
-
     @Override
     public void styleCoreUIComponents() {
-        stylesForContainer();
-        stylesForList();
-        stylesForForm();
-        stylesForButton();
-        stylesForInputField();
-    }
-
-    private void stylesForContainer() {
-        setPrefSize(750, 550);
+        setPrefSize(900, 550);
         getStyleClass().add("manage-admin-view");
-    }
 
-    private void stylesForList() {
+        leftPanel.getStyleClass().add("left-panel");
         adminListView.setPrefWidth(250);
         adminListView.getStyleClass().add("admin-list");
-    }
 
-    private void stylesForForm() {
+        centerPanel.getStyleClass().add("center-panel");
         adminDetailsPane.getStyleClass().add("details-pane");
-    }
 
-    private void stylesForButton() {
         createNewAdminButton.getStyleClass().add("action-button");
         updateAdminButton.getStyleClass().add("action-button");
         selectAdminButton.getStyleClass().add("action-button");
         deleteAdminButton.getStyleClass().add("action-button");
         refreshAdminListButton.getStyleClass().add("action-button");
 
-        backButton.getStyleClass().add("navigation-button");
-        logoutButton.getStyleClass().add("navigation-button");
-    }
+        backButton.getStyleClass().add("navigate-button");
+        logoutButton.getStyleClass().add("navigate-button");
 
-    private void stylesForInputField() {
         adminIdField.getStyleClass().add("read-only-field");
         firstNameField.getStyleClass().add("input-field");
         lastNameField.getStyleClass().add("input-field");

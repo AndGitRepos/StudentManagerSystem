@@ -5,7 +5,7 @@
 .manage-student-view,
 .manage-modules-view,
 .manage-course-view,
-.manage-assessments-view {
+.manage-assessments-view .manage-admin-view {
     -fx-background-color: white;
     -fx-padding: 10px;
 }
@@ -29,6 +29,11 @@
 .student-list,
 .course-list,
 .courses-list {
+    -fx-pref-width: 175px;
+    -fx-padding: 10px;
+}
+
+.admin-list {
     -fx-pref-width: 175px;
     -fx-padding: 10px;
 }
@@ -59,4 +64,20 @@
     -fx-border-color: #dfecf9;
     -fx-border-radius: 5;
     -fx-padding: 15px;
+}
+
+.input-field {
+    -fx-background-color: #e3e7eb;
+    -fx-background-radius: 5px;
+    -fx-border-color: #cccccf;
+    -fx-border-radius: 5;
+    -fx-padding: 10px;
+}
+
+.read-only-field {
+    -fx-background-color: #e3e7eb;
+    -fx-background-radius: 5px;
+    -fx-border-color: #cccccf;
+    -fx-border-radius: 5;
+    -fx-padding: 10px;
 }
