@@ -1,11 +1,14 @@
 package sms.gradle.view;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.utils.session.Session;
+import sms.gradle.view.Frames.admin.ManageAssessmentsView;
 import sms.gradle.view.frames.LoginView;
 import sms.gradle.view.frames.admin.AdminDashboardView;
 import sms.gradle.view.frames.admin.CourseDetailView;
@@ -13,6 +16,7 @@ import sms.gradle.view.frames.admin.ManageAdminView;
 import sms.gradle.view.frames.admin.ManageCourseView;
 import sms.gradle.view.frames.admin.ManageModulesView;
 import sms.gradle.view.frames.admin.ManageStudentView;
+import sms.gradle.view.frames.student.AccessStudentModulesView;
 import sms.gradle.view.frames.student.StudentDashboardView;
 
 /*
@@ -32,6 +36,8 @@ public class ViewFactory {
     private Stage manageModulesStage;
     private Stage manageAdminStage;
     private Stage courseDetailStage;
+    private Stage studentModulesStage;
+    private Stage manageAssessmentsStage;
 
     private ViewFactory() {
         LOGGER.info("Initialising View Factory");
@@ -42,7 +48,9 @@ public class ViewFactory {
         initialiseManageCourseStage();
         initialiseManageModulesStage();
         initialiseManageAdminStage();
-        initialieCourseDetailStage();
+        initialiseCourseDetailStage();
+        initialiseStudentModulesStage();
+        initialiseManageAssessmentsStage();
         LOGGER.info("View Factory initialised");
     }
 
@@ -61,8 +69,16 @@ public class ViewFactory {
 
     public void changeToStudentDashboardStage() {
         LOGGER.debug("Changing to student dashboard stage");
+        StudentDashboardView view =
+                (StudentDashboardView) studentDashboardStage.getScene().getRoot();
         loginStage.hide();
         studentDashboardStage.show();
+    }
+
+    public void changeToStudentModulesStage() {
+        LOGGER.debug("Changing to access student modules stage");
+        studentDashboardStage.hide();
+        studentModulesStage.show();
     }
 
     public void changeToAdminDashboardStage() {
@@ -72,6 +88,7 @@ public class ViewFactory {
         manageCourseStage.hide();
         manageModulesStage.hide();
         manageAdminStage.hide();
+        manageAssessmentsStage.hide();
         courseDetailStage.hide();
         adminDashboardStage.show();
     }
@@ -106,6 +123,12 @@ public class ViewFactory {
         courseDetailStage.show();
     }
 
+    public void changeToManageAssessmentsStage() {
+        LOGGER.debug("Changing to manage assessments stage");
+        adminDashboardStage.hide();
+        manageAssessmentsStage.show();
+    }
+
     private void initialiseLoginStage() {
         LOGGER.debug("Initialising login stage");
         LoginView login = new LoginView();
@@ -125,6 +148,18 @@ public class ViewFactory {
         studentDashboardStage.setMinWidth(750);
         studentDashboardStage.setTitle("SMS - Student Dashboard");
         studentDashboardStage.setScene(new Scene(studentDashboardView));
+    }
+
+    private void initialiseStudentModulesStage() {
+        LOGGER.debug("Initialising student modules stage");
+
+        AccessStudentModulesView modulesView = new AccessStudentModulesView();
+
+        studentModulesStage = new Stage();
+        studentModulesStage.setMinHeight(550);
+        studentModulesStage.setMinWidth(750);
+        studentModulesStage.setTitle("SMS - Module View");
+        studentModulesStage.setScene(new Scene(modulesView));
     }
 
     private void initialiseAdminDashboardStage() {
@@ -186,7 +221,7 @@ public class ViewFactory {
         manageAdminStage.setTitle("SMS - Manage Admins");
     }
 
-    private void initialieCourseDetailStage() {
+    private void initialiseCourseDetailStage() {
         LOGGER.debug("Initialising course detail stage");
         CourseDetailView courseDetailView = new CourseDetailView();
 
@@ -195,5 +230,20 @@ public class ViewFactory {
         courseDetailStage.setMinWidth(750);
         courseDetailStage.setScene(new Scene(courseDetailView));
         courseDetailStage.setTitle("SMS - Course Detail");
+    }
+
+    private void initialiseManageAssessmentsStage() {
+        LOGGER.debug("Initialising manage assessments stage");
+
+        ManageAssessmentsView manageAssessmentsView = new ManageAssessmentsView();
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+
+        manageAssessmentsStage = new Stage();
+        manageAssessmentsStage.setX(screenBounds.getMinX());
+        manageAssessmentsStage.setY(screenBounds.getMinY());
+        manageAssessmentsStage.setWidth(screenBounds.getWidth());
+        manageAssessmentsStage.setHeight(screenBounds.getHeight());
+        manageAssessmentsStage.setTitle("SMS - Manage Assessments");
+        manageAssessmentsStage.setScene(new Scene(manageAssessmentsView));
     }
 }
