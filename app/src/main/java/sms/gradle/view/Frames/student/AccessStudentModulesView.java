@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sms.gradle.model.entities.Module;
+import sms.gradle.controller.StudentControllers.AccessStudentModulesController;
 import sms.gradle.view.CoreViewInterface;
 
 /*
@@ -30,8 +30,15 @@ public class AccessStudentModulesView extends BorderPane implements CoreViewInte
 
     private Label courseNameHeading;
 
+    private Button refreshButton;
     private Button backButton;
     private Button signoutButton;
+
+    private void setupEventHandlers() {
+        refreshButton.setOnAction(AccessStudentModulesController::handleRefreshModulesButton);
+        backButton.setOnAction(AccessStudentModulesController::handleBackButton);
+        signoutButton.setOnAction(AccessStudentModulesController::handleSignoutButton);
+    }
 
     public AccessStudentModulesView() {
         LOGGER.debug("Initialising Access Student Modules View");
@@ -39,6 +46,7 @@ public class AccessStudentModulesView extends BorderPane implements CoreViewInte
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
+        setupEventHandlers();
         LOGGER.debug("Access Student Modules View Initialised");
     }
 
@@ -50,10 +58,13 @@ public class AccessStudentModulesView extends BorderPane implements CoreViewInte
 
         courseNameHeading = new Label("Course Modules");
         courseNameHeading.setStyle("-fx-font-size: 28px; -fx-font-weight: bold;");
+        courseNameHeading.setId("courseNameHeading");
 
         backButton = new Button("Back to Dashboard");
         signoutButton = new Button("Sign Out");
+        refreshButton = new Button("Refresh Modules");
 
+        refreshButton.setId("refreshButton");
         backButton.setId("backButton");
         signoutButton.setId("signoutButton");
         modulesGrid.setId("modulesGrid");
@@ -73,7 +84,7 @@ public class AccessStudentModulesView extends BorderPane implements CoreViewInte
         scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);
 
-        HBox buttonsBox = new HBox(20, backButton, signoutButton);
+        HBox buttonsBox = new HBox(20, backButton, signoutButton, refreshButton);
         buttonsBox.setAlignment(Pos.CENTER);
         buttonsBox.setPadding(new Insets(20, 0, 20, 0));
 
@@ -90,39 +101,8 @@ public class AccessStudentModulesView extends BorderPane implements CoreViewInte
         scrollPane.getStyleClass().add("module-scroll-pane");
         modulesGrid.getStyleClass().add("modules-grid");
 
+        refreshButton.getStyleClass().add("action-button");
         backButton.getStyleClass().add("navigation-button");
         signoutButton.getStyleClass().add("navigation-button");
-    }
-
-    public void setCourseNameHeader(String selectedCourseName) {
-        courseNameHeading.setText(selectedCourseName + " Modules");
-    }
-
-    public void upateModuleToGrid(Module module, int row, int column) {
-        VBox moduleCard = createModuleCard(module);
-        modulesGrid.add(moduleCard, column, row);
-    }
-
-    private VBox createModuleCard(Module module) {
-
-        VBox card = new VBox(10);
-        card.getStyleClass().add("module-card");
-        card.setPadding(new Insets(15));
-
-        Label moduleNameLabel = new Label(module.getName());
-        moduleNameLabel.getStyleClass().add("module-name");
-
-        Label moduleIdLabel = new Label("ID: " + module.getId());
-        Label moduleLecturerLabel = new Label("Lecturer: " + module.getLecturer());
-        Label moduleDescriptionLabel = new Label("Description: " + module.getDescription());
-        moduleDescriptionLabel.setWrapText(true);
-
-        card.getChildren().addAll(moduleNameLabel, moduleIdLabel, moduleLecturerLabel, moduleDescriptionLabel);
-
-        return card;
-    }
-
-    public void clearModules() {
-        modulesGrid.getChildren().clear();
     }
 }
