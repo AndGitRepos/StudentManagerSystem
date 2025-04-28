@@ -15,7 +15,7 @@ public final class AdminDashboardController {
 
     public static void handleManageAssessmentsButton(ActionEvent event) {
         LOGGER.debug("Manage Assessments button clicked");
-        // TODO - Once Manage assessments page has been implemented add call to change to
+        ViewFactory.getInstance().changeToManageAssessmentsStage();
     }
 
     public static void handleManageModulesButton(ActionEvent event) {

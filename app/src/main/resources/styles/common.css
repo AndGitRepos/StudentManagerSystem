@@ -38,6 +38,7 @@
 }
 
 /* User Interactive Components */
+/* Base button style */
 .button {
     -fx-background-color: #0a8edade;
     -fx-text-fill: white;
@@ -51,6 +52,30 @@
 
 .button:hover {
     -fx-background-color: derive(#0a8edade, -10%);
+}
+
+/* DatePicker button reset */
+.date-picker > .arrow-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-padding: 4 8;
+    -fx-min-width: 0;
+}
+
+.date-picker > .arrow-button:hover {
+    -fx-background-color: -fx-cell-hover-color;
+}
+
+.date-picker-popup .button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-padding: 4 8;
+    -fx-min-width: 0;
+    -fx-pref-width: 0;
+}
+
+.date-picker-popup .button:hover {
+    -fx-background-color: -fx-cell-hover-color;
 }
 
 .text-field,

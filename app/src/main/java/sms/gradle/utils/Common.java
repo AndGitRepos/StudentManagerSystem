@@ -6,6 +6,9 @@ import java.security.SecureRandom;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.model.dao.*;
@@ -101,5 +104,23 @@ public final class Common {
         LOGGER.debug("Populated results table");
 
         LOGGER.info("Finished populating tables");
+    }
+
+    public static Label createStyledLabel(String text, String style) {
+        Label label = new Label(text);
+        label.setStyle(style);
+        return label;
+    }
+
+    /**
+     * Gets a node from a stage using a CSS selector
+     * @param <T> The type of node to return
+     * @param stage The stage to search in
+     * @param selector The CSS selector to search for
+     * @return The node matching the selector
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends Node> T getNode(Stage stage, String selector) {
+        return (T) stage.getScene().lookup(selector);
     }
 }

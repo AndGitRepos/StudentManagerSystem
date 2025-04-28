@@ -1,11 +1,14 @@
 package sms.gradle.view;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.utils.session.Session;
+import sms.gradle.view.Frames.admin.ManageAssessmentsView;
 import sms.gradle.view.frames.LoginView;
 import sms.gradle.view.frames.admin.AdminDashboardView;
 import sms.gradle.view.frames.admin.CourseDetailView;
@@ -34,6 +37,7 @@ public class ViewFactory {
     private Stage manageAdminStage;
     private Stage courseDetailStage;
     private Stage studentModulesStage;
+    private Stage manageAssessmentsStage;
 
     private ViewFactory() {
         LOGGER.info("Initialising View Factory");
@@ -46,6 +50,7 @@ public class ViewFactory {
         initialiseManageAdminStage();
         initialiseCourseDetailStage();
         initialiseStudentModulesStage();
+        initialiseManageAssessmentsStage();
         LOGGER.info("View Factory initialised");
     }
 
@@ -83,6 +88,7 @@ public class ViewFactory {
         manageCourseStage.hide();
         manageModulesStage.hide();
         manageAdminStage.hide();
+        manageAssessmentsStage.hide();
         courseDetailStage.hide();
         adminDashboardStage.show();
     }
@@ -115,6 +121,12 @@ public class ViewFactory {
         LOGGER.debug("Changing to course detail stage");
         adminDashboardStage.hide();
         courseDetailStage.show();
+    }
+
+    public void changeToManageAssessmentsStage() {
+        LOGGER.debug("Changing to manage assessments stage");
+        adminDashboardStage.hide();
+        manageAssessmentsStage.show();
     }
 
     private void initialiseLoginStage() {
@@ -218,5 +230,20 @@ public class ViewFactory {
         courseDetailStage.setMinWidth(750);
         courseDetailStage.setScene(new Scene(courseDetailView));
         courseDetailStage.setTitle("SMS - Course Detail");
+    }
+
+    private void initialiseManageAssessmentsStage() {
+        LOGGER.debug("Initialising manage assessments stage");
+
+        ManageAssessmentsView manageAssessmentsView = new ManageAssessmentsView();
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+
+        manageAssessmentsStage = new Stage();
+        manageAssessmentsStage.setX(screenBounds.getMinX());
+        manageAssessmentsStage.setY(screenBounds.getMinY());
+        manageAssessmentsStage.setWidth(screenBounds.getWidth());
+        manageAssessmentsStage.setHeight(screenBounds.getHeight());
+        manageAssessmentsStage.setTitle("SMS - Manage Assessments");
+        manageAssessmentsStage.setScene(new Scene(manageAssessmentsView));
     }
 }
