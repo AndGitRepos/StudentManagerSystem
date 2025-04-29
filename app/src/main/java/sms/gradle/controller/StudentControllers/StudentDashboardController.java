@@ -31,7 +31,7 @@ public class StudentDashboardController {
      *
      * @param dashboardView instance of student-dashboard view
      */
-    public static void handleCourseListRefresh(ActionEvent event) {
+    public static void handleCourseRefreshButton(ActionEvent event) {
         try {
             if (!Session.getInstance().getUser().isPresent()) {
                 LOGGER.info("Unable to load courses - no user signed in");

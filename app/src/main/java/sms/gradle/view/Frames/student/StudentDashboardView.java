@@ -85,18 +85,19 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
         HBox courseListControls = new HBox(10);
         courseListControls.getChildren().add(refreshButton);
         courseListControls.setAlignment(Pos.CENTER_RIGHT);
-        courseListControls.setTranslateY(50);
+        refreshButton.setTranslateX(-220);
+        refreshButton.setTranslateY(50);
 
         VBox selectButtonContainer = new VBox(10);
         selectButtonContainer.setAlignment(Pos.CENTER);
-        selectButtonContainer.getChildren().add(selectCourseButton);
         VBox.setMargin(selectCourseButton, new Insets(0, 0, 0, 0));
+        selectButtonContainer.getChildren().add(selectCourseButton);
 
         HBox selectCourseArea = new HBox(20);
         selectCourseArea.setAlignment(Pos.TOP_CENTER);
-        selectCourseArea.getChildren().addAll(courseListView, selectButtonContainer);
+        selectCourseArea.getChildren().addAll(courseListView, selectButtonContainer, refreshButton);
 
-        courseListView.setMinWidth(400);
+        courseListView.setMinWidth(550);
         courseListView.setMinHeight(600);
 
         selectCourseButton.setMinWidth(120);
@@ -113,7 +114,7 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
         viewStatsButton.setOnAction(StudentDashboardController::handleViewStatsButton);
         accessAssessmentsViewButton.setOnAction(StudentDashboardController::handleViewAssessmentsButton);
         signoutButton.setOnAction(StudentDashboardController::handleSignout);
-        refreshButton.setOnAction(StudentDashboardController::handleCourseListRefresh);
+        refreshButton.setOnAction(StudentDashboardController::handleCourseRefreshButton);
     }
 
     public StudentDashboardView() {
@@ -142,7 +143,9 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
         viewStatsButton = new Button("View Overall Course Stats");
 
         signoutButton = new Button("Sign Out");
+
         refreshButton = new Button("Refresh Courses");
+        refreshButton.setStyle("-fx-font-size: 15px");
         refreshButton.setId("refreshButton");
 
         courseListView.setId("courseListView");
