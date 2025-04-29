@@ -8,11 +8,11 @@ import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.utils.session.Session;
-import sms.gradle.view.Frames.admin.ManageAssessmentsView;
 import sms.gradle.view.frames.LoginView;
 import sms.gradle.view.frames.admin.AdminDashboardView;
 import sms.gradle.view.frames.admin.CourseDetailView;
 import sms.gradle.view.frames.admin.ManageAdminView;
+import sms.gradle.view.frames.admin.ManageAssessmentsView;
 import sms.gradle.view.frames.admin.ManageCourseView;
 import sms.gradle.view.frames.admin.ManageModulesView;
 import sms.gradle.view.frames.admin.ManageStudentView;
@@ -43,13 +43,13 @@ public class ViewFactory {
         LOGGER.info("Initialising View Factory");
         initialiseLoginStage();
         initialiseStudentDashboardStage();
+        initialiseStudentModulesStage();
         initialiseAdminDashboardStage();
         initialiseManageStudentStage();
         initialiseManageCourseStage();
         initialiseManageModulesStage();
         initialiseManageAdminStage();
         initialiseCourseDetailStage();
-        initialiseStudentModulesStage();
         initialiseManageAssessmentsStage();
         LOGGER.info("View Factory initialised");
     }
@@ -72,11 +72,13 @@ public class ViewFactory {
         StudentDashboardView view =
                 (StudentDashboardView) studentDashboardStage.getScene().getRoot();
         loginStage.hide();
+        studentModulesStage.hide();
         studentDashboardStage.show();
     }
 
     public void changeToStudentModulesStage() {
         LOGGER.debug("Changing to access student modules stage");
+        loginStage.hide();
         studentDashboardStage.hide();
         studentModulesStage.show();
     }
