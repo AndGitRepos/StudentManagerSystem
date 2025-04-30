@@ -16,6 +16,7 @@ import sms.gradle.view.frames.admin.ManageAssessmentsView;
 import sms.gradle.view.frames.admin.ManageCourseView;
 import sms.gradle.view.frames.admin.ManageModulesView;
 import sms.gradle.view.frames.admin.ManageStudentView;
+import sms.gradle.view.frames.student.AccessStudentAssessmentsView;
 import sms.gradle.view.frames.student.AccessStudentModulesView;
 import sms.gradle.view.frames.student.StudentDashboardView;
 
@@ -30,13 +31,14 @@ public class ViewFactory {
     private static final ViewFactory instance = new ViewFactory();
     private Stage loginStage;
     private Stage studentDashboardStage;
+    private Stage studentModulesStage;
+    private Stage studentAssessmentsStage;
     private Stage adminDashboardStage;
     private Stage manageStudentStage;
     private Stage manageCourseStage;
     private Stage manageModulesStage;
     private Stage manageAdminStage;
     private Stage courseDetailStage;
-    private Stage studentModulesStage;
     private Stage manageAssessmentsStage;
 
     private ViewFactory() {
@@ -44,6 +46,7 @@ public class ViewFactory {
         initialiseLoginStage();
         initialiseStudentDashboardStage();
         initialiseStudentModulesStage();
+        initialiseStudentAssessmentsStage();
         initialiseAdminDashboardStage();
         initialiseManageStudentStage();
         initialiseManageCourseStage();
@@ -79,6 +82,14 @@ public class ViewFactory {
         loginStage.hide();
         studentDashboardStage.hide();
         studentModulesStage.show();
+    }
+
+    public void changeToStudentAssessmentsStage() {
+        LOGGER.debug("Changing to access student assessments stage");
+        loginStage.hide();
+        studentDashboardStage.hide();
+        studentModulesStage.hide();
+        studentAssessmentsStage.show();
     }
 
     public void changeToAdminDashboardStage() {
@@ -160,6 +171,18 @@ public class ViewFactory {
         studentModulesStage.setMinWidth(750);
         studentModulesStage.setTitle("SMS - Module View");
         studentModulesStage.setScene(new Scene(modulesView));
+    }
+
+    private void initialiseStudentAssessmentsStage() {
+        LOGGER.debug("Initialising student assessments stage");
+
+        AccessStudentAssessmentsView assessmentsView = new AccessStudentAssessmentsView();
+
+        studentAssessmentsStage = new Stage();
+        studentAssessmentsStage.setMinHeight(550);
+        studentAssessmentsStage.setMinWidth(750);
+        studentAssessmentsStage.setTitle("SMS - Assessments View");
+        studentAssessmentsStage.setScene(new Scene(assessmentsView));
     }
 
     private void initialiseAdminDashboardStage() {
