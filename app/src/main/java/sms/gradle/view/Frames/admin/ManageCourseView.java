@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sms.gradle.controller.admin.ManageCourseController;
 import sms.gradle.model.entities.Course;
 import sms.gradle.view.CoreViewInterface;
 
@@ -29,10 +30,11 @@ public class ManageCourseView extends BorderPane implements CoreViewInterface {
     private Button selectButton;
     private TextField courseIdField;
     private TextField courseNameField;
-    private TextArea courseDescriptionField;
+    private TextArea courseDescriptionArea;
     private Button updateButton;
     private Button createNewButton;
     private Button deleteButton;
+    private Button refreshButton;
     private Button backButton;
     private Button logoutButton;
     private VBox centerPanel;
@@ -41,9 +43,35 @@ public class ManageCourseView extends BorderPane implements CoreViewInterface {
         LOGGER.debug("Initialising Manage Course View");
         getStylesheets().add(getClass().getResource("/styles/manager.css").toExternalForm());
         initialiseCoreUIComponents();
+        setComponentIds();
         layoutCoreUIComponents();
         styleCoreUIComponents();
+        setEventHandlers();
         LOGGER.debug("Manage Course View initialised");
+    }
+
+    private void setEventHandlers() {
+        selectButton.setOnAction(ManageCourseController::selectCourse);
+        createNewButton.setOnAction(ManageCourseController::createNewCourse);
+        updateButton.setOnAction(ManageCourseController::updateCourse);
+        deleteButton.setOnAction(ManageCourseController::deleteCourse);
+        backButton.setOnAction(ManageCourseController::handleBackButton);
+        logoutButton.setOnAction(ManageCourseController::handleLogoutButton);
+        refreshButton.setOnAction(ManageCourseController::refreshListOfCourses);
+    }
+
+    private void setComponentIds() {
+        courseListView.setId("courseListView");
+        selectButton.setId("selectButton");
+        createNewButton.setId("createNewButton");
+        updateButton.setId("updateButton");
+        deleteButton.setId("deleteButton");
+        refreshButton.setId("refreshButton");
+        backButton.setId("backButton");
+        logoutButton.setId("logoutButton");
+        courseIdField.setId("courseIdField");
+        courseNameField.setId("courseNameField");
+        courseDescriptionArea.setId("courseDescriptionArea");
     }
 
     @Override
@@ -53,10 +81,12 @@ public class ManageCourseView extends BorderPane implements CoreViewInterface {
         createNewButton = new Button("Create New");
         courseDetailsPane = new GridPane();
         courseIdField = new TextField();
+        courseIdField.setEditable(false);
         courseNameField = new TextField();
-        courseDescriptionField = new TextArea();
+        courseDescriptionArea = new TextArea();
         updateButton = new Button("Update");
         deleteButton = new Button("Delete");
+        refreshButton = new Button("Refresh");
         centerPanel = new VBox(10);
         backButton = new Button("Back");
         logoutButton = new Button("Logout");
@@ -68,7 +98,7 @@ public class ManageCourseView extends BorderPane implements CoreViewInterface {
         courseListSection.getStyleClass().add("left-panel");
         Label coursesLabel = new Label("Courses");
         coursesLabel.getStyleClass().add("section-header");
-        courseListSection.getChildren().addAll(coursesLabel, courseListView, selectButton);
+        courseListSection.getChildren().addAll(coursesLabel, refreshButton, courseListView, selectButton);
         courseListSection.setAlignment(CENTER);
         setLeft(courseListSection);
         courseListSection.setPadding(new Insets(10));
@@ -79,13 +109,13 @@ public class ManageCourseView extends BorderPane implements CoreViewInterface {
         Label detailsLabel = new Label("Course Details");
         detailsLabel.getStyleClass().add("section-header");
 
-        courseDescriptionField.setPrefRowCount(3);
-        courseDescriptionField.setPrefWidth(300);
-        courseDescriptionField.setWrapText(true);
+        courseDescriptionArea.setPrefRowCount(3);
+        courseDescriptionArea.setPrefWidth(300);
+        courseDescriptionArea.setWrapText(true);
 
         courseDetailsPane.addRow(0, new Label("Course ID:"), courseIdField);
         courseDetailsPane.addRow(1, new Label("Course Name:"), courseNameField);
-        courseDetailsPane.addRow(2, new Label("Course Description:"), courseDescriptionField);
+        courseDetailsPane.addRow(2, new Label("Course Description:"), courseDescriptionArea);
 
         HBox actionButtons = new HBox(10, createNewButton, updateButton, deleteButton);
         actionButtons.setAlignment(CENTER);
@@ -114,6 +144,7 @@ public class ManageCourseView extends BorderPane implements CoreViewInterface {
 
         selectButton.getStyleClass().add("action-button");
         deleteButton.getStyleClass().add("action-button");
+        refreshButton.getStyleClass().add("action-button");
         createNewButton.getStyleClass().add("action-button");
         updateButton.getStyleClass().add("action-button");
         backButton.getStyleClass().add("navigate-button");
