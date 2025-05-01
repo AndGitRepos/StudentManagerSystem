@@ -12,7 +12,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.controller.StudentControllers.StudentDashboardController;
@@ -22,46 +21,22 @@ import sms.gradle.view.CoreViewInterface;
 /*
  * Manages StudentDashboard view via CoreViewInterface's Template pattern
  */
-
-@Getter
 public class StudentDashboardView extends BorderPane implements CoreViewInterface {
-
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private VBox profileSection;
-    private VBox academiaSection;
-    private ListView<Course> courseListView;
+    private VBox profileSection = new VBox(20);
+    private VBox academiaSection = new VBox(20);
+    private ListView<Course> courseListView = new ListView<>();
 
-    private Button selectCourseButton;
-    private Button accessAssessmentsViewButton;
-    private Button viewStatsButton;
-    private Button signoutButton;
-    private Button refreshButton;
+    private Button selectCourseButton = new Button("Select Course");
+    private Button accessAssessmentsViewButton = new Button("View All Assessments");
+    private Button viewStatsButton = new Button("View Overall Course Stats");
+    private Button signoutButton = new Button("Sign Out");
+    private Button refreshButton = new Button("Refresh Courses");
 
-    private Label studentNameLabel;
-    private Label studentEmailLabel;
-    private Label studentJoinDateLabel;
-
-    private void initialiseKeyContainers() {
-        profileSection = new VBox(20);
-        academiaSection = new VBox(20);
-    }
-
-    private void initialiseStudentDetails() {
-        studentNameLabel = new Label("Student: ");
-        studentNameLabel.setId("studentNameLabel");
-
-        studentEmailLabel = new Label("Email: ");
-        studentEmailLabel.setId("studentEmailLabel");
-
-        studentJoinDateLabel = new Label("Join Date: ");
-        studentJoinDateLabel.setId("studentJoinDateLabel");
-    }
-
-    private void initialiseSignoutControl() {
-        signoutButton = new Button("Sign Out");
-        signoutButton.setTooltip(new Tooltip("Click to Sign Out"));
-    }
+    private Label studentNameLabel = new Label("Student: ");
+    private Label studentEmailLabel = new Label("Email: ");
+    private Label studentJoinDateLabel = new Label("Join Date: ");
 
     private void setupProfileSection() {
         Label profileHeader = new Label("PROFILE");
@@ -114,7 +89,6 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
     }
 
     private void setupEventHandlers() {
-
         selectCourseButton.setOnAction(StudentDashboardController::handleSelectCourseButton);
         viewStatsButton.setOnAction(StudentDashboardController::handleViewStatsButton);
         accessAssessmentsViewButton.setOnAction(StudentDashboardController::handleViewAssessmentsButton);
@@ -134,31 +108,26 @@ public class StudentDashboardView extends BorderPane implements CoreViewInterfac
         LOGGER.debug("Student Dashboard View Initialised");
     }
 
-    @Override
-    public void initialiseCoreUIComponents() {
-        initialiseKeyContainers();
-        initialiseStudentDetails();
+    private void setComponentIds() {
+        studentNameLabel.setId("studentNameLabel");
+        studentEmailLabel.setId("studentEmailLabel");
+        studentJoinDateLabel.setId("studentJoinDateLabel");
 
-        courseListView = new ListView<>();
-
-        selectCourseButton = new Button("Select Course");
-        selectCourseButton.setTooltip(new Tooltip("View the Modules for this chosen Course"));
-
-        accessAssessmentsViewButton = new Button("View All Assessments");
-        viewStatsButton = new Button("View Overall Course Stats");
-
-        signoutButton = new Button("Sign Out");
-
-        refreshButton = new Button("Refresh Courses");
-        refreshButton.setStyle("-fx-font-size: 15px");
         refreshButton.setId("refreshButton");
-
         courseListView.setId("courseListView");
         selectCourseButton.setId("selectCourseButton");
         accessAssessmentsViewButton.setId("accessAssessmentsViewButton");
         viewStatsButton.setId("viewStatsButton");
+    }
 
-        initialiseSignoutControl();
+    @Override
+    public void initialiseCoreUIComponents() {
+        selectCourseButton.setTooltip(new Tooltip("View the Modules for this chosen Course"));
+        refreshButton.setStyle("-fx-font-size: 15px");
+
+        signoutButton.setTooltip(new Tooltip("Click to Sign Out"));
+
+        setComponentIds();
     }
 
     @Override

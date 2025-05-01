@@ -7,26 +7,24 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.controller.admin.AdminDashboardController;
 import sms.gradle.view.CoreViewInterface;
 
-@Getter
 public class AdminDashboardView extends VBox implements CoreViewInterface {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private Label welcomeLabel;
-    private Button manageAssessmentsButton;
-    private Button manageModulesButton;
-    private Button manageCoursesButton;
-    private Button manageStudentsButton;
-    private Button manageAdminButton;
-    private Button viewCourseButton;
-    private Button logoutButton;
-    private ScrollPane courseScrollPane;
-    private VBox courseListContainer;
+    private Label welcomeLabel = new Label("Welcome to Admin Dashboard");
+    private Button manageAssessmentsButton = new Button("Manage Assessments");
+    private Button manageModulesButton = new Button("Manage Modules");
+    private Button manageCoursesButton = new Button("Manage Courses");
+    private Button manageStudentsButton = new Button("Manage Students");
+    private Button manageAdminButton = new Button("Manage Admin");
+    private Button viewCourseButton = new Button("View Course");
+    private Button logoutButton = new Button("Logout");
+    private VBox courseListContainer = new VBox(5);
+    private ScrollPane courseScrollPane = new ScrollPane(courseListContainer);
 
     public AdminDashboardView() {
         LOGGER.debug("Initialising Admin Dashboard View");
@@ -50,21 +48,9 @@ public class AdminDashboardView extends VBox implements CoreViewInterface {
 
     @Override
     public void initialiseCoreUIComponents() {
-        welcomeLabel = new Label("Welcome to Admin Dashboard");
-
-        courseListContainer = new VBox(5);
-        courseScrollPane = new ScrollPane(courseListContainer);
         courseScrollPane.setPrefViewportHeight(200);
         courseScrollPane.setPrefViewportWidth(100);
         courseScrollPane.setFitToWidth(true);
-
-        viewCourseButton = new Button("View Course");
-        manageAssessmentsButton = new Button("Manage Assessments");
-        manageModulesButton = new Button("Manage Modules");
-        manageCoursesButton = new Button("Manage Courses");
-        manageStudentsButton = new Button("Manage Students");
-        manageAdminButton = new Button("Manage Admin");
-        logoutButton = new Button("Logout");
 
         viewCourseButton.setPrefWidth(200);
         manageAssessmentsButton.setPrefWidth(200);

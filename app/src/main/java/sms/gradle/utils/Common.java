@@ -106,7 +106,7 @@ public final class Common {
         LOGGER.info("Finished populating tables");
     }
 
-    public static Label createStyledLabel(String text, String style) {
+    public static Label createStyledLabel(final String text, final String style) {
         Label label = new Label(text);
         label.setStyle(style);
         return label;
@@ -120,7 +120,7 @@ public final class Common {
      * @return The node matching the selector
      */
     @SuppressWarnings("unchecked")
-    public static <T extends Node> T getNode(Stage stage, String selector) {
+    public static <T extends Node> T getNode(final Stage stage, final String selector) {
         return (T) stage.getScene().lookup(selector);
     }
 }

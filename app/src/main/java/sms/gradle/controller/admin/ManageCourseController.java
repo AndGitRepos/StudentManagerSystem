@@ -143,6 +143,7 @@ public final class ManageCourseController {
 
     public static void handleBackButton(ActionEvent event) {
         LOGGER.debug("Returning to Main Course Dashboard");
+        ViewFactory.getInstance().getManageCourseStage().hide();
         ViewFactory.getInstance().changeToAdminDashboardStage();
     }
 

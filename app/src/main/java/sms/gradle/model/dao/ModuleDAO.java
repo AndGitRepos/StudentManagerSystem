@@ -88,7 +88,6 @@ public final class ModuleDAO {
     public static Optional<Module> findById(final int id) throws SQLException {
         LOGGER.debug("Finding module by ID: {}", id);
         final String sql = "SELECT * FROM modules WHERE id = ?";
-        Optional<Module> module = Optional.empty();
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             findSqlStatement.setInt(1, id);
@@ -149,7 +148,6 @@ public final class ModuleDAO {
     public static List<Module> findByCourseId(final int courseId) throws SQLException {
         LOGGER.debug("Finding module by course ID: {}", courseId);
         final String sql = "SELECT * FROM modules WHERE course_id = ?";
-        Optional<Module> module = Optional.empty();
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             findSqlStatement.setInt(1, courseId);

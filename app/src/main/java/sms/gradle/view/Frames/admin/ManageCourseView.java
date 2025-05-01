@@ -14,36 +14,33 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.controller.admin.ManageCourseController;
 import sms.gradle.model.entities.Course;
 import sms.gradle.view.CoreViewInterface;
 
-@Getter
 public class ManageCourseView extends BorderPane implements CoreViewInterface {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private GridPane courseDetailsPane;
-    private ListView<Course> courseListView;
-    private Button selectButton;
-    private TextField courseIdField;
-    private TextField courseNameField;
-    private TextArea courseDescriptionArea;
-    private Button updateButton;
-    private Button createNewButton;
-    private Button deleteButton;
-    private Button refreshButton;
-    private Button backButton;
-    private Button logoutButton;
-    private VBox centerPanel;
+    private GridPane courseDetailsPane = new GridPane();
+    private ListView<Course> courseListView = new ListView<>();
+    private Button selectButton = new Button("Select");
+    private TextField courseIdField = new TextField();
+    private TextField courseNameField = new TextField();
+    private TextArea courseDescriptionArea = new TextArea();
+    private Button updateButton = new Button("Update");
+    private Button createNewButton = new Button("Create New");
+    private Button deleteButton = new Button("Delete");
+    private Button backButton = new Button("Back");
+    private Button refreshButton = new Button("Refresh");
+    private Button logoutButton = new Button("Logout");
+    private VBox centerPanel = new VBox(10);
 
     public ManageCourseView() {
         LOGGER.debug("Initialising Manage Course View");
         getStylesheets().add(getClass().getResource("/styles/manager.css").toExternalForm());
         initialiseCoreUIComponents();
-        setComponentIds();
         layoutCoreUIComponents();
         styleCoreUIComponents();
         setEventHandlers();
@@ -76,20 +73,8 @@ public class ManageCourseView extends BorderPane implements CoreViewInterface {
 
     @Override
     public void initialiseCoreUIComponents() {
-        courseListView = new ListView<>();
-        selectButton = new Button("Select");
-        createNewButton = new Button("Create New");
-        courseDetailsPane = new GridPane();
-        courseIdField = new TextField();
         courseIdField.setEditable(false);
-        courseNameField = new TextField();
-        courseDescriptionArea = new TextArea();
-        updateButton = new Button("Update");
-        deleteButton = new Button("Delete");
-        refreshButton = new Button("Refresh");
-        centerPanel = new VBox(10);
-        backButton = new Button("Back");
-        logoutButton = new Button("Logout");
+        setComponentIds();
     }
 
     @Override

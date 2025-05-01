@@ -12,7 +12,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.model.dao.AssessmentDAO;
@@ -31,8 +30,6 @@ import sms.gradle.view.ViewFactory;
 import sms.gradle.view.components.GradeCircle;
 
 public class AccessStudentAssessmentsController {
-
-    @Getter
     private static final Logger LOGGER = LogManager.getLogger();
 
     private AccessStudentAssessmentsController() {
@@ -169,14 +166,12 @@ public class AccessStudentAssessmentsController {
 
     public static void handleBackButton(ActionEvent event) {
         LOGGER.debug("Clicked back button");
-        ViewFactory.getInstance().changeToStudentDashboardStage();
-        ViewFactory.getInstance().getLoginStage().hide();
         ViewFactory.getInstance().getStudentAssessmentsStage().hide();
+        ViewFactory.getInstance().changeToStudentDashboardStage();
     }
 
     public static void handleSignoutButton(ActionEvent event) {
         LOGGER.debug("Clicked signout button");
-        ViewFactory.getInstance().getStudentDashboardStage().hide();
         ViewFactory.getInstance().getStudentAssessmentsStage().hide();
         ViewFactory.getInstance().changeToLoginStage();
     }

@@ -4,11 +4,11 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 import javafx.event.ActionEvent;
-import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.model.dao.AssessmentDAO;
@@ -22,6 +22,76 @@ import sms.gradle.view.ViewFactory;
 public class ManageAssessmentsController {
     private static final Logger LOGGER = LogManager.getLogger();
 
+    private ManageAssessmentsController() {
+        throw new UnsupportedOperationException("This is a controller class and cannot be instantiated");
+    }
+
+    private static Stage getViewStage() {
+        return ViewFactory.getInstance().getManageAssessmentsStage();
+    }
+
+    private static void updateAssessmentDetails(Assessment selectedAssessment) {
+        final TextField assessmentIdField = Common.getNode(getViewStage(), "#assessmentIdField");
+        final TextField nameField = Common.getNode(getViewStage(), "#nameField");
+        final TextField descriptionField = Common.getNode(getViewStage(), "#descriptionField");
+        final DatePicker dueDatePicker = Common.getNode(getViewStage(), "#dueDatePicker");
+
+        assessmentIdField.setText(String.valueOf(selectedAssessment.getId()));
+        nameField.setText(selectedAssessment.getName());
+        descriptionField.setText(selectedAssessment.getDescription());
+        dueDatePicker.setValue(selectedAssessment.getDueDate().toLocalDate());
+    }
+
+    private static void updateLinkedModuleDetails(Module linkedModule) {
+        LOGGER.debug("Updating linked module");
+        try {
+            final Label linkedModuleNameLabel = Common.getNode(getViewStage(), "#linkedModuleNameLabel");
+            final Label linkedModuleIdLabel = Common.getNode(getViewStage(), "#linkedModuleIdLabel");
+            final Label linkedModuleDescriptionLabel = Common.getNode(getViewStage(), "#linkedModuleDescriptionLabel");
+            final Label linkedModuleLecturerLabel = Common.getNode(getViewStage(), "#linkedModuleLecturerLabel");
+            final Label linkedModuleCourseNameLabel = Common.getNode(getViewStage(), "#linkedModuleCourseNameLabel");
+
+            linkedModuleNameLabel.setText(linkedModule.getName());
+            linkedModuleIdLabel.setText("(" + linkedModule.getId() + ")");
+            linkedModuleDescriptionLabel.setText(linkedModule.getDescription());
+            linkedModuleLecturerLabel.setText(linkedModule.getLecturer());
+            linkedModuleCourseNameLabel.setText(
+                    CourseDAO.findById(linkedModule.getCourseId()).get().getName());
+        } catch (SQLException e) {
+            LOGGER.error("Failed to update linked modules list: ", e);
+        }
+    }
+
+    private static void updateUnlinkedModulesListView() {
+        LOGGER.debug("Updating unlinked modules list");
+
+        final ListView<Module> unlinkedModulesListView = Common.getNode(getViewStage(), "#unlinkedModulesListView");
+        unlinkedModulesListView.getItems().clear();
+
+        try {
+            List<Module> allModules = ModuleDAO.findAll();
+            for (Module module : allModules) {
+                // Don't add the currently linked module to the list
+                if (module.getId() != getModuleIdFromLinkedModule()) {
+                    unlinkedModulesListView.getItems().add(module);
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.error("Failed to update unlinked modules list: ", e);
+        }
+    }
+
+    private static int getModuleIdFromLinkedModule() {
+        final Label linkedModuleIdLabel = Common.getNode(getViewStage(), "#linkedModuleIdLabel");
+        final String labelText = linkedModuleIdLabel.getText();
+
+        if (labelText == null || labelText.isEmpty()) {
+            return 0;
+        }
+
+        return Integer.parseInt(labelText.substring(1, labelText.length() - 1));
+    }
+
     /**
      * Updates the list of assessments with all the assessments in the database
      * @param event The action event that triggered this method
@@ -29,7 +99,7 @@ public class ManageAssessmentsController {
     public static void updateListOfAssessments(ActionEvent event) {
         LOGGER.debug("Updating list of assessments");
 
-        ListView<Assessment> assessmentsList = getNode("#assessmentsListView");
+        final ListView<Assessment> assessmentsList = Common.getNode(getViewStage(), "#assessmentsListView");
         assessmentsList.getItems().clear();
         try {
             AssessmentDAO.findAll()
@@ -47,8 +117,9 @@ public class ManageAssessmentsController {
     public static void selectAssessment(ActionEvent event) {
         LOGGER.debug("Selecting assessment");
 
-        ListView<Assessment> assessmentsListView = getNode("#assessmentsListView");
-        Assessment selectedAssessment = assessmentsListView.getSelectionModel().getSelectedItem();
+        final ListView<Assessment> assessmentsListView = Common.getNode(getViewStage(), "#assessmentsListView");
+        final Assessment selectedAssessment =
+                assessmentsListView.getSelectionModel().getSelectedItem();
         Module linkedModule;
 
         if (selectedAssessment == null) {
@@ -78,11 +149,25 @@ public class ManageAssessmentsController {
     public static void createNewAssessment(ActionEvent event) {
         LOGGER.debug("Creating new assessment");
 
-        TextField nameField = getNode("#nameField");
-        TextField descriptionField = getNode("#descriptionField");
-        DatePicker dueDatePicker = getNode("#dueDatePicker");
+        final TextField nameField = Common.getNode(getViewStage(), "#nameField");
+        final TextField descriptionField = Common.getNode(getViewStage(), "#descriptionField");
+        final DatePicker dueDatePicker = Common.getNode(getViewStage(), "#dueDatePicker");
 
-        Assessment newAssessment = new Assessment(
+        List<Module> modules;
+        try {
+            modules = ModuleDAO.findAll();
+        } catch (SQLException e) {
+            LOGGER.error("Failed to get list of modules: ", e);
+            return;
+        }
+
+        if (modules.isEmpty()) {
+            // TODO: Display user error
+            LOGGER.info("No modules found. Cannot create assessment");
+            return;
+        }
+
+        final Assessment newAssessment = new Assessment(
                 0,
                 nameField.getText(),
                 descriptionField.getText(),
@@ -104,8 +189,9 @@ public class ManageAssessmentsController {
      */
     public static void deleteAssessment(ActionEvent event) {
         LOGGER.debug("Deleting assessment");
-        ListView<Assessment> assessmentsListView = getNode("#assessmentsListView");
-        Assessment selectedAssessment = assessmentsListView.getSelectionModel().getSelectedItem();
+        final ListView<Assessment> assessmentsListView = Common.getNode(getViewStage(), "#assessmentsListView");
+        final Assessment selectedAssessment =
+                assessmentsListView.getSelectionModel().getSelectedItem();
 
         if (selectedAssessment == null) {
             LOGGER.debug("No assessment selected. Ignoring.");
@@ -123,8 +209,9 @@ public class ManageAssessmentsController {
 
     public static void swapLinkedModule(ActionEvent event) {
         LOGGER.debug("Swapping linked module");
-        ListView<Module> unlinkedModulesListView = getNode("#unlinkedModulesListView");
-        Module selectedModule = unlinkedModulesListView.getSelectionModel().getSelectedItem();
+        ListView<Module> unlinkedModulesListView = Common.getNode(getViewStage(), "#unlinkedModulesListView");
+        final Module selectedModule =
+                unlinkedModulesListView.getSelectionModel().getSelectedItem();
 
         if (selectedModule == null) {
             LOGGER.debug("No module selected. Ignoring.");
@@ -139,17 +226,25 @@ public class ManageAssessmentsController {
     public static void updateAssessment(ActionEvent event) {
         LOGGER.debug("Updating assessment");
 
-        TextField assessmentIdField = getNode("#assessmentIdField");
-        TextField nameField = getNode("#nameField");
-        TextField descriptionField = getNode("#descriptionField");
-        DatePicker dueDatePicker = getNode("#dueDatePicker");
+        final TextField assessmentIdField = Common.getNode(getViewStage(), "#assessmentIdField");
+        final TextField nameField = Common.getNode(getViewStage(), "#nameField");
+        final TextField descriptionField = Common.getNode(getViewStage(), "#descriptionField");
+        final DatePicker dueDatePicker = Common.getNode(getViewStage(), "#dueDatePicker");
 
-        Assessment updatedAssessment = new Assessment(
+        final int moduleIdFromLinkedModule = getModuleIdFromLinkedModule();
+
+        if (moduleIdFromLinkedModule == 0) {
+            LOGGER.debug("No module selected. Ignoring.");
+            // TODO: Show an error alert to the user
+            return;
+        }
+
+        final Assessment updatedAssessment = new Assessment(
                 Integer.parseInt(assessmentIdField.getText()),
                 nameField.getText(),
                 descriptionField.getText(),
                 Date.valueOf(dueDatePicker.getValue()),
-                getModuleIdFromLinkedModule());
+                moduleIdFromLinkedModule);
 
         try {
             AssessmentDAO.update(updatedAssessment);
@@ -160,64 +255,9 @@ public class ManageAssessmentsController {
         }
     }
 
-    private static void updateAssessmentDetails(Assessment selectedAssessment) {
-        TextField assessmentIdField = getNode("#assessmentIdField");
-        TextField nameField = getNode("#nameField");
-        TextField descriptionField = getNode("#descriptionField");
-        DatePicker dueDatePicker = getNode("#dueDatePicker");
-
-        assessmentIdField.setText(String.valueOf(selectedAssessment.getId()));
-        nameField.setText(selectedAssessment.getName());
-        descriptionField.setText(selectedAssessment.getDescription());
-        dueDatePicker.setValue(selectedAssessment.getDueDate().toLocalDate());
-    }
-
-    private static void updateLinkedModuleDetails(Module linkedModule) {
-        LOGGER.debug("Updating linked module");
-        try {
-            Label linkedModuleNameLabel = getNode("#linkedModuleNameLabel");
-            Label linkedModuleIdLabel = getNode("#linkedModuleIdLabel");
-            Label linkedModuleDescriptionLabel = getNode("#linkedModuleDescriptionLabel");
-            Label linkedModuleLecturerLabel = getNode("#linkedModuleLecturerLabel");
-            Label linkedModuleCourseNameLabel = getNode("#linkedModuleCourseNameLabel");
-
-            linkedModuleNameLabel.setText(linkedModule.getName());
-            linkedModuleIdLabel.setText("(" + linkedModule.getId() + ")");
-            linkedModuleDescriptionLabel.setText(linkedModule.getDescription());
-            linkedModuleLecturerLabel.setText(linkedModule.getLecturer());
-            linkedModuleCourseNameLabel.setText(
-                    CourseDAO.findById(linkedModule.getCourseId()).get().getName());
-        } catch (SQLException e) {
-            LOGGER.error("Failed to update linked modules list: ", e);
-        }
-    }
-
-    private static void updateUnlinkedModulesListView() {
-        LOGGER.debug("Updating unlinked modules list");
-
-        ListView<Module> unlinkedModulesListView = getNode("#unlinkedModulesListView");
-        unlinkedModulesListView.getItems().clear();
-
-        try {
-            List<Module> allModules = ModuleDAO.findAll();
-            for (Module module : allModules) {
-                // Don't add the currently linked module to the list
-                if (module.getId() != getModuleIdFromLinkedModule()) {
-                    unlinkedModulesListView.getItems().add(module);
-                }
-            }
-        } catch (SQLException e) {
-            LOGGER.error("Failed to update unlinked modules list: ", e);
-        }
-    }
-
-    private static int getModuleIdFromLinkedModule() {
-        Label linkedModuleIdLabel = getNode("#linkedModuleIdLabel");
-        String labelText = linkedModuleIdLabel.getText();
-        return Integer.parseInt(labelText.substring(1, labelText.length() - 1));
-    }
-
-    private static <T extends Node> T getNode(String selector) {
-        return Common.getNode(ViewFactory.getInstance().getManageAssessmentsStage(), selector);
+    public static void handleBackButton(ActionEvent event) {
+        LOGGER.debug("Handling back button");
+        ViewFactory.getInstance().getManageAssessmentsStage().hide();
+        ViewFactory.getInstance().changeToAdminDashboardStage();
     }
 }

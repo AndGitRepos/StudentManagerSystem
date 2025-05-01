@@ -8,6 +8,14 @@ import sms.gradle.view.ViewFactory;
 public final class CourseDetailViewController {
     private static final Logger LOGGER = LogManager.getLogger();
 
+    private CourseDetailViewController() {
+        throw new UnsupportedOperationException("This is a controller class and cannot be instantiated");
+    }
+
+    private static void hideCourseDetail() {
+        ViewFactory.getInstance().getCourseDetailStage().hide();
+    }
+
     public static void handleViewAssessmentDetailButton(ActionEvent event) {
         LOGGER.debug("View Assessment button clicked");
         // TODO - Once assessment detail page has been implemented add call to change to
@@ -25,11 +33,13 @@ public final class CourseDetailViewController {
 
     public static void handleLogoutButton(ActionEvent event) {
         LOGGER.debug("Logout button clicked");
+        hideCourseDetail();
         ViewFactory.getInstance().changeToLoginStage();
     }
 
     public static void handleBackButton(ActionEvent event) {
         LOGGER.debug("Back button clicked");
+        hideCourseDetail();
         ViewFactory.getInstance().changeToAdminDashboardStage();
     }
 }

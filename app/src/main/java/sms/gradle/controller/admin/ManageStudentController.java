@@ -21,6 +21,10 @@ import sms.gradle.view.ViewFactory;
 public final class ManageStudentController {
     private static final Logger LOGGER = LogManager.getLogger();
 
+    private ManageStudentController() {
+        throw new UnsupportedOperationException("This is a controller class and cannot be instantiated");
+    }
+
     private static Stage getViewStage() {
         return ViewFactory.getInstance().getManageStudentStage();
     }
@@ -32,7 +36,7 @@ public final class ManageStudentController {
      */
     public static void updateListOfStudents(ActionEvent event) {
         LOGGER.debug("Updating list of students");
-        ListView<Student> studentList = Common.getNode(getViewStage(), "#studentListView");
+        final ListView<Student> studentList = Common.getNode(getViewStage(), "#studentListView");
         studentList.getItems().clear();
         try {
             StudentDAO.findAll().forEach(student -> studentList.getItems().add(student));
@@ -47,20 +51,20 @@ public final class ManageStudentController {
      * @param event The action event that triggered this method
      */
     public static void selectStudent(ActionEvent event) {
-        ListView<Student> studentList = Common.getNode(getViewStage(), "#studentListView");
-        Student selectedStudent = studentList.getSelectionModel().getSelectedItem();
+        final ListView<Student> studentList = Common.getNode(getViewStage(), "#studentListView");
+        final Student selectedStudent = studentList.getSelectionModel().getSelectedItem();
         LOGGER.debug("Selected student {}", selectedStudent);
 
-        ListView<Course> enrolledCourses = Common.getNode(getViewStage(), "#enrolledCoursesListView");
-        ListView<Course> availableCourses = Common.getNode(getViewStage(), "#availableCoursesListView");
+        final ListView<Course> enrolledCourses = Common.getNode(getViewStage(), "#enrolledCoursesListView");
+        final ListView<Course> availableCourses = Common.getNode(getViewStage(), "#availableCoursesListView");
 
-        TextField studentIdField = Common.getNode(getViewStage(), "#studentIdField");
-        TextField firstNameField = Common.getNode(getViewStage(), "#firstNameField");
-        TextField lastNameField = Common.getNode(getViewStage(), "#lastNameField");
-        DatePicker dateOfBirthPicker = Common.getNode(getViewStage(), "#dateOfBirthPicker");
-        DatePicker joinDatePicker = Common.getNode(getViewStage(), "#joinDatePicker");
-        TextField emailField = Common.getNode(getViewStage(), "#emailField");
-        PasswordField passwordField = Common.getNode(getViewStage(), "#passwordField");
+        final TextField studentIdField = Common.getNode(getViewStage(), "#studentIdField");
+        final TextField firstNameField = Common.getNode(getViewStage(), "#firstNameField");
+        final TextField lastNameField = Common.getNode(getViewStage(), "#lastNameField");
+        final DatePicker dateOfBirthPicker = Common.getNode(getViewStage(), "#dateOfBirthPicker");
+        final DatePicker joinDatePicker = Common.getNode(getViewStage(), "#joinDatePicker");
+        final TextField emailField = Common.getNode(getViewStage(), "#emailField");
+        final PasswordField passwordField = Common.getNode(getViewStage(), "#passwordField");
 
         if (selectedStudent == null) {
             return;
@@ -79,7 +83,8 @@ public final class ManageStudentController {
         enrolledCourses.getItems().clear();
         try {
             LOGGER.debug("Updating enrolled courses list");
-            List<CourseEnrollment> courseEnrollments = CourseEnrollmentDAO.findByStudentId(selectedStudent.getId());
+            final List<CourseEnrollment> courseEnrollments =
+                    CourseEnrollmentDAO.findByStudentId(selectedStudent.getId());
             for (CourseEnrollment courseEnrollment : courseEnrollments) {
                 CourseDAO.findById(courseEnrollment.getCourseId())
                         .ifPresent(course -> enrolledCourses.getItems().add(course));
@@ -92,7 +97,7 @@ public final class ManageStudentController {
         availableCourses.getItems().clear();
         try {
             LOGGER.debug("Updating available courses list");
-            List<Course> allCourses = CourseDAO.findAll();
+            final List<Course> allCourses = CourseDAO.findAll();
             for (Course course : allCourses) {
                 if (!enrolledCourses.getItems().contains(course)) {
                     availableCourses.getItems().add(course);
@@ -110,15 +115,15 @@ public final class ManageStudentController {
      */
     public static void createNewStudent(ActionEvent event) {
         LOGGER.debug("Creating new student");
-        TextField firstNameField = Common.getNode(getViewStage(), "#firstNameField");
-        TextField lastNameField = Common.getNode(getViewStage(), "#lastNameField");
-        DatePicker dateOfBirthPicker = Common.getNode(getViewStage(), "#dateOfBirthPicker");
-        DatePicker joinDatePicker = Common.getNode(getViewStage(), "#joinDatePicker");
-        TextField emailField = Common.getNode(getViewStage(), "#emailField");
-        PasswordField passwordField = Common.getNode(getViewStage(), "#passwordField");
+        final TextField firstNameField = Common.getNode(getViewStage(), "#firstNameField");
+        final TextField lastNameField = Common.getNode(getViewStage(), "#lastNameField");
+        final DatePicker dateOfBirthPicker = Common.getNode(getViewStage(), "#dateOfBirthPicker");
+        final DatePicker joinDatePicker = Common.getNode(getViewStage(), "#joinDatePicker");
+        final TextField emailField = Common.getNode(getViewStage(), "#emailField");
+        final PasswordField passwordField = Common.getNode(getViewStage(), "#passwordField");
 
         try {
-            Student newStudent = new Student(
+            final Student newStudent = new Student(
                     0,
                     firstNameField.getText(),
                     lastNameField.getText(),
@@ -138,8 +143,8 @@ public final class ManageStudentController {
      * @param event The action event that triggered this method
      */
     public static void deleteStudent(ActionEvent event) {
-        ListView<Student> studentList = Common.getNode(getViewStage(), "#studentListView");
-        Student selectedStudent = studentList.getSelectionModel().getSelectedItem();
+        final ListView<Student> studentList = Common.getNode(getViewStage(), "#studentListView");
+        final Student selectedStudent = studentList.getSelectionModel().getSelectedItem();
         LOGGER.debug("Deleting student: {}", selectedStudent);
 
         if (selectedStudent == null) {
@@ -156,11 +161,11 @@ public final class ManageStudentController {
     }
 
     public static void enrollCourse(ActionEvent event) {
-        TextField studentIdField = Common.getNode(getViewStage(), "#studentIdField");
-        ListView<Course> enrolledCourses = Common.getNode(getViewStage(), "#enrolledCoursesListView");
-        ListView<Course> availableCourses = Common.getNode(getViewStage(), "#availableCoursesListView");
+        final TextField studentIdField = Common.getNode(getViewStage(), "#studentIdField");
+        final ListView<Course> enrolledCourses = Common.getNode(getViewStage(), "#enrolledCoursesListView");
+        final ListView<Course> availableCourses = Common.getNode(getViewStage(), "#availableCoursesListView");
 
-        Course selectedCourse = availableCourses.getSelectionModel().getSelectedItem();
+        final Course selectedCourse = availableCourses.getSelectionModel().getSelectedItem();
         LOGGER.debug("Enrolling student {} in course: {}", studentIdField.getText(), selectedCourse);
 
         if (selectedCourse == null) {
@@ -186,11 +191,11 @@ public final class ManageStudentController {
     }
 
     public static void unenrollCourse(ActionEvent event) {
-        TextField studentIdField = Common.getNode(getViewStage(), "#studentIdField");
-        ListView<Course> enrolledCourses = Common.getNode(getViewStage(), "#enrolledCoursesListView");
-        ListView<Course> availableCourses = Common.getNode(getViewStage(), "#availableCoursesListView");
+        final TextField studentIdField = Common.getNode(getViewStage(), "#studentIdField");
+        final ListView<Course> enrolledCourses = Common.getNode(getViewStage(), "#enrolledCoursesListView");
+        final ListView<Course> availableCourses = Common.getNode(getViewStage(), "#availableCoursesListView");
 
-        Course selectedCourse = enrolledCourses.getSelectionModel().getSelectedItem();
+        final Course selectedCourse = enrolledCourses.getSelectionModel().getSelectedItem();
         LOGGER.debug("Enrolling student {} in course: {}", studentIdField.getText(), selectedCourse);
 
         if (selectedCourse == null) {
@@ -206,7 +211,7 @@ public final class ManageStudentController {
         }
 
         try {
-            Optional<CourseEnrollment> courseEnrollment =
+            final Optional<CourseEnrollment> courseEnrollment =
                     CourseEnrollmentDAO.findByStudentAndCourseId(studentId, selectedCourse.getId());
             if (courseEnrollment.isEmpty()) {
                 LOGGER.warn(
@@ -222,5 +227,11 @@ public final class ManageStudentController {
         } catch (SQLException e) {
             LOGGER.error("Failed to unenroll student from course", e);
         }
+    }
+
+    public static void handleBackButton(ActionEvent event) {
+        LOGGER.debug("Handling back button");
+        ViewFactory.getInstance().getManageStudentStage().hide();
+        ViewFactory.getInstance().changeToAdminDashboardStage();
     }
 }

@@ -141,15 +141,16 @@ public final class AdminDAO {
      * @return The number of rows affected (1 if successful, 0 if admin not found)
      * @throws SQLException if there is an error executing the update operation
      */
-    public static int update(final Admin admin) throws SQLException {
+    public static int update(final Admin admin, final String hashedPassword) throws SQLException {
         LOGGER.debug("Updating admin: {}", admin);
-        final String sql = "UPDATE admins SET first_name = ?, last_name = ?, email = ? WHERE id = ?";
+        final String sql = "UPDATE admins SET first_name = ?, last_name = ?, email = ?, password = ? WHERE id = ?";
         try (PreparedStatement updateSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             updateSqlStatement.setString(1, admin.getFirstName());
             updateSqlStatement.setString(2, admin.getLastName());
             updateSqlStatement.setString(3, admin.getEmail());
-            updateSqlStatement.setInt(4, admin.getId());
+            updateSqlStatement.setString(4, hashedPassword);
+            updateSqlStatement.setInt(5, admin.getId());
             return updateSqlStatement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error("Failed to update admin: {}", admin, e);
