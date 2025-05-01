@@ -17,7 +17,6 @@ import sms.gradle.model.entities.Course;
 import sms.gradle.view.CoreViewInterface;
 
 public class AccessStudentAssessmentsView extends BorderPane implements CoreViewInterface {
-
     private static final Logger LOGGER = LogManager.getLogger();
 
     private ComboBox<Course> filterDropDown = new ComboBox<>();

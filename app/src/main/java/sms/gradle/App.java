@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.model.dao.DatabaseConnection;
-import sms.gradle.utils.Common;
+import sms.gradle.utils.MockDatabaseGenerator;
 import sms.gradle.view.ViewFactory;
 
 public class App extends Application {
@@ -19,7 +19,7 @@ public class App extends Application {
         if (!DatabaseConnection.getInstance().isPopulated()) {
             try {
                 LOGGER.info("Populating database");
-                Common.populateTables();
+                MockDatabaseGenerator.populateTables();
             } catch (Exception e) {
                 LOGGER.error("Failed to populate tables: ", e);
             }

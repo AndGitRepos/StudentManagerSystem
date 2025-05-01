@@ -148,6 +148,33 @@ public class ResultDAO {
     }
 
     /**
+     * Finds a result for a specific student and assessment
+     *
+     * @param studentId The ID of the student
+     * @param assessmentId The ID of the assessment
+     * @return An Optional containing the Result object if found, or an empty Optional if not found
+     * @throws SQLException if there is an error executing the query
+     */
+    public static Optional<Result> findByStudentAndAssessment(final int studentId, final int assessmentId)
+            throws SQLException {
+        LOGGER.debug("Finding result by student id: {} and assessment id: {}", studentId, assessmentId);
+        final String sql = "SELECT * FROM results WHERE student_id = ? AND assessment_id = ?";
+        try (PreparedStatement findSqlStatement =
+                DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+            findSqlStatement.setInt(1, studentId);
+            findSqlStatement.setInt(2, assessmentId);
+            ResultSet resultSet = findSqlStatement.executeQuery();
+            return getResultFromResultSet(resultSet);
+        } catch (SQLException e) {
+            LOGGER.error("Failed to find result by student id: {} and assessment id: {}", studentId, assessmentId, e);
+            throw new SQLException(
+                    String.format(
+                            "Failed to find result for Student Id: %d and Assessment Id: %d", studentId, assessmentId),
+                    e);
+        }
+    }
+
+    /**
      * Retrieves all results from the database
      *
      * @return A List containing all Result objects in the database
