@@ -5,7 +5,6 @@ import java.sql.*;
 import java.sql.ResultSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sms.gradle.model.entities.*;
 import sms.gradle.utils.DatabaseScripts;
 
 public final class DatabaseConnection {

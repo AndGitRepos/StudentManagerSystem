@@ -146,13 +146,14 @@ public class AdminDAOTest {
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
         when(mockPreparedStatement.executeUpdate()).thenReturn(1);
 
-        int result = AdminDAO.update(admin);
+        int result = AdminDAO.update(admin, "password");
 
         assertEquals(1, result);
         verify(mockPreparedStatement).setString(1, admin.getFirstName());
         verify(mockPreparedStatement).setString(2, admin.getLastName());
         verify(mockPreparedStatement).setString(3, admin.getEmail());
-        verify(mockPreparedStatement).setInt(4, admin.getId());
+        verify(mockPreparedStatement).setString(4, "password");
+        verify(mockPreparedStatement).setInt(5, admin.getId());
     }
 
     @Test

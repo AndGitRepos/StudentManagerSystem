@@ -76,7 +76,6 @@ public final class CourseDAO {
     public static Optional<Course> findById(final int id) throws SQLException {
         LOGGER.debug("Finding course by id: {}", id);
         final String sql = "SELECT * FROM courses WHERE id = ?";
-        Optional<Course> course = Optional.empty();
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             findSqlStatement.setInt(1, id);
@@ -96,7 +95,6 @@ public final class CourseDAO {
      */
     public static Optional<Course> findByName(final String name) throws SQLException {
         LOGGER.debug("Finding course by name: {}", name);
-        Optional<Course> course = Optional.empty();
         final String sql = "SELECT * FROM courses WHERE name = ?";
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {

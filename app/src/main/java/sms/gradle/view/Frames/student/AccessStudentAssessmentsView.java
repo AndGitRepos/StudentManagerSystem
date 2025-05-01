@@ -20,25 +20,29 @@ public class AccessStudentAssessmentsView extends BorderPane implements CoreView
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private ComboBox<Course> filterDropDown;
-    private VBox leftPanel;
-    private ListView<Assessment> assessmentListView;
-    private Button selectButton;
-    private Button refreshButton;
+    private ComboBox<Course> filterDropDown = new ComboBox<>();
+    private VBox leftPanel = new VBox(20);
+    private ListView<Assessment> assessmentListView = new ListView<>();
+    private Button selectButton = new Button("SELECT");
 
-    private VBox rightPanel;
-    private Label assessmentNameLabel;
-    private Label assessmentIdLabel;
-    private Label moduleLabel;
-    private Label assessmentDescriptionLabel;
-    private Label lecturerLabel;
-    private Label dueDateLabel;
+    private VBox rightPanel = new VBox(15);
+    private Label assessmentNameLabel = new Label("Assessment: ");
+    private Label assessmentIdLabel = new Label("ID: ");
+    private Label moduleLabel = new Label("Associated Module");
+    private Label assessmentDescriptionLabel = new Label("Description: ");
+    private Label lecturerLabel = new Label("Lecturer: ");
+    private Label dueDateLabel = new Label("Due Date: ");
 
-    private VBox displayResultsArea;
-    private VBox graphResultArea; // TODO:
+    private VBox displayResultsArea = new VBox(10);
+    private VBox graphResultArea = new VBox(10); // TODO:
 
-    private Button backButton;
-    private Button signoutButton;
+    private Label viewHeading = new Label("All Assessments");
+    private Label courseNameLabel = new Label("Course: ");
+    private Label assessmentsNumberLabel = new Label("Assessment NO: ");
+
+    private Button refreshButton = new Button("REFRESH");
+    private Button backButton = new Button("Back to Dashboard");
+    private Button signoutButton = new Button("Sign Out");
 
     private void setupEventHandlers() {
         filterDropDown.setOnAction(AccessStudentAssessmentsController::handleFilterAssessments);
@@ -59,35 +63,10 @@ public class AccessStudentAssessmentsView extends BorderPane implements CoreView
         LOGGER.debug("Access Student Assessments View Initialised");
     }
 
-    @Override
-    public void initialiseCoreUIComponents() {
-        filterDropDown = new ComboBox<>();
-        filterDropDown.setPromptText("Filter by Course");
-        leftPanel = new VBox(20);
-        assessmentListView = new ListView<>();
-        selectButton = new Button("SELECT");
-        refreshButton = new Button("REFRESH");
-
-        rightPanel = new VBox(15);
-        assessmentNameLabel = new Label("Assessment: ");
-        assessmentIdLabel = new Label("ID: ");
-        moduleLabel = new Label("Associated Module");
-        assessmentDescriptionLabel = new Label("Description: ");
-        lecturerLabel = new Label("Lecturer: ");
-        dueDateLabel = new Label("Due Date: ");
-
-        displayResultsArea = new VBox(10);
-        graphResultArea = new VBox(10);
-        displayResultsArea.setPrefSize(200, 200);
-        displayResultsArea.setAlignment(Pos.CENTER);
-
-        backButton = new Button("Back to Dashboard");
-        signoutButton = new Button("Sign Out");
-
-        filterDropDown.setId("filterDropDown");
-        leftPanel.setId("leftPanel");
-        assessmentListView.setId("assessmentListView");
-        selectButton.setId("selectButton");
+    private void setComponentIds() {
+        viewHeading.setId("assessmentsViewHeading");
+        courseNameLabel.setId("courseNameLabel");
+        assessmentsNumberLabel.setId("courseassessmentsNumberLabelNameLabel");
         refreshButton.setId("refreshButton");
 
         rightPanel.setId("rightPanel");
@@ -99,14 +78,35 @@ public class AccessStudentAssessmentsView extends BorderPane implements CoreView
         dueDateLabel.setId("dueDateLabel");
         displayResultsArea.setId("displayResultsArea");
         graphResultArea.setId("graphResultArea");
+
+        filterDropDown.setId("filterDropDown");
+        leftPanel.setId("leftPanel");
+        assessmentListView.setId("assessmentListView");
+        selectButton.setId("selectButton");
     }
 
     @Override
-    public void layoutCoreUIComponents() {
+    public void initialiseCoreUIComponents() {
+        filterDropDown.setPromptText("Filter by Course");
+
+        displayResultsArea.setPrefSize(200, 200);
+        displayResultsArea.setAlignment(Pos.CENTER);
+
+        viewHeading.setStyle("-fx-font-size: 28px; -fx-font-weight: bold;");
+        courseNameLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        assessmentsNumberLabel.setStyle("-fx-font-size: 16px;");
 
         leftPanel.getChildren().addAll(filterDropDown, assessmentListView, selectButton, refreshButton);
         leftPanel.setPadding(new Insets(20));
         leftPanel.setAlignment(Pos.TOP_CENTER);
+        setComponentIds();
+    }
+
+    @Override
+    public void layoutCoreUIComponents() {
+        HBox headerBox = new HBox(viewHeading);
+        headerBox.setAlignment(Pos.CENTER);
+        headerBox.setPadding(new Insets(20, 0, 30, 0));
 
         rightPanel
                 .getChildren()
@@ -140,7 +140,6 @@ public class AccessStudentAssessmentsView extends BorderPane implements CoreView
 
     @Override
     public void styleCoreUIComponents() {
-
         leftPanel.getStyleClass().add("left-panel");
         filterDropDown.getStyleClass().add("filter-drop-down");
         assessmentListView.getStyleClass().add("assessment-view-container");

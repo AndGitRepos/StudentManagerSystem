@@ -23,10 +23,8 @@ import sms.gradle.model.entities.Assessment;
 import sms.gradle.model.entities.Course;
 import sms.gradle.utils.Common;
 import sms.gradle.view.CoreViewInterface;
-import sms.gradle.view.ViewFactory;
 
 public class ManageAssessmentsView extends BorderPane implements CoreViewInterface {
-
     private static final Logger LOGGER = LogManager.getLogger();
 
     // Left Panel Components
@@ -69,6 +67,7 @@ public class ManageAssessmentsView extends BorderPane implements CoreViewInterfa
 
     @Override
     public void initialiseCoreUIComponents() {
+        assessmentIdField.setEditable(false);
         setComponentIds();
     }
 
@@ -229,7 +228,7 @@ public class ManageAssessmentsView extends BorderPane implements CoreViewInterfa
         updateButton.setOnAction(ManageAssessmentsController::updateAssessment);
         deleteButton.setOnAction(ManageAssessmentsController::deleteAssessment);
         swapButton.setOnAction(ManageAssessmentsController::swapLinkedModule);
-        backButton.setOnAction(event -> ViewFactory.getInstance().changeToAdminDashboardStage());
+        backButton.setOnAction(ManageAssessmentsController::handleBackButton);
     }
 
     private static class AssessmentListCell extends ListCell<Assessment> {

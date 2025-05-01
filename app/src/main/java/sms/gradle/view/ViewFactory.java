@@ -65,79 +65,56 @@ public class ViewFactory {
     public void changeToLoginStage() {
         LOGGER.debug("Changing to login stage");
         Session.getInstance().clearSession();
-        studentDashboardStage.hide();
-        adminDashboardStage.hide();
-        courseDetailStage.hide();
         loginStage.show();
     }
 
     public void changeToStudentDashboardStage() {
         LOGGER.debug("Changing to student dashboard stage");
-        loginStage.hide();
-        studentModulesStage.hide();
         studentDashboardStage.show();
     }
 
     public void changeToStudentModulesStage() {
         LOGGER.debug("Changing to access student modules stage");
-        loginStage.hide();
-        studentDashboardStage.hide();
         studentModulesStage.show();
     }
 
     public void changeToStudentAssessmentsStage() {
         LOGGER.debug("Changing to access student assessments stage");
-        loginStage.hide();
-        studentDashboardStage.hide();
-        studentModulesStage.hide();
         studentAssessmentsStage.show();
     }
 
     public void changeToAdminDashboardStage() {
         LOGGER.debug("Changing to admin dashboard stage");
-        loginStage.hide();
-        manageStudentStage.hide();
-        manageCourseStage.hide();
-        manageModulesStage.hide();
-        manageAdminStage.hide();
-        manageAssessmentsStage.hide();
-        courseDetailStage.hide();
         adminDashboardStage.show();
     }
 
     public void changeToManageStudentStage() {
         LOGGER.debug("Changing to manage student stage");
-        adminDashboardStage.hide();
         manageStudentStage.show();
     }
 
     public void changeToManageCourseStage() {
         LOGGER.debug("Changing to manage course stage");
-        adminDashboardStage.hide();
         manageCourseStage.show();
     }
 
     public void changeToManageModulesStage() {
         LOGGER.debug("Changing to manage modules stage");
-        adminDashboardStage.hide();
         manageModulesStage.show();
     }
 
     public void changeToManageAdminStage() {
         LOGGER.debug("Changing to manage admin stage");
-        adminDashboardStage.hide();
         manageAdminStage.show();
     }
 
     public void changeToCourseDetailStage() {
         LOGGER.debug("Changing to course detail stage");
-        adminDashboardStage.hide();
         courseDetailStage.show();
     }
 
     public void changeToManageAssessmentsStage() {
         LOGGER.debug("Changing to manage assessments stage");
-        adminDashboardStage.hide();
         manageAssessmentsStage.show();
     }
 

@@ -17,15 +17,14 @@ import sms.gradle.view.CoreViewInterface;
  * Implement Login view via CoreViewInterface's Template pattern Focus on: input verification, error
  * feedback & user authentication
  */
-
 public class LoginView extends VBox implements CoreViewInterface {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private Label loginErrorLabel;
-    private Button loginButton;
-    private TextField usernameField;
-    private PasswordField passwordField;
-    private Label titleLabel;
+    private Label loginErrorLabel = new Label();
+    private Button loginButton = new Button("Log In");
+    private TextField usernameField = new TextField();
+    private PasswordField passwordField = new PasswordField();
+    private Label titleLabel = new Label("Student Management System");
 
     public LoginView() {
         LOGGER.debug("Initialising Login View");
@@ -43,26 +42,19 @@ public class LoginView extends VBox implements CoreViewInterface {
 
     @Override
     public void initialiseCoreUIComponents() {
-
-        titleLabel = new Label("Student Management System");
-
-        usernameField = new TextField();
         usernameField.setId("username_field");
         usernameField.setPromptText("Example: johnsmith@qmul.ac.uk ");
         usernameField.setMaxWidth(250);
         usernameField.setTooltip(new Tooltip("Enter your email address"));
 
-        passwordField = new PasswordField();
         passwordField.setId("password_field");
         passwordField.setPromptText("Example: GitHub123 ");
         passwordField.setMaxWidth(250);
         passwordField.setTooltip(new Tooltip("Enter your password"));
 
-        loginButton = new Button("Log In");
         loginButton.setMaxWidth(200);
         loginButton.setId("login_button");
 
-        loginErrorLabel = new Label();
         loginErrorLabel.setId("error_label");
         loginErrorLabel.setVisible(false);
         loginErrorLabel.getStyleClass().add("login-error-label");
@@ -70,7 +62,6 @@ public class LoginView extends VBox implements CoreViewInterface {
 
     @Override
     public void layoutCoreUIComponents() {
-
         setAlignment(Pos.CENTER);
         setSpacing(20);
         setPadding(new Insets(50));

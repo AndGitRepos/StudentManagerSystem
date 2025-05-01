@@ -15,7 +15,6 @@ import sms.gradle.controller.admin.ManageModuleController;
 import sms.gradle.model.entities.Course;
 import sms.gradle.model.entities.Module;
 import sms.gradle.view.CoreViewInterface;
-import sms.gradle.view.ViewFactory;
 
 public class ManageModulesView extends BorderPane implements CoreViewInterface {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -59,6 +58,7 @@ public class ManageModulesView extends BorderPane implements CoreViewInterface {
 
     @Override
     public void initialiseCoreUIComponents() {
+        moduleIdField.setEditable(false);
         setComponentIds();
     }
 
@@ -69,7 +69,6 @@ public class ManageModulesView extends BorderPane implements CoreViewInterface {
         deleteButton.setId("deleteButton");
 
         moduleIdField.setId("moduleIdField");
-        moduleIdField.setEditable(false);
         nameField.setId("nameField");
         descriptionField.setId("descriptionField");
         lecturerField.setId("lecturerField");
@@ -193,7 +192,7 @@ public class ManageModulesView extends BorderPane implements CoreViewInterface {
         updateButton.setOnAction(ManageModuleController::updateModule);
         deleteButton.setOnAction(ManageModuleController::deleteModule);
         swapButton.setOnAction(ManageModuleController::swapLinkedCourse);
-        backButton.setOnAction(event -> ViewFactory.getInstance().changeToAdminDashboardStage());
+        backButton.setOnAction(ManageModuleController::handleBackButton);
     }
 
     private static class ModuleListCell extends ListCell<Module> {

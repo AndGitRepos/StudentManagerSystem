@@ -14,7 +14,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.controller.admin.CourseDetailViewController;
@@ -29,7 +28,6 @@ import sms.gradle.view.CoreViewInterface;
  * Course View that displays detailed information about a course and its students.
  * This view is shown when the "View Course" button is clicked in the StaffDashboardView.
  */
-@Getter
 public final class CourseDetailView extends BorderPane implements CoreViewInterface {
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -37,33 +35,34 @@ public final class CourseDetailView extends BorderPane implements CoreViewInterf
     private static final double STATS_PANEL_HEIGHT_PERCENT = 0.15;
 
     // Sidebar components
-    private VBox sidebar;
-    private Label courseNameLabel;
-    private Label courseDescriptionLabel;
-    private Button moduleDetailButton;
-    private Button assessmentDetailButton;
-    private Button backButton;
-    private Button logoutButton;
-    private ScrollPane moduleScrollPane;
-    private VBox moduleListContainer;
+    private VBox sidebar = new VBox(15);
+    private Label courseNameLabel = new Label("Course Name");
+    private Label courseDescriptionLabel =
+            new Label("Course Description: This is a placeholder for the course description.");
+    private Button moduleDetailButton = new Button("View Module");
+    private Button assessmentDetailButton = new Button("View Assessment");
+    private Button backButton = new Button("Back");
+    private Button logoutButton = new Button("Logout");
+    private VBox moduleListContainer = new VBox(5);
+    private ScrollPane moduleScrollPane = new ScrollPane(moduleListContainer);
     private HBox selectedModuleRow = null;
-    private ScrollPane assessmentScrollPane;
-    private VBox assessmentListContainer;
+    private VBox assessmentListContainer = new VBox(5);
+    private ScrollPane assessmentScrollPane = new ScrollPane(assessmentListContainer);
     private HBox selectedAssessmentRow = null;
 
     // Stats panel components
-    private HBox statsPanel;
-    private Label totalStudentsLabel;
-    private Label averageGradeLabel;
-    private Label passRateLabel;
+    private HBox statsPanel = new HBox(30);
+    private Label totalStudentsLabel = new Label("Total Students: 0");
+    private Label averageGradeLabel = new Label("Average Grade: 0.0");
+    private Label passRateLabel = new Label("Pass Rate: 0%");
 
     // Main information panel components
-    private VBox mainInfoPanel;
-    private ScrollPane studentScrollPane;
-    private VBox studentListContainer;
+    private VBox mainInfoPanel = new VBox(10);
+    private VBox studentListContainer = new VBox(5);
+    private ScrollPane studentScrollPane = new ScrollPane(studentListContainer);
     private HBox selectedStudentRow = null;
-    private Button viewStudentButton;
-    private VBox studentSection;
+    private Button viewStudentButton = new Button("View Student Details");
+    private VBox studentSection = new VBox(0);
     private HBox headerRow;
 
     // Current course ID
@@ -86,40 +85,15 @@ public final class CourseDetailView extends BorderPane implements CoreViewInterf
 
     @Override
     public void initialiseCoreUIComponents() {
-        // Sidebar components
-        sidebar = new VBox(15);
-        courseNameLabel = new Label("Course Name");
-        courseDescriptionLabel = new Label("Course Description: This is a placeholder for the course description.");
-        moduleDetailButton = new Button("View Module");
-        assessmentDetailButton = new Button("View Assessment");
-        backButton = new Button("Back");
-        logoutButton = new Button("Logout");
-
-        // Stats panel components
-        statsPanel = new HBox(30);
-        totalStudentsLabel = new Label("Total Students: 0");
-        averageGradeLabel = new Label("Average Grade: 0.0");
-        passRateLabel = new Label("Pass Rate: 0%");
-
         // Main information panel components
-        mainInfoPanel = new VBox(10);
-        studentListContainer = new VBox(5);
-        studentScrollPane = new ScrollPane(studentListContainer);
-        viewStudentButton = new Button("View Student Details");
         viewStudentButton.setDisable(true);
         studentScrollPane.setFitToWidth(true);
-        studentSection = new VBox(0);
+
         headerRow = createStudentRow("ID", "Name", "Email", "Join Date");
         headerRow.getStyleClass().add("student-header-row");
 
-        // Module scroll components
-        moduleListContainer = new VBox(5);
-        moduleScrollPane = new ScrollPane(moduleListContainer);
         moduleScrollPane.setFitToWidth(true);
 
-        // Assessment scroll components
-        assessmentListContainer = new VBox(5);
-        assessmentScrollPane = new ScrollPane(assessmentListContainer);
         assessmentScrollPane.setFitToWidth(true);
     }
 

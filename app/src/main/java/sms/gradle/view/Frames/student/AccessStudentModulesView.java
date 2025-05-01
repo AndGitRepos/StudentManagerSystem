@@ -9,7 +9,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.controller.StudentControllers.AccessStudentModulesController;
@@ -18,21 +17,18 @@ import sms.gradle.view.CoreViewInterface;
 /*
  * Manages Access Modules view for selected student via CoreViewInterface's Template pattern
  */
-
-@Getter
 public class AccessStudentModulesView extends BorderPane implements CoreViewInterface {
-
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private VBox coreContent;
-    private GridPane modulesGrid;
-    private ScrollPane scrollPane;
+    private VBox coreContent = new VBox(20);
+    private GridPane modulesGrid = new GridPane();
+    private ScrollPane scrollPane = new ScrollPane(modulesGrid);
 
-    private Label courseNameHeading;
+    private Label courseNameHeading = new Label("Course Modules");
 
-    private Button refreshButton;
-    private Button backButton;
-    private Button signoutButton;
+    private Button refreshButton = new Button("Refresh Modules");
+    private Button backButton = new Button("Back to Dashboard");
+    private Button signoutButton = new Button("Sign Out");
 
     private void setupEventHandlers() {
         refreshButton.setOnAction(AccessStudentModulesController::handleRefreshModulesButton);
@@ -50,24 +46,18 @@ public class AccessStudentModulesView extends BorderPane implements CoreViewInte
         LOGGER.debug("Access Student Modules View Initialised");
     }
 
-    @Override
-    public void initialiseCoreUIComponents() {
-        coreContent = new VBox(20);
-        modulesGrid = new GridPane();
-        scrollPane = new ScrollPane(modulesGrid);
-
-        courseNameHeading = new Label("Course Modules");
-        courseNameHeading.setStyle("-fx-font-size: 28px; -fx-font-weight: bold;");
+    private void setComponentIds() {
         courseNameHeading.setId("courseNameHeading");
-
-        backButton = new Button("Back to Dashboard");
-        signoutButton = new Button("Sign Out");
-        refreshButton = new Button("Refresh Modules");
-
         refreshButton.setId("refreshButton");
         backButton.setId("backButton");
         signoutButton.setId("signoutButton");
         modulesGrid.setId("modulesGrid");
+    }
+
+    @Override
+    public void initialiseCoreUIComponents() {
+        courseNameHeading.setStyle("-fx-font-size: 28px; -fx-font-weight: bold;");
+        setComponentIds();
     }
 
     @Override

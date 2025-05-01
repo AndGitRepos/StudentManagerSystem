@@ -12,38 +12,36 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.controller.admin.ManageAdminsController;
 import sms.gradle.model.entities.Admin;
 import sms.gradle.view.CoreViewInterface;
 
-@Getter
 public class ManageAdminView extends BorderPane implements CoreViewInterface {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private ListView<Admin> adminListView;
-    private Button refreshAdminListButton;
-    private Button selectAdminButton;
-    private Button deleteAdminButton;
+    private ListView<Admin> adminListView = new ListView<>();
+    private Button refreshAdminListButton = new Button("Refresh");
+    private Button selectAdminButton = new Button("Select");
+    private Button deleteAdminButton = new Button("Delete");
 
     VBox leftPanel = new VBox(10);
-    private GridPane adminDetailsPane;
+    private GridPane adminDetailsPane = new GridPane();
 
-    private TextField firstNameField;
-    private TextField lastNameField;
-    private TextField adminIdField;
-    private TextField adminEmailField;
-    private PasswordField passwordField;
+    private TextField firstNameField = new TextField();
+    private TextField lastNameField = new TextField();
+    private TextField adminIdField = new TextField();
+    private TextField adminEmailField = new TextField();
+    private PasswordField passwordField = new PasswordField();
 
-    private Button createNewAdminButton;
-    private Button updateAdminButton;
-    private Button backButton;
-    private Button logoutButton;
+    private Button createNewAdminButton = new Button("Create New");
+    private Button updateAdminButton = new Button("Update");
+    private Button backButton = new Button("Back");
+    private Button logoutButton = new Button("Logout");
 
-    private VBox centerPanel;
+    private VBox centerPanel = new VBox(15);
 
     public ManageAdminView() {
         LOGGER.debug("Initialising Manage Admin View");
@@ -57,66 +55,48 @@ public class ManageAdminView extends BorderPane implements CoreViewInterface {
         initialiseAdminListComponents();
         initialiseAdminDetailsComponents();
         initialiseActionButtons();
-        centerPanel = new VBox(15);
     }
 
     private void initialiseAdminListComponents() {
-        adminListView = new ListView<>();
         adminListView.setId("adminListView");
 
-        refreshAdminListButton = new Button("Refresh");
         refreshAdminListButton.setId("refreshAdminListButton");
         refreshAdminListButton.setOnAction(ManageAdminsController::refreshListOfAdmins);
 
-        deleteAdminButton = new Button("Delete");
         deleteAdminButton.setId("deleteAdminButton");
         deleteAdminButton.setOnAction(ManageAdminsController::deleteAdmin);
 
-        selectAdminButton = new Button("Select");
         selectAdminButton.setId("selectAdminButton");
         selectAdminButton.setOnAction(ManageAdminsController::selectAdmin);
     }
 
     private void initialiseAdminDetailsComponents() {
-
-        adminDetailsPane = new GridPane();
-
-        adminIdField = new TextField();
         adminIdField.setId("adminIdField");
         adminIdField.setEditable(false);
 
-        firstNameField = new TextField();
         firstNameField.setId("firstNameField");
         firstNameField.setPromptText("Enter First Name");
 
-        lastNameField = new TextField();
         lastNameField.setId("lastNameField");
         lastNameField.setPromptText("Enter Last Name");
 
-        adminEmailField = new TextField();
         adminEmailField.setId("adminEmailField");
         adminEmailField.setPromptText("Enter Email Address");
 
-        passwordField = new PasswordField();
         passwordField.setId("passwordField");
         passwordField.setPromptText("Enter Password");
     }
 
     private void initialiseActionButtons() {
-
-        createNewAdminButton = new Button("Create New Admin");
         createNewAdminButton.setId("createNewAdminButton");
         createNewAdminButton.setOnAction(ManageAdminsController::createNewAdmin);
 
-        updateAdminButton = new Button("Update Admin");
         updateAdminButton.setId("updateAdminButton");
         updateAdminButton.setOnAction(ManageAdminsController::updateAdmin);
 
-        backButton = new Button("Back");
         backButton.setId("backButton");
         backButton.setOnAction(ManageAdminsController::handleBack);
 
-        logoutButton = new Button("Logout");
         logoutButton.setId("logoutButton");
         logoutButton.setOnAction(ManageAdminsController::handleLogout);
     }

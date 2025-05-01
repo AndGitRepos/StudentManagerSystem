@@ -16,6 +16,7 @@ import sms.gradle.model.dao.CourseEnrollmentDAO;
 import sms.gradle.model.dao.StudentDAO;
 import sms.gradle.model.entities.Course;
 import sms.gradle.model.entities.CourseEnrollment;
+import sms.gradle.utils.Common;
 import sms.gradle.utils.session.Session;
 import sms.gradle.view.ViewFactory;
 
@@ -24,7 +25,11 @@ public class StudentDashboardController {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private StudentDashboardController() {
-        throw new UnsupportedOperationException("All methods in controller class are static");
+        throw new UnsupportedOperationException("This is a controller class and cannot be instantiated");
+    }
+
+    private static Stage getViewStage() {
+        return ViewFactory.getInstance().getStudentDashboardStage();
     }
 
     /**
@@ -38,17 +43,13 @@ public class StudentDashboardController {
                 LOGGER.info("Unable to load courses - no user signed in");
                 return;
             }
-            ListView<Course> courseListView = (ListView<Course>) ViewFactory.getInstance()
-                    .getStudentDashboardStage()
-                    .getScene()
-                    .lookup("#courseListView");
+            final ListView<Course> courseListView = Common.getNode(getViewStage(), "#courseListView");
 
-            Stage stage = ViewFactory.getInstance().getStudentDashboardStage();
-            Label nameLabel = (Label) stage.getScene().lookup("#studentNameLabel");
-            Label emailLabel = (Label) stage.getScene().lookup("#studentEmailLabel");
-            Label joinDateLabel = (Label) stage.getScene().lookup("#studentJoinDateLabel");
+            final Label nameLabel = Common.getNode(getViewStage(), "#studentNameLabel");
+            final Label emailLabel = Common.getNode(getViewStage(), "#studentEmailLabel");
+            final Label joinDateLabel = Common.getNode(getViewStage(), "#studentJoinDateLabel");
 
-            int studentId = Session.getInstance().getUser().get().getId();
+            final int studentId = Session.getInstance().getUser().get().getId();
 
             StudentDAO.findById(studentId).ifPresent(student -> {
                 nameLabel.setText("Student: " + student.getFirstName() + " " + student.getLastName());
@@ -57,7 +58,7 @@ public class StudentDashboardController {
                 LOGGER.debug("Loaded student details successfully");
             });
 
-            List<CourseEnrollment> enrolledCourses = CourseEnrollmentDAO.findByStudentId(studentId);
+            final List<CourseEnrollment> enrolledCourses = CourseEnrollmentDAO.findByStudentId(studentId);
             List<Course> courses = new ArrayList<>();
 
             for (CourseEnrollment enrolledCourse : enrolledCourses) {
@@ -73,14 +74,14 @@ public class StudentDashboardController {
     }
 
     public static void handleSelectCourseButton(ActionEvent event) {
-        ListView<Course> courseList = (ListView<Course>)
-                ViewFactory.getInstance().getStudentDashboardStage().getScene().lookup("#courseListView");
+        final ListView<Course> courseList = Common.getNode(getViewStage(), "#courseListView");
 
-        Course selectedCourse = courseList.getSelectionModel().getSelectedItem();
+        final Course selectedCourse = courseList.getSelectionModel().getSelectedItem();
 
         if (selectedCourse != null) {
             LOGGER.debug("Selected course: {}", selectedCourse.getName());
             Session.getInstance().setSelectedCourseId(selectedCourse.getId());
+            ViewFactory.getInstance().getStudentDashboardStage().hide();
             ViewFactory.getInstance().changeToStudentModulesStage();
 
         } else {
@@ -100,11 +101,13 @@ public class StudentDashboardController {
 
     public static void handleViewAssessmentsButton(ActionEvent event) {
         LOGGER.debug("Clicked 'access assessments' button");
+        ViewFactory.getInstance().getStudentDashboardStage().hide();
         ViewFactory.getInstance().changeToStudentAssessmentsStage();
     }
 
     public static void handleSignout(ActionEvent event) {
         LOGGER.debug("Clicked signout button");
+        ViewFactory.getInstance().getStudentDashboardStage().hide();
         ViewFactory.getInstance().changeToLoginStage();
     }
 }

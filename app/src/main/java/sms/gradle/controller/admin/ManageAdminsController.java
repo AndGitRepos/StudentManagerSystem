@@ -7,6 +7,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.model.dao.AdminDAO;
@@ -18,72 +19,68 @@ public final class ManageAdminsController {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private static TextField getAdminIdField() {
-        return (TextField)
-                ViewFactory.getInstance().getManageAdminStage().getScene().lookup("#adminIdField");
+    private ManageAdminsController() {
+        throw new UnsupportedOperationException("This is a controller class and cannot be instantiated");
     }
 
-    private static TextField getAdminEmailField() {
-        return (TextField)
-                ViewFactory.getInstance().getManageAdminStage().getScene().lookup("#adminEmailField");
-    }
-
-    private static PasswordField getAdminPasswordField() {
-        return (PasswordField)
-                ViewFactory.getInstance().getManageAdminStage().getScene().lookup("#passwordField");
-    }
-
-    private static TextField getAdminFirstNameField() {
-        return (TextField)
-                ViewFactory.getInstance().getManageAdminStage().getScene().lookup("#firstNameField");
-    }
-
-    private static TextField getAdminLastNameField() {
-        return (TextField)
-                ViewFactory.getInstance().getManageAdminStage().getScene().lookup("#lastNameField");
+    private static Stage getViewStage() {
+        return ViewFactory.getInstance().getManageAdminStage();
     }
 
     private static boolean verifyAdminFields() {
-        return !getAdminFirstNameField().getText().isEmpty()
-                && !getAdminLastNameField().getText().isEmpty()
-                && !getAdminEmailField().getText().isEmpty();
+        LOGGER.debug("Verifying admin fields");
+        final TextField adminFirstNameField = Common.getNode(getViewStage(), "#firstNameField");
+        final TextField adminLastNameField = Common.getNode(getViewStage(), "#lastNameField");
+        final TextField adminEmailField = Common.getNode(getViewStage(), "#adminEmailField");
+
+        return !adminFirstNameField.getText().isEmpty()
+                && !adminLastNameField.getText().isEmpty()
+                && !adminEmailField.getText().isEmpty();
     }
 
     private static void populateFormFields(Admin selectedAdmin) {
+        final TextField adminFirstNameField = Common.getNode(getViewStage(), "#firstNameField");
+        final TextField adminLastNameField = Common.getNode(getViewStage(), "#lastNameField");
+        final TextField adminEmailField = Common.getNode(getViewStage(), "#adminEmailField");
+        final PasswordField adminPasswordField = Common.getNode(getViewStage(), "#passwordField");
+        final TextField adminIdField = Common.getNode(getViewStage(), "#adminIdField");
 
         if (selectedAdmin != null) {
             LOGGER.debug("Populating field for admin: {}", selectedAdmin);
-            getAdminIdField().setText(String.valueOf(selectedAdmin.getId()));
-            getAdminEmailField().setText(selectedAdmin.getEmail());
-            getAdminPasswordField().clear();
-            getAdminFirstNameField().setText(selectedAdmin.getFirstName());
-            getAdminLastNameField().setText(selectedAdmin.getLastName());
+            adminIdField.setText(String.valueOf(selectedAdmin.getId()));
+            adminEmailField.setText(selectedAdmin.getEmail());
+            adminPasswordField.clear();
+            adminFirstNameField.setText(selectedAdmin.getFirstName());
+            adminLastNameField.setText(selectedAdmin.getLastName());
         }
     }
 
     private static void clearFields() {
         LOGGER.debug("Clearing Fields");
-        getAdminIdField().clear();
-        getAdminEmailField().clear();
-        getAdminPasswordField().clear();
-        getAdminFirstNameField().clear();
-        getAdminLastNameField().clear();
+        final TextField adminFirstNameField = Common.getNode(getViewStage(), "#firstNameField");
+        final TextField adminLastNameField = Common.getNode(getViewStage(), "#lastNameField");
+        final TextField adminEmailField = Common.getNode(getViewStage(), "#adminEmailField");
+        final PasswordField adminPasswordField = Common.getNode(getViewStage(), "#passwordField");
+        final TextField adminIdField = Common.getNode(getViewStage(), "#adminIdField");
+
+        adminIdField.clear();
+        adminFirstNameField.clear();
+        adminLastNameField.clear();
+        adminEmailField.clear();
+        adminPasswordField.clear();
     }
 
     public static void selectAdmin(ActionEvent event) {
         LOGGER.debug("Selecting admin");
-        ListView<Admin> adminListView = (ListView<Admin>)
-                ViewFactory.getInstance().getManageAdminStage().getScene().lookup("#adminListView");
+        final ListView<Admin> adminListView = Common.getNode(getViewStage(), "#adminListView");
 
-        Admin selectedAdmin = adminListView.getSelectionModel().getSelectedItem();
+        final Admin selectedAdmin = adminListView.getSelectionModel().getSelectedItem();
         populateFormFields(selectedAdmin);
     }
 
     public static void refreshListOfAdmins(ActionEvent event) {
-
         LOGGER.debug("Updating & Refreshing List Of Admins");
-        ListView<Admin> adminListView = (ListView<Admin>)
-                ViewFactory.getInstance().getManageAdminStage().getScene().lookup("#adminListView");
+        final ListView<Admin> adminListView = Common.getNode(getViewStage(), "#adminListView");
 
         adminListView.getItems().clear();
 
@@ -95,7 +92,6 @@ public final class ManageAdminsController {
     }
 
     public static void createNewAdmin(ActionEvent event) {
-
         LOGGER.debug("Creating new Admin member");
 
         if (!verifyAdminFields()) {
@@ -103,15 +99,16 @@ public final class ManageAdminsController {
             return;
         }
 
-        try {
-            Admin newAdmin = new Admin(
-                    0,
-                    getAdminFirstNameField().getText(),
-                    getAdminLastNameField().getText(),
-                    getAdminEmailField().getText());
+        final TextField adminFirstNameField = Common.getNode(getViewStage(), "#firstNameField");
+        final TextField adminLastNameField = Common.getNode(getViewStage(), "#lastNameField");
+        final TextField adminEmailField = Common.getNode(getViewStage(), "#adminEmailField");
+        final PasswordField adminPasswordField = Common.getNode(getViewStage(), "#passwordField");
 
-            AdminDAO.addAdmin(
-                    newAdmin, Common.generateSha256Hash(getAdminPasswordField().getText()));
+        try {
+            final Admin newAdmin = new Admin(
+                    0, adminFirstNameField.getText(), adminLastNameField.getText(), adminEmailField.getText());
+
+            AdminDAO.addAdmin(newAdmin, Common.generateSha256Hash(adminPasswordField.getText()));
 
             refreshListOfAdmins(event);
             clearFields();
@@ -123,7 +120,6 @@ public final class ManageAdminsController {
     }
 
     public static void updateAdmin(ActionEvent event) {
-
         LOGGER.debug("Updating selected Admin member");
 
         if (!verifyAdminFields()) {
@@ -131,14 +127,20 @@ public final class ManageAdminsController {
             return;
         }
 
-        try {
-            Admin updatedAdmin = new Admin(
-                    Integer.parseInt(getAdminIdField().getText()),
-                    getAdminFirstNameField().getText(),
-                    getAdminLastNameField().getText(),
-                    getAdminEmailField().getText());
+        final TextField adminFirstNameField = Common.getNode(getViewStage(), "#firstNameField");
+        final TextField adminLastNameField = Common.getNode(getViewStage(), "#lastNameField");
+        final TextField adminEmailField = Common.getNode(getViewStage(), "#adminEmailField");
+        final PasswordField adminPasswordField = Common.getNode(getViewStage(), "#passwordField");
+        final TextField adminIdField = Common.getNode(getViewStage(), "#adminIdField");
 
-            AdminDAO.update(updatedAdmin);
+        try {
+            final Admin updatedAdmin = new Admin(
+                    Integer.parseInt(adminIdField.getText()),
+                    adminFirstNameField.getText(),
+                    adminLastNameField.getText(),
+                    adminEmailField.getText());
+
+            AdminDAO.update(updatedAdmin, Common.generateSha256Hash(adminPasswordField.getText()));
             refreshListOfAdmins(event);
 
             LOGGER.debug("Updated admin: {}", updatedAdmin);
@@ -150,9 +152,13 @@ public final class ManageAdminsController {
     public static void deleteAdmin(ActionEvent event) {
         LOGGER.debug("Delete selected Admin member");
 
-        ListView<Admin> adminList = (ListView<Admin>)
-                ViewFactory.getInstance().getManageAdminStage().getScene().lookup("#adminListView");
-        Admin selectedAdmin = adminList.getSelectionModel().getSelectedItem();
+        final ListView<Admin> adminList = Common.getNode(getViewStage(), "#adminListView");
+        final Admin selectedAdmin = adminList.getSelectionModel().getSelectedItem();
+
+        if (selectedAdmin == null) {
+            LOGGER.info("No admin selected for deletion. Aborting");
+            return;
+        }
 
         Alert deletionConfirmation = new Alert(Alert.AlertType.CONFIRMATION);
         deletionConfirmation.setTitle("Deletion Confirmation");
@@ -181,6 +187,7 @@ public final class ManageAdminsController {
 
     public static void handleBack(ActionEvent event) {
         LOGGER.debug("Returning to Main Admin Dashboard");
+        ViewFactory.getInstance().getManageAdminStage().hide();
         ViewFactory.getInstance().changeToAdminDashboardStage();
     }
 

@@ -13,49 +13,45 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.controller.admin.ManageStudentController;
 import sms.gradle.model.entities.Course;
 import sms.gradle.model.entities.Student;
 import sms.gradle.view.CoreViewInterface;
-import sms.gradle.view.ViewFactory;
 
-@Getter
 public class ManageStudentView extends BorderPane implements CoreViewInterface {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private ListView<Student> studentListView;
-    private Button refreshButton;
-    private Button selectButton;
-    private Button createNewButton;
-    private VBox leftPanel;
+    private ListView<Student> studentListView = new ListView<>();
+    private Button refreshButton = new Button("Refresh");
+    private Button selectButton = new Button("Select");
+    private Button createNewButton = new Button("Create New");
+    private VBox leftPanel = new VBox(10);
 
-    private GridPane studentDetailsPane;
-    private TextField studentIdField;
-    private TextField firstNameField;
-    private TextField lastNameField;
-    private DatePicker dateOfBirthPicker;
-    private DatePicker joinDatePicker;
-    private TextField emailField;
-    private PasswordField passwordField;
-    private Button updateButton;
-    private Button deleteButton;
-    private VBox centerPanel;
+    private GridPane studentDetailsPane = new GridPane();
+    private TextField studentIdField = new TextField();
+    private TextField firstNameField = new TextField();
+    private TextField lastNameField = new TextField();
+    private DatePicker dateOfBirthPicker = new DatePicker();
+    private DatePicker joinDatePicker = new DatePicker();
+    private TextField emailField = new TextField();
+    private PasswordField passwordField = new PasswordField();
+    private Button updateButton = new Button("Update");
+    private Button deleteButton = new Button("Delete");
+    private VBox centerPanel = new VBox(10);
 
-    private ListView<Course> enrolledCoursesListView;
-    private ListView<Course> availableCoursesListView;
-    private Button enrollButton;
-    private Button unenrollButton;
-    private Button backButton;
-    private VBox rightPanel;
+    private ListView<Course> enrolledCoursesListView = new ListView<>();
+    private ListView<Course> availableCoursesListView = new ListView<>();
+    private Button enrollButton = new Button("Enroll");
+    private Button unenrollButton = new Button("Un-Enroll");
+    private Button backButton = new Button("Back");
+    private VBox rightPanel = new VBox(10);
 
     public ManageStudentView() {
         LOGGER.debug("Initialising Manage Student View");
         getStylesheets().add(getClass().getResource("/styles/manager.css").toExternalForm());
         initialiseCoreUIComponents();
-        setCoreUiComponentIds();
         layoutCoreUIComponents();
         styleCoreUIComponents();
         assignButtonActions();
@@ -69,7 +65,7 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
         createNewButton.setOnAction(ManageStudentController::createNewStudent);
         enrollButton.setOnAction(ManageStudentController::enrollCourse);
         unenrollButton.setOnAction(ManageStudentController::unenrollCourse);
-        backButton.setOnAction(event -> ViewFactory.getInstance().changeToAdminDashboardStage());
+        backButton.setOnAction(ManageStudentController::handleBackButton);
     }
 
     private void setCoreUiComponentIds() {
@@ -97,31 +93,9 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
 
     @Override
     public void initialiseCoreUIComponents() {
-        studentListView = new ListView<>();
-        refreshButton = new Button("Refresh");
-        selectButton = new Button("Select");
-        deleteButton = new Button("Delete");
-        leftPanel = new VBox(10);
-
-        studentDetailsPane = new GridPane();
-        studentIdField = new TextField();
         studentIdField.setEditable(false);
-        firstNameField = new TextField();
-        lastNameField = new TextField();
-        dateOfBirthPicker = new DatePicker();
-        joinDatePicker = new DatePicker();
-        emailField = new TextField();
-        passwordField = new PasswordField();
-        createNewButton = new Button("Create New");
-        updateButton = new Button("Update");
-        centerPanel = new VBox(10);
 
-        enrolledCoursesListView = new ListView<>();
-        availableCoursesListView = new ListView<>();
-        enrollButton = new Button("Enroll");
-        unenrollButton = new Button("Un-Enroll");
-        backButton = new Button("Back");
-        rightPanel = new VBox(10);
+        setCoreUiComponentIds();
     }
 
     @Override

@@ -2,11 +2,11 @@ package sms.gradle.controller.login;
 
 import java.sql.SQLException;
 import java.util.Optional;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import sms.gradle.model.dao.AdminDAO;
 import sms.gradle.model.dao.StudentDAO;
 import sms.gradle.model.entities.Admin;
@@ -19,16 +19,17 @@ import sms.gradle.view.ViewFactory;
 
 public final class LoginController {
 
-    private static Scene getLoginScene() {
-        return ViewFactory.getInstance().getLoginStage().getScene();
+    private LoginController() {
+        throw new UnsupportedOperationException("This is a controller class and cannot be instantiated");
+    }
+
+    private static Stage getViewStage() {
+        return ViewFactory.getInstance().getLoginStage();
     }
 
     public static void handleLoginAttempt() {
-
-        Scene loginScene = getLoginScene();
-
-        TextField usernameField = (TextField) loginScene.lookup("#username_field");
-        PasswordField passwordField = (PasswordField) loginScene.lookup("#password_field");
+        TextField usernameField = Common.getNode(getViewStage(), "#username_field");
+        PasswordField passwordField = Common.getNode(getViewStage(), "#password_field");
 
         String email = usernameField.getText();
         String password = passwordField.getText();
@@ -53,7 +54,6 @@ public final class LoginController {
     }
 
     private static User authenticateUser(String email, String hashedPassword) throws SQLException {
-
         if (AdminDAO.verifyPassword(email, hashedPassword)) {
             Optional<Admin> admin = AdminDAO.findByEmail(email);
 
@@ -78,6 +78,7 @@ public final class LoginController {
     }
 
     private static void changeToUserDashboard(User user) {
+        ViewFactory.getInstance().getLoginStage().hide();
         if (user.getType() == UserType.ADMIN) {
             ViewFactory.getInstance().changeToAdminDashboardStage();
         } else {
@@ -95,7 +96,7 @@ public final class LoginController {
     }
 
     private static void resetLoginForm() {
-        PasswordField passwordField = (PasswordField) getLoginScene().lookup("#password_field");
+        PasswordField passwordField = Common.getNode(getViewStage(), "#password_field");
         passwordField.clear();
     }
 }

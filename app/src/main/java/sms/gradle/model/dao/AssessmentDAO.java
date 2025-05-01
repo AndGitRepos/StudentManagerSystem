@@ -89,7 +89,6 @@ public final class AssessmentDAO {
     public static Optional<Assessment> findById(final int id) throws SQLException {
         LOGGER.debug("Finding assessment by ID: {}", id);
         final String sql = "SELECT * FROM assessments WHERE id = ?";
-        Optional<Assessment> assessment = Optional.empty();
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             findSqlStatement.setInt(1, id);
@@ -110,7 +109,6 @@ public final class AssessmentDAO {
     public static Optional<Assessment> findByName(final String name) throws SQLException {
         LOGGER.debug("Finding assessment by name: {}", name);
         final String sql = "SELECT * FROM assessments WHERE name = ?";
-        Optional<Assessment> assessment = Optional.empty();
         try (PreparedStatement findSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             findSqlStatement.setString(1, name);

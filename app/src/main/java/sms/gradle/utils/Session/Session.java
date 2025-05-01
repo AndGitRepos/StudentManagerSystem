@@ -24,7 +24,7 @@ public class Session {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(final User user) {
         LOGGER.debug("Setting session user: {}", user);
         this.user = Optional.of(user);
     }
@@ -34,7 +34,7 @@ public class Session {
         user = Optional.empty();
     }
 
-    public void setSelectedCourseId(int id) {
+    public void setSelectedCourseId(final int id) {
         this.selectedCourseId = id;
     }
 
