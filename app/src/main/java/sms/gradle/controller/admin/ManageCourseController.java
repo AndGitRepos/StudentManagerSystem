@@ -8,6 +8,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.model.dao.CourseDAO;
@@ -139,6 +140,10 @@ public final class ManageCourseController {
                 LOGGER.info("Course deletion request has been cancelled");
             }
         });
+    }
+
+    public static void handleOnShowEvent(WindowEvent event) {
+        refreshListOfCourses(new ActionEvent());
     }
 
     public static void handleBackButton(ActionEvent event) {

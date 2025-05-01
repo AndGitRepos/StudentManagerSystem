@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.model.dao.CourseDAO;
@@ -243,6 +244,10 @@ public final class ManageModuleController {
         } catch (SQLException e) {
             LOGGER.error("Failed to update module: ", e);
         }
+    }
+
+    public static void handleOnShowEvent(WindowEvent event) {
+        updateListOfModules(new ActionEvent());
     }
 
     public static void handleBackButton(ActionEvent event) {

@@ -1,8 +1,14 @@
 package sms.gradle.controller.admin;
 
+import java.sql.SQLException;
 import javafx.event.ActionEvent;
+import javafx.scene.control.ListView;
+import javafx.stage.WindowEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sms.gradle.model.dao.CourseDAO;
+import sms.gradle.model.entities.Course;
+import sms.gradle.utils.Common;
 import sms.gradle.view.ViewFactory;
 
 public final class AdminDashboardController {
@@ -10,6 +16,22 @@ public final class AdminDashboardController {
 
     private AdminDashboardController() {
         throw new UnsupportedOperationException("This is a controller class and cannot be instantiated");
+    }
+
+    public static void refreshListOfCourses(ActionEvent event) {
+        LOGGER.debug("Refreshing List Of Courses");
+        ListView<Course> courseListView =
+                Common.getNode(ViewFactory.getInstance().getAdminDashboardStage(), "#courseListView");
+        courseListView.getItems().clear();
+        try {
+            courseListView.getItems().addAll(CourseDAO.findAll());
+        } catch (SQLException e) {
+            LOGGER.error("Failed to update list of courses: ", e);
+        }
+    }
+
+    public static void handleOnShowEvent(WindowEvent event) {
+        refreshListOfCourses(new ActionEvent());
     }
 
     private static void hideAdminDashboard() {

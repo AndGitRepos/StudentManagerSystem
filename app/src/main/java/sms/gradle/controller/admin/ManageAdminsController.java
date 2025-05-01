@@ -8,6 +8,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.model.dao.AdminDAO;
@@ -183,6 +184,10 @@ public final class ManageAdminsController {
                 LOGGER.info("Admin deletion request has been cancelled");
             }
         });
+    }
+
+    public static void handleOnShowEvent(WindowEvent event) {
+        refreshListOfAdmins(new ActionEvent());
     }
 
     public static void handleBack(ActionEvent event) {
