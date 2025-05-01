@@ -11,14 +11,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sms.gradle.controller.StudentControllers.AccessStudentAssessmentsController;
 import sms.gradle.model.entities.Assessment;
+import sms.gradle.model.entities.Course;
 import sms.gradle.view.CoreViewInterface;
 
 public class AccessStudentAssessmentsView extends BorderPane implements CoreViewInterface {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private ComboBox<String> filterDropDown;
+    private ComboBox<Course> filterDropDown;
     private VBox leftPanel;
     private ListView<Assessment> assessmentListView;
     private Button selectButton;
@@ -26,7 +28,7 @@ public class AccessStudentAssessmentsView extends BorderPane implements CoreView
 
     private VBox rightPanel;
     private Label assessmentNameLabel;
-    private Label assessmentsIdLabel;
+    private Label assessmentIdLabel;
     private Label moduleLabel;
     private Label assessmentDescriptionLabel;
     private Label lecturerLabel;
@@ -39,7 +41,11 @@ public class AccessStudentAssessmentsView extends BorderPane implements CoreView
     private Button signoutButton;
 
     private void setupEventHandlers() {
-        // TODO This will be amongst Assessments Controller Pull Request
+        filterDropDown.setOnAction(AccessStudentAssessmentsController::handleFilterAssessments);
+        selectButton.setOnAction(AccessStudentAssessmentsController::handleSelectButton);
+        refreshButton.setOnAction(AccessStudentAssessmentsController::handleRefreshButton);
+        backButton.setOnAction(AccessStudentAssessmentsController::handleBackButton);
+        signoutButton.setOnAction(AccessStudentAssessmentsController::handleSignoutButton);
     }
 
     public AccessStudentAssessmentsView() {
@@ -49,6 +55,7 @@ public class AccessStudentAssessmentsView extends BorderPane implements CoreView
         layoutCoreUIComponents();
         styleCoreUIComponents();
         setupEventHandlers();
+
         LOGGER.debug("Access Student Assessments View Initialised");
     }
 
@@ -63,7 +70,7 @@ public class AccessStudentAssessmentsView extends BorderPane implements CoreView
 
         rightPanel = new VBox(15);
         assessmentNameLabel = new Label("Assessment: ");
-        assessmentsIdLabel = new Label("ID: ");
+        assessmentIdLabel = new Label("ID: ");
         moduleLabel = new Label("Associated Module");
         assessmentDescriptionLabel = new Label("Description: ");
         lecturerLabel = new Label("Lecturer: ");
@@ -71,6 +78,8 @@ public class AccessStudentAssessmentsView extends BorderPane implements CoreView
 
         displayResultsArea = new VBox(10);
         graphResultArea = new VBox(10);
+        displayResultsArea.setPrefSize(200, 200);
+        displayResultsArea.setAlignment(Pos.CENTER);
 
         backButton = new Button("Back to Dashboard");
         signoutButton = new Button("Sign Out");
@@ -83,7 +92,7 @@ public class AccessStudentAssessmentsView extends BorderPane implements CoreView
 
         rightPanel.setId("rightPanel");
         assessmentNameLabel.setId("assessmentNameLabel");
-        assessmentsIdLabel.setId("assessmentsIdLabel");
+        assessmentIdLabel.setId("assessmentIdLabel");
         moduleLabel.setId("moduleLabel");
         assessmentDescriptionLabel.setId("assessmentDescriptionLabel");
         lecturerLabel.setId("lecturerLabel");
@@ -103,7 +112,7 @@ public class AccessStudentAssessmentsView extends BorderPane implements CoreView
                 .getChildren()
                 .addAll(
                         assessmentNameLabel,
-                        assessmentsIdLabel,
+                        assessmentIdLabel,
                         moduleLabel,
                         lecturerLabel,
                         assessmentDescriptionLabel,
@@ -125,6 +134,7 @@ public class AccessStudentAssessmentsView extends BorderPane implements CoreView
 
         setLeft(leftPanel);
         setRight(rightPanel);
+        setCenter(gradeArea);
         setBottom(navigationButtons);
     }
 
