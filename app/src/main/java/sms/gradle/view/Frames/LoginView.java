@@ -25,6 +25,8 @@ public class LoginView extends VBox implements CoreViewInterface {
     private TextField usernameField = new TextField();
     private PasswordField passwordField = new PasswordField();
     private Label titleLabel = new Label("Student Management System");
+    private Button fillAdminDetailsButton = new Button("Fill Admin Details");
+    private Button fillStudentDetailsButton = new Button("Fill Student Details");
 
     public LoginView() {
         LOGGER.debug("Initialising Login View");
@@ -37,7 +39,9 @@ public class LoginView extends VBox implements CoreViewInterface {
     }
 
     private void setupHandlersForEvent() {
-        loginButton.setOnAction(event -> LoginController.handleLoginAttempt());
+        loginButton.setOnAction(LoginController::handleLoginAttempt);
+        fillAdminDetailsButton.setOnAction(LoginController::handleFillAdminDetails);
+        fillStudentDetailsButton.setOnAction(LoginController::handleFillStudentDetails);
     }
 
     @Override
@@ -70,11 +74,11 @@ public class LoginView extends VBox implements CoreViewInterface {
 
         VBox usernameSection = new VBox(5);
         Label usernameLabel = new Label("Username");
-        usernameSection.getChildren().addAll(usernameLabel, usernameField);
+        usernameSection.getChildren().addAll(usernameLabel, usernameField, fillAdminDetailsButton);
 
         VBox passwordSection = new VBox(5);
         Label passwordLabel = new Label("Password");
-        passwordSection.getChildren().addAll(passwordLabel, passwordField);
+        passwordSection.getChildren().addAll(passwordLabel, passwordField, fillStudentDetailsButton);
 
         getChildren().addAll(titleLabel, usernameSection, passwordSection, loginErrorLabel, loginButton);
     }
