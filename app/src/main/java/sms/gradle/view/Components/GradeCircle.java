@@ -1,5 +1,6 @@
 package sms.gradle.view.components;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
@@ -28,13 +29,17 @@ public class GradeCircle extends StackPane {
         getStylesheets().add(getClass().getResource("/styles/components.css").toExternalForm());
 
         gradeValidation(grade);
-        circle = new Circle(90);
+        circle = new Circle(100);
 
         styleCircleColourByGrade(grade);
 
-        gradeLabel = new Label(grade + "%");
+        gradeLabel = new Label("Grade:\n" + grade + "%");
         gradeLabel.setTextFill(Color.WHITE);
-        gradeLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        gradeLabel.setStyle("-fx-font-size: 28px; -fx-font-weight: bold;");
+        gradeLabel.setAlignment(Pos.CENTER);
+        gradeLabel.setWrapText(true);
+        gradeLabel.setPrefHeight(80);
+        gradeLabel.setPrefWidth(180);
 
         getChildren().addAll(circle, gradeLabel);
 
@@ -62,17 +67,17 @@ public class GradeCircle extends StackPane {
     private void styleCircleColourByGrade(final int grade) {
 
         if (grade >= EXCEPTIONAL_GRADE) {
-            circle.setFill(Color.GREEN);
+            circle.setFill(Color.PALEGREEN);
         } else if (grade >= MERIT_GRADE) {
-            circle.setFill(Color.BLUE);
+            circle.setFill(Color.PALETURQUOISE);
         } else if (grade >= PASSING_GRADE) {
-            circle.setFill(Color.ORANGE);
+            circle.setFill(Color.PALEGOLDENROD);
         } else {
-            circle.setFill(Color.RED);
+            circle.setFill(Color.LIGHTSALMON);
         }
 
         // White border
         circle.setStroke(Color.WHITE);
-        circle.setStrokeWidth(3);
+        circle.setStrokeWidth(5);
     }
 }
