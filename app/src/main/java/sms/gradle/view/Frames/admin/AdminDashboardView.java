@@ -5,6 +5,7 @@ import static javafx.geometry.Pos.CENTER;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
@@ -50,6 +51,24 @@ public class AdminDashboardView extends VBox implements CoreViewInterface {
     @Override
     public void initialiseCoreUIComponents() {
         courseListView.setId("courseListView");
+
+        courseListView.setCellFactory(listView -> new ListCell<Course>() {
+
+            @Override
+            protected void updateItem(Course course, boolean empty) {
+                super.updateItem(course, empty);
+
+                if (empty || course == null) {
+                    setText(null);
+                    return;
+                }
+
+                String displayText = String.format(
+                        "%s\nID: %d\nDescription: %s", course.getName(), course.getId(), course.getDescription());
+                setText(displayText);
+                setWrapText(true);
+            }
+        });
 
         viewCourseButton.setPrefWidth(200);
         manageAssessmentsButton.setPrefWidth(200);

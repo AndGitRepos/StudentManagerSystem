@@ -1,17 +1,21 @@
 package sms.gradle.view.frames.student;
 
+import java.sql.SQLException;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.controller.StudentControllers.AccessStudentAssessmentsController;
+import sms.gradle.model.dao.ModuleDAO;
 import sms.gradle.model.entities.Assessment;
 import sms.gradle.model.entities.Course;
 import sms.gradle.view.CoreViewInterface;
@@ -84,8 +88,58 @@ public class AccessStudentAssessmentsView extends BorderPane implements CoreView
         selectButton.setId("selectButton");
     }
 
+    private static class AssessmentListCell extends ListCell<Assessment> {
+        @Override
+        protected void updateItem(Assessment assessment, boolean empty) {
+            super.updateItem(assessment, empty);
+
+            if (empty || assessment == null) {
+                setText(null);
+                return;
+            }
+            String moduleName;
+            try {
+                moduleName = ModuleDAO.findById(assessment.getModuleId())
+                        .map(sms.gradle.model.entities.Module::getName)
+                        .orElse("Unknown Module");
+            } catch (SQLException e) {
+                moduleName = "Unknown Module";
+            }
+
+            String displayText = String.format(
+                    "%s (ID: %d)\n%s\nDue: %s\nModule: %s",
+                    assessment.getName(),
+                    assessment.getId(),
+                    assessment.getDescription(),
+                    assessment.getDueDate(),
+                    moduleName);
+
+            setText(displayText);
+            setWrapText(true);
+        }
+    }
+
     @Override
     public void initialiseCoreUIComponents() {
+
+        filterDropDown.setPromptText("Filter by Course");
+        filterDropDown.setConverter(new StringConverter<Course>() {
+            @Override
+            public String toString(Course course) {
+                if (course == null) {
+                    return "";
+                }
+                return String.format(course.getName());
+            }
+
+            @Override
+            public Course fromString(String string) {
+                return null;
+            }
+        });
+
+        assessmentListView.setCellFactory(listView -> new AssessmentListCell());
+
         filterDropDown.setPromptText("Filter by Course");
 
         displayResultsArea.setPrefSize(200, 200);

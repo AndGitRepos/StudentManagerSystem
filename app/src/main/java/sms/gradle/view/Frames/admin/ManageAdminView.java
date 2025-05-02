@@ -5,6 +5,7 @@ import static javafx.geometry.Pos.CENTER;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -59,6 +60,23 @@ public class ManageAdminView extends BorderPane implements CoreViewInterface {
 
     private void initialiseAdminListComponents() {
         adminListView.setId("adminListView");
+
+        adminListView.setCellFactory(listView -> new ListCell<Admin>() {
+            @Override
+            protected void updateItem(Admin admin, boolean empty) {
+                super.updateItem(admin, empty);
+                if (empty || admin == null) {
+                    setText(null);
+                    return;
+                }
+
+                String displayText = String.format(
+                        "%s %s\nID**: %d\nEmail: %s",
+                        admin.getFirstName(), admin.getLastName(), admin.getId(), admin.getEmail());
+                setText(displayText);
+                setWrapText(true);
+            }
+        });
 
         refreshAdminListButton.setId("refreshAdminListButton");
         refreshAdminListButton.setOnAction(ManageAdminsController::refreshListOfAdmins);
