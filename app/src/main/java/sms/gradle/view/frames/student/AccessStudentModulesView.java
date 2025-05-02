@@ -11,7 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sms.gradle.controller.StudentControllers.AccessStudentModulesController;
+import sms.gradle.controller.student.AccessStudentModulesController;
 import sms.gradle.view.CoreViewInterface;
 
 /*

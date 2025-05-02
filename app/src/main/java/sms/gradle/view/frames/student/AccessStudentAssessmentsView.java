@@ -14,7 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sms.gradle.controller.StudentControllers.AccessStudentAssessmentsController;
+import sms.gradle.controller.student.AccessStudentAssessmentsController;
 import sms.gradle.model.dao.ModuleDAO;
 import sms.gradle.model.entities.Assessment;
 import sms.gradle.model.entities.Course;

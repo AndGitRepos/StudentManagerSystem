@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sms.gradle.controller.StudentControllers.StudentDashboardController;
+import sms.gradle.controller.student.StudentDashboardController;
 import sms.gradle.model.entities.Course;
 import sms.gradle.view.CoreViewInterface;
 
