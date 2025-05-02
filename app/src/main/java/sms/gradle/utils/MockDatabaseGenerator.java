@@ -262,9 +262,9 @@ public final class MockDatabaseGenerator {
 
     private static final int NUMBER_OF_MODULES_PER_COURSE = 5;
     private static final int NUMBER_OF_ASSESSMENTS_PER_MODULE = 3;
-    private static final int NUMBER_OF_ENROLLMENTS_PER_STUDENT = 2;
+    private static final int NUMBER_OF_ENROLLMENTS_PER_STUDENT = 3;
 
-    private static final int NUMBER_OF_STUDENTS = 10;
+    private static final int NUMBER_OF_STUDENTS = 200;
     private static final int NUMBER_OF_COURSES = MockDatabaseGenerator.COURSE_NAMES.size();
 
     /**
