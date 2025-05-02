@@ -75,6 +75,8 @@ public final class LoginController {
             }
         } catch (SQLException e) {
             LOGGER.error("Failed to find students", e);
+            Common.showAlert(
+                    "An error occurred", "We had a problem pre-filling the student's details. Please try again.");
         }
     }
 

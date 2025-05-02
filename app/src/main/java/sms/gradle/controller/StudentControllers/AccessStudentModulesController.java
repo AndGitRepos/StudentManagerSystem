@@ -4,8 +4,6 @@ import java.sql.SQLException;
 import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -116,11 +114,7 @@ public final class AccessStudentModulesController {
             LOGGER.debug("Refreshed {} modules for course ID: {}", modules.size(), courseId);
         } catch (SQLException e) {
             LOGGER.info("Failed in refreshing modules", e);
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.setTitle("Loading Modules Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Failed in loading modules. Try again");
-            alert.showAndWait();
+            Common.showAlert("An error occurred", "We had a problem refreshing the modules. Please try again.");
         }
     }
 

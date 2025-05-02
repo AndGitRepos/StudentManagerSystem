@@ -35,6 +35,7 @@ public final class AdminDashboardController {
             courseListView.getItems().addAll(CourseDAO.findAll());
         } catch (SQLException e) {
             LOGGER.error("Failed to update list of courses: ", e);
+            Common.showAlert("An error occurred", "We had a problem loading the courses. Please try again.");
         }
     }
 

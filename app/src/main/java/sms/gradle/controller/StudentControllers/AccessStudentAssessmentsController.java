@@ -4,8 +4,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -62,11 +60,8 @@ public class AccessStudentAssessmentsController {
             assessmentsList.getItems().addAll(assessments);
         } catch (SQLException e) {
             LOGGER.error("Failed to display assessments list for course", e);
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.setTitle("Loading Assessments Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Failed in loading assessments. Try again");
-            alert.showAndWait();
+            Common.showAlert(
+                    "An error occurred", "We had a problem loading the assessments for the course. Please try again.");
         }
     }
 
@@ -117,11 +112,7 @@ public class AccessStudentAssessmentsController {
             }
         } catch (SQLException e) {
             LOGGER.error("Failed in updating student assessment details");
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.setTitle("Updating Assessments Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Failed in updating assessments. Try again");
-            alert.showAndWait();
+            Common.showAlert("An error occurred", "We had a problem updating the assessment. Please try again.");
         }
     }
 
@@ -188,11 +179,8 @@ public class AccessStudentAssessmentsController {
             }
         } catch (SQLException e) {
             LOGGER.error("Failed in loading student courses to filter");
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.setTitle("Loading Courses Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Failed in loading student courses to filter. Try again");
-            alert.showAndWait();
+            Common.showAlert(
+                    "An error occurred", "We had a problem loading the courses into the filter. Please try again.");
         }
     }
 

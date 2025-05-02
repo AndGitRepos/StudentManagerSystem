@@ -93,6 +93,8 @@ public final class ManageModuleController {
             }
         } catch (SQLException e) {
             LOGGER.error("Failed to update unlinked courses list: ", e);
+            Common.showAlert(
+                    "An error occurred", "We had a problem updating the unlinked courses list. Please try again.");
         }
     }
 
@@ -125,6 +127,7 @@ public final class ManageModuleController {
             modulesList.getItems().addAll(ModuleDAO.findAll());
         } catch (SQLException e) {
             LOGGER.error("Failed to update list of modules: ", e);
+            Common.showAlert("An error occurred", "We had a problem updating the list of modules. Please try again.");
         }
     }
 
@@ -153,6 +156,9 @@ public final class ManageModuleController {
             linkedCourse = CourseDAO.findById(linkedCourseId);
         } catch (SQLException e) {
             LOGGER.error("Failed to get linked course from currently selected module");
+            Common.showAlert(
+                    "An error occurred",
+                    "We had a problem fetching the linked course ID for the selected module. Please try again.");
             return;
         }
 
@@ -187,6 +193,7 @@ public final class ManageModuleController {
             courses = CourseDAO.findAll();
         } catch (SQLException e) {
             LOGGER.error("Failed to get list of courses: ", e);
+            Common.showAlert("An error occurred", "We had a problem fetching the list of courses. Please try again.");
             return;
         }
 
@@ -204,6 +211,7 @@ public final class ManageModuleController {
             LOGGER.debug("New module created: {}", newModule);
         } catch (SQLException e) {
             LOGGER.error("Failed to create new module: ", e);
+            Common.showAlert("An error occurred", "We had a problem creating the new module. Please try again.");
         }
     }
 
@@ -228,6 +236,7 @@ public final class ManageModuleController {
             modulesListView.getItems().remove(selectedModule);
         } catch (SQLException e) {
             LOGGER.error("Failed to delete module: ", e);
+            Common.showAlert("An error occurred", "We had a problem deleting the module. Please try again.");
         }
     }
 
@@ -293,6 +302,7 @@ public final class ManageModuleController {
             LOGGER.debug("Module updated: {}", updatedModule);
         } catch (SQLException e) {
             LOGGER.error("Failed to update module: ", e);
+            Common.showAlert("An error occurred", "We had a problem updating the module. Please try again.");
         }
     }
 

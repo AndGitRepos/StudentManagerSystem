@@ -44,6 +44,7 @@ public final class AssessmentDetailViewController {
             LOGGER.debug("Loaded {} students for assessment ID: {}", students.size(), assessmentId);
         } catch (SQLException e) {
             LOGGER.error("Error loading students for assessment ID: {}", assessmentId, e);
+            Common.showAlert("An error occurred", "We had a problem loading the students. Please try again.");
         }
 
         return students;
@@ -68,6 +69,8 @@ public final class AssessmentDetailViewController {
             LOGGER.debug("Loaded {} modules for assessment ID: {}", modules.size(), assessmentId);
         } catch (SQLException e) {
             LOGGER.error("Error loading module for assessment ID: {}", assessmentId, e);
+            Common.showAlert(
+                    "An error occurred", "We had a problem loading the modules for the assessment. Please try again.");
         }
 
         return modules;
@@ -92,6 +95,8 @@ public final class AssessmentDetailViewController {
             LOGGER.debug("Loaded {} related assessments for assessment ID: {}", assessments.size(), assessmentId);
         } catch (SQLException e) {
             LOGGER.error("Error loading related assessments for assessment ID: {}", assessmentId, e);
+            Common.showAlert(
+                    "An error occurred", "We had a problem loading the related assessments. Please try again.");
         }
 
         return assessments;

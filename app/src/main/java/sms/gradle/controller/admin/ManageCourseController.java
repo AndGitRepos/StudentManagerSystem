@@ -102,6 +102,7 @@ public final class ManageCourseController {
             CourseDAO.findAll().forEach(course -> courseListView.getItems().add(course));
         } catch (SQLException e) {
             LOGGER.error("Failed to update & refresh courses list", e);
+            Common.showAlert("An error occurred", "We had a problem updating the list of courses. Please try again.");
         }
     }
 
@@ -133,6 +134,7 @@ public final class ManageCourseController {
             LOGGER.debug("Created new course: {}", newCourse);
         } catch (SQLException e) {
             LOGGER.error("Failed to create a new course: ", e);
+            Common.showAlert("An error occurred", "We had a problem creating a new course. Please try again.");
         }
     }
 
@@ -167,6 +169,7 @@ public final class ManageCourseController {
             LOGGER.debug("Updated course: {}", updatedCourse);
         } catch (SQLException e) {
             LOGGER.error("Failed in updating chosen course: ", e);
+            Common.showAlert("An error occurred", "We had a problem updating the course. Please try again.");
         }
     }
 
@@ -204,6 +207,7 @@ public final class ManageCourseController {
                     LOGGER.debug("Deleted chosen course: {}", selectedCourse);
                 } catch (SQLException e) {
                     LOGGER.error("Failed to delete chosen course: ", e);
+                    Common.showAlert("An error occurred", "We had a problem deleting the course. Please try again.");
                 }
 
             } else {

@@ -73,7 +73,11 @@ public final class AdminDAO {
             addSqlStatement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error("Failed to add admin to database {}", admin, e);
-            throw new SQLException(String.format("Failed to add admin: %s", admin.toString()), e);
+            switch (e.getErrorCode()) {
+                case 23505 -> throw new SQLException(
+                        String.format("The email '%s' is associated with an existing admin.", admin.getEmail()), e);
+                default -> throw new SQLException("Failed to add admin", e);
+            }
         }
     }
 
