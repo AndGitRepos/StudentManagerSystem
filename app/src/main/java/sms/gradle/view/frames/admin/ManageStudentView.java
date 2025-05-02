@@ -118,7 +118,7 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
             }
         });
 
-        ListCell<Course> courseCell = new ListCell<Course>() {
+        enrolledCoursesListView.setCellFactory(listView -> new ListCell<Course>() {
             @Override
             protected void updateItem(Course course, boolean empty) {
                 super.updateItem(course, empty);
@@ -132,10 +132,23 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
                 setText(displayText);
                 setWrapText(true);
             }
-        };
+        });
 
-        enrolledCoursesListView.setCellFactory(listView -> courseCell);
-        availableCoursesListView.setCellFactory(listView -> courseCell);
+        availableCoursesListView.setCellFactory(listView -> new ListCell<Course>() {
+            @Override
+            protected void updateItem(Course course, boolean empty) {
+                super.updateItem(course, empty);
+
+                if (empty || course == null) {
+                    setText(null);
+                    return;
+                }
+                String displayText = String.format(
+                        "%s\nID: %d\nDescription: %s", course.getName(), course.getId(), course.getDescription());
+                setText(displayText);
+                setWrapText(true);
+            }
+        });
 
         setCoreUiComponentIds();
     }
