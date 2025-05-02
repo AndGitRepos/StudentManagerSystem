@@ -1,11 +1,12 @@
 package sms.gradle.controller.admin;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -14,10 +15,20 @@ import org.apache.logging.log4j.Logger;
 import sms.gradle.model.dao.CourseDAO;
 import sms.gradle.model.entities.Course;
 import sms.gradle.utils.Common;
+import sms.gradle.utils.checks.ChecksProcessor;
+import sms.gradle.utils.checks.NodeValidator;
+import sms.gradle.utils.checks.textfield.MinLengthCheck;
 import sms.gradle.view.ViewFactory;
 
 public final class ManageCourseController {
     private static final Logger LOGGER = LogManager.getLogger();
+
+    private static final NodeValidator idValidator =
+            new NodeValidator("Id", "#courseIdField", List.of(new MinLengthCheck(1)), List.of());
+
+    private static final List<NodeValidator> nodeValidators = List.of(
+            new NodeValidator("Name", "#courseNameField", List.of(new MinLengthCheck(1)), List.of()),
+            new NodeValidator("Description", "#courseDescriptionField", List.of(new MinLengthCheck(1)), List.of()));
 
     private static Stage getViewStage() {
         return ViewFactory.getInstance().getManageCourseStage();
@@ -36,11 +47,11 @@ public final class ManageCourseController {
             LOGGER.debug("Populating field for course: {}", selectedCourse);
             TextField courseIdField = Common.getNode(getViewStage(), "#courseIdField");
             TextField courseNameField = Common.getNode(getViewStage(), "#courseNameField");
-            TextArea courseDescriptionArea = Common.getNode(getViewStage(), "#courseDescriptionArea");
+            TextField courseDescriptionField = Common.getNode(getViewStage(), "#courseDescriptionField");
 
             courseIdField.setText(Integer.toString(selectedCourse.getId()));
             courseNameField.setText(selectedCourse.getName());
-            courseDescriptionArea.setText(selectedCourse.getDescription());
+            courseDescriptionField.setText(selectedCourse.getDescription());
         }
     }
 
@@ -55,10 +66,10 @@ public final class ManageCourseController {
         LOGGER.debug("Clearing Fields");
         TextField courseIdField = Common.getNode(getViewStage(), "#courseIdField");
         TextField courseNameField = Common.getNode(getViewStage(), "#courseNameField");
-        TextArea courseDescriptionArea = Common.getNode(getViewStage(), "#courseDescriptionArea");
+        TextField courseDescriptionField = Common.getNode(getViewStage(), "#courseDescriptionField");
         courseIdField.clear();
         courseNameField.clear();
-        courseDescriptionArea.clear();
+        courseDescriptionField.clear();
     }
 
     /**
@@ -105,9 +116,13 @@ public final class ManageCourseController {
     public static void createNewCourse(ActionEvent event) {
         LOGGER.debug("Creating new Course member");
         TextField courseNameField = Common.getNode(getViewStage(), "#courseNameField");
-        TextArea courseDescriptionArea = Common.getNode(getViewStage(), "#courseDescriptionArea");
+        TextField courseDescriptionField = Common.getNode(getViewStage(), "#courseDescriptionField");
 
-        Course newCourse = new Course(0, courseNameField.getText(), courseDescriptionArea.getText());
+        if (!ChecksProcessor.checkValidationError(getViewStage(), nodeValidators)) {
+            return;
+        }
+
+        Course newCourse = new Course(0, courseNameField.getText(), courseDescriptionField.getText());
 
         try {
             CourseDAO.addCourse(newCourse);
@@ -133,10 +148,17 @@ public final class ManageCourseController {
         LOGGER.debug("Updating selected Course member");
         TextField courseIdField = Common.getNode(getViewStage(), "#courseIdField");
         TextField courseNameField = Common.getNode(getViewStage(), "#courseNameField");
-        TextArea courseDescriptionArea = Common.getNode(getViewStage(), "#courseDescriptionArea");
+        TextField courseDescriptionField = Common.getNode(getViewStage(), "#courseDescriptionField");
+
+        List<NodeValidator> mergedValidators = List.of(idValidator).stream().collect(Collectors.toList());
+        mergedValidators.addAll(nodeValidators);
+
+        if (!ChecksProcessor.checkValidationError(getViewStage(), mergedValidators)) {
+            return;
+        }
 
         Course updatedCourse = new Course(
-                Integer.parseInt(courseIdField.getText()), courseNameField.getText(), courseDescriptionArea.getText());
+                Integer.parseInt(courseIdField.getText()), courseNameField.getText(), courseDescriptionField.getText());
 
         try {
             CourseDAO.update(updatedCourse);

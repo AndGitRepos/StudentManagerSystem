@@ -1,6 +1,8 @@
 package sms.gradle.controller.admin;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -15,11 +17,23 @@ import org.apache.logging.log4j.Logger;
 import sms.gradle.model.dao.AdminDAO;
 import sms.gradle.model.entities.Admin;
 import sms.gradle.utils.Common;
+import sms.gradle.utils.checks.ChecksProcessor;
+import sms.gradle.utils.checks.NodeValidator;
+import sms.gradle.utils.checks.textfield.MinLengthCheck;
 import sms.gradle.view.ViewFactory;
 
 public final class ManageAdminsController {
 
     private static final Logger LOGGER = LogManager.getLogger();
+
+    private static final NodeValidator idValidator =
+            new NodeValidator("Id", "#adminIdField", List.of(new MinLengthCheck(1)), List.of());
+
+    private static final List<NodeValidator> nodeValidators = List.of(
+            new NodeValidator("First Name", "#firstNameField", List.of(new MinLengthCheck(1)), List.of()),
+            new NodeValidator("Last Name", "#lastNameField", List.of(new MinLengthCheck(1)), List.of()),
+            new NodeValidator("Email", "#adminEmailField", List.of(new MinLengthCheck(1)), List.of()),
+            new NodeValidator("Password", "#passwordField", List.of(new MinLengthCheck(1)), List.of()));
 
     private ManageAdminsController() {
         throw new UnsupportedOperationException("This is a controller class and cannot be instantiated");
@@ -27,23 +41,6 @@ public final class ManageAdminsController {
 
     private static Stage getViewStage() {
         return ViewFactory.getInstance().getManageAdminStage();
-    }
-
-    /**
-     * Verifies that all required admin fields in the form are filled out.
-     * Checks the first name, last name, and email fields to ensure they are not empty.
-     *
-     * @return true if all required fields are filled out, false if any field is empty
-     */
-    private static boolean verifyAdminFields() {
-        LOGGER.debug("Verifying admin fields");
-        final TextField adminFirstNameField = Common.getNode(getViewStage(), "#firstNameField");
-        final TextField adminLastNameField = Common.getNode(getViewStage(), "#lastNameField");
-        final TextField adminEmailField = Common.getNode(getViewStage(), "#adminEmailField");
-
-        return !adminFirstNameField.getText().isEmpty()
-                && !adminLastNameField.getText().isEmpty()
-                && !adminEmailField.getText().isEmpty();
     }
 
     /**
@@ -135,18 +132,14 @@ public final class ManageAdminsController {
     public static void createNewAdmin(ActionEvent event) {
         LOGGER.debug("Creating new Admin member");
 
-        PasswordField adminPassworField = Common.getNode(getViewStage(), "#passwordField");
-
-        if (!verifyAdminFields() || adminPassworField.getText().isEmpty()) {
-            LOGGER.info("User did not complete all fields. Admin Creation Terminated");
-            displayLoginFailureError("You must complete the fields: Email, First Name, Last Name, Password");
-            return;
-        }
-
         final TextField adminFirstNameField = Common.getNode(getViewStage(), "#firstNameField");
         final TextField adminLastNameField = Common.getNode(getViewStage(), "#lastNameField");
         final TextField adminEmailField = Common.getNode(getViewStage(), "#adminEmailField");
         final PasswordField adminPasswordField = Common.getNode(getViewStage(), "#passwordField");
+
+        if (!ChecksProcessor.checkValidationError(getViewStage(), nodeValidators)) {
+            return;
+        }
 
         try {
             final Admin newAdmin = new Admin(
@@ -174,17 +167,18 @@ public final class ManageAdminsController {
     public static void updateAdmin(ActionEvent event) {
         LOGGER.debug("Updating selected Admin member");
 
-        if (!verifyAdminFields()) {
-            LOGGER.info("User did not complete all fields. Admin Creation Terminated");
-            displayLoginFailureError("You must complete the fields: Email, First Name, Last Name");
-            return;
-        }
-
+        final TextField adminIdField = Common.getNode(getViewStage(), "#adminIdField");
         final TextField adminFirstNameField = Common.getNode(getViewStage(), "#firstNameField");
         final TextField adminLastNameField = Common.getNode(getViewStage(), "#lastNameField");
         final TextField adminEmailField = Common.getNode(getViewStage(), "#adminEmailField");
         final PasswordField adminPasswordField = Common.getNode(getViewStage(), "#passwordField");
-        final TextField adminIdField = Common.getNode(getViewStage(), "#adminIdField");
+
+        List<NodeValidator> mergedValidators = List.of(idValidator).stream().collect(Collectors.toList());
+        mergedValidators.addAll(nodeValidators);
+
+        if (!ChecksProcessor.checkValidationError(getViewStage(), mergedValidators)) {
+            return;
+        }
 
         try {
             final Admin updatedAdmin = new Admin(

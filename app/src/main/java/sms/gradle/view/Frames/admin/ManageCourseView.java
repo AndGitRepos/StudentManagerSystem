@@ -6,7 +6,6 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -28,7 +27,7 @@ public class ManageCourseView extends BorderPane implements CoreViewInterface {
     private Button selectButton = new Button("Select");
     private TextField courseIdField = new TextField();
     private TextField courseNameField = new TextField();
-    private TextArea courseDescriptionArea = new TextArea();
+    private TextField courseDescriptionField = new TextField();
     private Button updateButton = new Button("Update");
     private Button createNewButton = new Button("Create New");
     private Button deleteButton = new Button("Delete");
@@ -68,7 +67,7 @@ public class ManageCourseView extends BorderPane implements CoreViewInterface {
         logoutButton.setId("logoutButton");
         courseIdField.setId("courseIdField");
         courseNameField.setId("courseNameField");
-        courseDescriptionArea.setId("courseDescriptionArea");
+        courseDescriptionField.setId("courseDescriptionField");
     }
 
     @Override
@@ -94,13 +93,11 @@ public class ManageCourseView extends BorderPane implements CoreViewInterface {
         Label detailsLabel = new Label("Course Details");
         detailsLabel.getStyleClass().add("section-header");
 
-        courseDescriptionArea.setPrefRowCount(3);
-        courseDescriptionArea.setPrefWidth(300);
-        courseDescriptionArea.setWrapText(true);
+        courseDescriptionField.setPrefWidth(300);
 
         courseDetailsPane.addRow(0, new Label("Course ID:"), courseIdField);
         courseDetailsPane.addRow(1, new Label("Course Name:"), courseNameField);
-        courseDetailsPane.addRow(2, new Label("Course Description:"), courseDescriptionArea);
+        courseDetailsPane.addRow(2, new Label("Course Description:"), courseDescriptionField);
 
         HBox actionButtons = new HBox(10, createNewButton, updateButton, deleteButton);
         actionButtons.setAlignment(CENTER);
