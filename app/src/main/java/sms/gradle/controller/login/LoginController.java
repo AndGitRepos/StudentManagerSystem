@@ -2,6 +2,7 @@ package sms.gradle.controller.login;
 
 import java.security.SecureRandom;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javafx.event.ActionEvent;
@@ -17,6 +18,8 @@ import sms.gradle.model.dao.StudentDAO;
 import sms.gradle.model.entities.Admin;
 import sms.gradle.model.entities.Student;
 import sms.gradle.utils.Common;
+import sms.gradle.utils.checks.textfield.MinLengthCheck;
+import sms.gradle.utils.checks.textfield.TextFieldCheck;
 import sms.gradle.utils.session.Session;
 import sms.gradle.utils.session.User;
 import sms.gradle.utils.session.UserType;
@@ -72,6 +75,74 @@ public final class LoginController {
     }
 
     /**
+     * Collects validation errors from username and password fields
+     * @param usernameField The username field
+     * @param passwordField The password field
+     * @return A list of error messages
+     */
+    public static List<String> collectValidationErrors(TextField usernameField, PasswordField passwordField) {
+        List<String> errorMessages = new ArrayList<>();
+
+        // Username validation
+        List<TextFieldCheck> usernameChecks = List.of(new MinLengthCheck(1));
+
+        // Password validation
+        List<TextFieldCheck> passwordChecks = List.of(new MinLengthCheck(1));
+
+        // Check username
+        String username = usernameField.getText();
+        for (TextFieldCheck check : usernameChecks) {
+            if (!check.isValid(username)) {
+                errorMessages.add("Username: " + check.getErrorMessage());
+            }
+        }
+
+        // Check password
+        String password = passwordField.getText();
+        for (TextFieldCheck check : passwordChecks) {
+            if (!check.isValid(password)) {
+                errorMessages.add("Password: " + check.getErrorMessage());
+            }
+        }
+
+        return errorMessages;
+    }
+
+    /**
+     * Collects validation errors from username and password fields
+     * @param usernameField The username field
+     * @param passwordField The password field
+     * @return A list of error messages
+     */
+    public static List<String> collectValidationErrors(TextField usernameField, PasswordField passwordField) {
+        List<String> errorMessages = new ArrayList<>();
+
+        // Username validation
+        List<TextFieldCheck> usernameChecks = List.of(new MinLengthCheck(1));
+
+        // Password validation
+        List<TextFieldCheck> passwordChecks = List.of(new MinLengthCheck(1));
+
+        // Check username
+        String username = usernameField.getText();
+        for (TextFieldCheck check : usernameChecks) {
+            if (!check.isValid(username)) {
+                errorMessages.add("Username: " + check.getErrorMessage());
+            }
+        }
+
+        // Check password
+        String password = passwordField.getText();
+        for (TextFieldCheck check : passwordChecks) {
+            if (!check.isValid(password)) {
+                errorMessages.add("Password: " + check.getErrorMessage());
+            }
+        }
+
+        return errorMessages;
+    }
+
+    /**
      * Handles the login attempt by retrieving the username and password from the form,
      * authenticating the user, and either displaying a success message or an error message.
      *
@@ -84,8 +155,10 @@ public final class LoginController {
         String email = usernameField.getText();
         String password = passwordField.getText();
 
-        if (email.isEmpty() || password.isEmpty()) {
-            displayLoginFailureError("Enter password and username first");
+        // Validate fields when submit button is pressed
+        List<String> validationErrors = collectValidationErrors(usernameField, passwordField);
+        if (!validationErrors.isEmpty()) {
+            displayValidationErrors(validationErrors);
             return;
         }
 
@@ -99,8 +172,44 @@ public final class LoginController {
                 displayLoginFailureError("Invalid Login Details!");
             }
         } catch (Exception e) {
-            displayLoginFailureError("Login error occured! Please retry.");
+            displayLoginFailureError("Login error occurred! Please retry.");
         }
+    }
+
+    /**
+     * Displays validation errors in an alert dialog
+     * @param errorMessages List of error messages to display
+     */
+    private static void displayValidationErrors(List<String> errorMessages) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Validation Error");
+        alert.setHeaderText("Please fix the following issues:");
+
+        StringBuilder content = new StringBuilder();
+        for (String error : errorMessages) {
+            content.append("• ").append(error).append("\n");
+        }
+
+        alert.setContentText(content.toString());
+        alert.showAndWait();
+    }
+
+    /**
+     * Displays validation errors in an alert dialog
+     * @param errorMessages List of error messages to display
+     */
+    private static void displayValidationErrors(List<String> errorMessages) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Validation Error");
+        alert.setHeaderText("Please fix the following issues:");
+
+        StringBuilder content = new StringBuilder();
+        for (String error : errorMessages) {
+            content.append("• ").append(error).append("\n");
+        }
+
+        alert.setContentText(content.toString());
+        alert.showAndWait();
     }
 
     /**

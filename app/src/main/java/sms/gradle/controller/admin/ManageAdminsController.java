@@ -3,6 +3,7 @@ package sms.gradle.controller.admin;
 import java.sql.SQLException;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
@@ -119,6 +120,7 @@ public final class ManageAdminsController {
             AdminDAO.findAll().forEach(admin -> adminListView.getItems().add(admin));
         } catch (SQLException e) {
             LOGGER.info("Failed to update & refresh admins list", e);
+            displayLoginFailureError("Failed to update & refresh admins list");
         }
     }
 
@@ -133,8 +135,11 @@ public final class ManageAdminsController {
     public static void createNewAdmin(ActionEvent event) {
         LOGGER.debug("Creating new Admin member");
 
-        if (!verifyAdminFields()) {
+        PasswordField adminPassworField = Common.getNode(getViewStage(), "#passwordField");
+
+        if (!verifyAdminFields() || adminPassworField.getText().isEmpty()) {
             LOGGER.info("User did not complete all fields. Admin Creation Terminated");
+            displayLoginFailureError("You must complete the fields: Email, First Name, Last Name, Password");
             return;
         }
 
@@ -154,7 +159,8 @@ public final class ManageAdminsController {
 
             LOGGER.debug("Created new admin: {}", newAdmin);
         } catch (SQLException e) {
-            LOGGER.info("Failed in creating new admin: ", e);
+            LOGGER.info("Failed to create new admin: ", e);
+            displayLoginFailureError("Failed to create new admin");
         }
     }
 
@@ -170,6 +176,7 @@ public final class ManageAdminsController {
 
         if (!verifyAdminFields()) {
             LOGGER.info("User did not complete all fields. Admin Creation Terminated");
+            displayLoginFailureError("You must complete the fields: Email, First Name, Last Name");
             return;
         }
 
@@ -192,6 +199,7 @@ public final class ManageAdminsController {
             LOGGER.debug("Updated admin: {}", updatedAdmin);
         } catch (SQLException e) {
             LOGGER.info("Failed in updating chosen admin: ", e);
+            displayLoginFailureError("Failed to update chosen admin");
         }
     }
 
@@ -210,6 +218,7 @@ public final class ManageAdminsController {
 
         if (selectedAdmin == null) {
             LOGGER.info("No admin selected for deletion. Aborting");
+            displayLoginFailureError("Please highlight an admin to delete");
             return;
         }
 
@@ -230,6 +239,7 @@ public final class ManageAdminsController {
                     LOGGER.debug("Deleted chosen admin: {}", selectedAdmin);
                 } catch (SQLException e) {
                     LOGGER.info("Failed to delete chosen admin: ", e);
+                    displayLoginFailureError("Failed to delete chosen admin");
                 }
 
             } else {
@@ -246,6 +256,22 @@ public final class ManageAdminsController {
      */
     public static void handleOnShowEvent(WindowEvent event) {
         refreshListOfAdmins(new ActionEvent());
+    }
+
+    private static void displayLoginFailureError(String errorMessage) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Login Error");
+        alert.setHeaderText(null);
+        alert.setContentText(errorMessage);
+        alert.showAndWait();
+    }
+
+    private static void displayLoginFailureError(String errorMessage) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Login Error");
+        alert.setHeaderText(null);
+        alert.setContentText(errorMessage);
+        alert.showAndWait();
     }
 
     /**
@@ -265,9 +291,9 @@ public final class ManageAdminsController {
      * Hides the current stage and changes the view to the login stage.
      *
      * @param event The action event that triggered this method.
-     */
+     */ 
     public static void handleLogout(ActionEvent event) {
-        LOGGER.debug("Logging Out - returning to LogIn Page");
+        LOGGER.debug("Logging Out - returning to Login Page");
         ViewFactory.getInstance().getManageAdminStage().hide();
         ViewFactory.getInstance().changeToLoginStage();
     }
