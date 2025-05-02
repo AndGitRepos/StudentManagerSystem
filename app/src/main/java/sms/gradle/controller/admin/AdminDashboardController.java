@@ -10,6 +10,7 @@ import sms.gradle.model.dao.CourseDAO;
 import sms.gradle.model.entities.Course;
 import sms.gradle.utils.Common;
 import sms.gradle.view.ViewFactory;
+import sms.gradle.view.frames.admin.CourseDetailView;
 
 public final class AdminDashboardController {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -65,8 +66,25 @@ public final class AdminDashboardController {
      */
     public static void handleViewCourseButton(ActionEvent event) {
         LOGGER.debug("View Course button clicked");
-        hideAdminDashboard();
-        ViewFactory.getInstance().changeToCourseDetailStage();
+
+        ListView<Course> courseListView =
+                Common.getNode(ViewFactory.getInstance().getAdminDashboardStage(), "#courseListView");
+        Course selectedCourse = courseListView.getSelectionModel().getSelectedItem();
+
+        if (selectedCourse != null) {
+            LOGGER.debug("Selected course: {} (ID: {})", selectedCourse.getName(), selectedCourse.getId());
+            hideAdminDashboard();
+
+            CourseDetailView courseDetailView = (CourseDetailView)
+                    ViewFactory.getInstance().getCourseDetailStage().getScene().getRoot();
+            courseDetailView.setCourseId(selectedCourse.getId());
+
+            ViewFactory.getInstance().changeToCourseDetailStage();
+        } else {
+            LOGGER.warn("No course selected");
+            // Show an alert or message to the user that they need to select a course
+            Common.showAlert("No Course Selected", "Please select a course to view.");
+        }
     }
 
     /**

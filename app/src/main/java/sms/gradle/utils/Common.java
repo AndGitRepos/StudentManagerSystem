@@ -3,6 +3,7 @@ package sms.gradle.utils;
 import com.google.common.hash.Hashing;
 import java.nio.charset.StandardCharsets;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
@@ -51,5 +52,19 @@ public final class Common {
             LOGGER.error("Failed to find node with selector: {}", selector);
         }
         return lookupResult;
+    }
+
+    /**
+     * Shows an alert dialog with the specified title and message
+     * @param title The title of the alert
+     * @param message The message to display
+     */
+    public static void showAlert(final String title, final String message) {
+        LOGGER.debug("Showing alert: {} - {}", title, message);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

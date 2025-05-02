@@ -19,12 +19,15 @@ import sms.gradle.controller.admin.ManageStudentController;
 import sms.gradle.utils.session.Session;
 import sms.gradle.view.frames.LoginView;
 import sms.gradle.view.frames.admin.AdminDashboardView;
+import sms.gradle.view.frames.admin.AssessmentDetailView;
 import sms.gradle.view.frames.admin.CourseDetailView;
 import sms.gradle.view.frames.admin.ManageAdminView;
 import sms.gradle.view.frames.admin.ManageAssessmentsView;
 import sms.gradle.view.frames.admin.ManageCourseView;
 import sms.gradle.view.frames.admin.ManageModulesView;
 import sms.gradle.view.frames.admin.ManageStudentView;
+import sms.gradle.view.frames.admin.ModuleDetailView;
+import sms.gradle.view.frames.admin.StudentDetailView;
 import sms.gradle.view.frames.student.AccessStudentAssessmentsView;
 import sms.gradle.view.frames.student.AccessStudentModulesView;
 import sms.gradle.view.frames.student.StudentDashboardView;
@@ -48,6 +51,9 @@ public class ViewFactory {
     private Stage manageModulesStage;
     private Stage manageAdminStage;
     private Stage courseDetailStage;
+    private Stage moduleDetailStage;
+    private Stage assessmentDetailStage;
+    private Stage studentDetailStage;
     private Stage manageAssessmentsStage;
 
     private ViewFactory() {
@@ -62,6 +68,9 @@ public class ViewFactory {
         initialiseManageModulesStage();
         initialiseManageAdminStage();
         initialiseCourseDetailStage();
+        initialiseModuleDetailStage();
+        initialiseAssessmentDetailStage();
+        initialiseStudentDetailStage();
         initialiseManageAssessmentsStage();
         LOGGER.info("View Factory initialised");
     }
@@ -119,6 +128,21 @@ public class ViewFactory {
     public void changeToCourseDetailStage() {
         LOGGER.debug("Changing to course detail stage");
         courseDetailStage.show();
+    }
+
+    public void changeToModuleDetailStage() {
+        LOGGER.debug("Changing to module detail stage");
+        moduleDetailStage.show();
+    }
+
+    public void changeToAssessmentDetailStage() {
+        LOGGER.debug("Changing to assessment detail stage");
+        assessmentDetailStage.show();
+    }
+
+    public void changeToStudentDetailStage() {
+        LOGGER.debug("Changing to student detail stage");
+        studentDetailStage.show();
     }
 
     public void changeToManageAssessmentsStage() {
@@ -247,6 +271,39 @@ public class ViewFactory {
         courseDetailStage.setMinWidth(750);
         courseDetailStage.setScene(new Scene(courseDetailView));
         courseDetailStage.setTitle("SMS - Course Detail");
+    }
+
+    private void initialiseModuleDetailStage() {
+        LOGGER.debug("Initialising module detail stage");
+        ModuleDetailView moduleDetailView = new ModuleDetailView();
+
+        moduleDetailStage = new Stage();
+        moduleDetailStage.setMinHeight(550);
+        moduleDetailStage.setMinWidth(750);
+        moduleDetailStage.setScene(new Scene(moduleDetailView));
+        moduleDetailStage.setTitle("SMS - Module Detail");
+    }
+
+    private void initialiseAssessmentDetailStage() {
+        LOGGER.debug("Initialising assessment detail stage");
+        AssessmentDetailView assessmentDetailView = new AssessmentDetailView();
+
+        assessmentDetailStage = new Stage();
+        assessmentDetailStage.setMinHeight(550);
+        assessmentDetailStage.setMinWidth(750);
+        assessmentDetailStage.setScene(new Scene(assessmentDetailView));
+        assessmentDetailStage.setTitle("SMS - Assessment Detail");
+    }
+
+    private void initialiseStudentDetailStage() {
+        LOGGER.debug("Initialising student detail stage");
+        StudentDetailView studentDetailView = new StudentDetailView();
+
+        studentDetailStage = new Stage();
+        studentDetailStage.setMinHeight(550);
+        studentDetailStage.setMinWidth(750);
+        studentDetailStage.setScene(new Scene(studentDetailView));
+        studentDetailStage.setTitle("SMS - Student Detail");
     }
 
     private void initialiseManageAssessmentsStage() {

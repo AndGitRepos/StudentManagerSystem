@@ -14,16 +14,17 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sms.gradle.controller.admin.CourseDetailViewController;
+import sms.gradle.controller.admin.ModuleDetailViewController;
+import sms.gradle.model.dao.ModuleDAO;
 import sms.gradle.model.entities.Assessment;
 import sms.gradle.model.entities.Student;
 import sms.gradle.view.CoreViewInterface;
 
 /**
- * Course View that displays detailed information about a course and its students.
- * This view is shown when the "View Course" button is clicked in the StaffDashboardView.
+ * Module View that displays detailed information about a module and its students.
+ * This view is shown when the "View Module" button is clicked in the CourseDetailView.
  */
-public final class CourseDetailView extends BorderPane implements CoreViewInterface {
+public final class ModuleDetailView extends BorderPane implements CoreViewInterface {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private static final double SIDEBAR_WIDTH_PERCENT = 0.25;
@@ -31,15 +32,12 @@ public final class CourseDetailView extends BorderPane implements CoreViewInterf
 
     // Sidebar components
     private VBox sidebar = new VBox(15);
-    private Label courseNameLabel = new Label("Course Name");
-    private Label courseDescriptionLabel = new Label("Select a course to view details");
-    private Button moduleDetailButton = new Button("View Module");
+    private Label moduleNameLabel = new Label("Module Name");
+    private Label moduleDescriptionLabel = new Label("Select a module to view details");
+    private Label moduleLecturerLabel = new Label("Lecturer: ");
     private Button assessmentDetailButton = new Button("View Assessment");
     private Button backButton = new Button("Back");
     private Button logoutButton = new Button("Logout");
-    private VBox moduleListContainer = new VBox(5);
-    private ScrollPane moduleScrollPane = new ScrollPane(moduleListContainer);
-    private HBox selectedModuleRow = null;
     private VBox assessmentListContainer = new VBox(5);
     private ScrollPane assessmentScrollPane = new ScrollPane(assessmentListContainer);
     private HBox selectedAssessmentRow = null;
@@ -59,36 +57,30 @@ public final class CourseDetailView extends BorderPane implements CoreViewInterf
     private VBox studentSection = new VBox(0);
     private HBox headerRow;
 
-    // Current course ID
-    private int currentCourseId = -1;
+    // Current module ID
+    private int currentModuleId = -1;
 
-    public CourseDetailView() {
-        LOGGER.debug("Initialising Course View");
+    public ModuleDetailView() {
+        LOGGER.debug("Initialising Module View");
         getStylesheets().add(getClass().getResource("/styles/manager.css").toExternalForm());
         initialiseCoreUIComponents();
         layoutCoreUIComponents();
         styleCoreUIComponents();
         assignButtonActions();
-        // Module and assessment data will be loaded when a course is selected
 
         setupResponsiveBehavior();
 
-        LOGGER.debug("Course View initialised");
+        LOGGER.debug("Module View initialised");
     }
 
     @Override
     public void initialiseCoreUIComponents() {
         // Main information panel components
         viewStudentButton.setDisable(true);
-        moduleDetailButton.setDisable(true);
-        assessmentDetailButton.setDisable(true);
-
         studentScrollPane.setFitToWidth(true);
 
         headerRow = createStudentRow("ID", "Name", "Email", "Join Date");
         headerRow.getStyleClass().add("student-header-row");
-
-        moduleScrollPane.setFitToWidth(true);
 
         assessmentScrollPane.setFitToWidth(true);
     }
@@ -97,11 +89,9 @@ public final class CourseDetailView extends BorderPane implements CoreViewInterf
     public void layoutCoreUIComponents() {
         sidebar.getChildren()
                 .addAll(
-                        courseNameLabel,
-                        courseDescriptionLabel,
-                        new Label("Modules:"),
-                        moduleScrollPane,
-                        moduleDetailButton,
+                        moduleNameLabel,
+                        moduleDescriptionLabel,
+                        moduleLecturerLabel,
                         new Label("Assessments:"),
                         assessmentScrollPane,
                         assessmentDetailButton,
@@ -138,17 +128,17 @@ public final class CourseDetailView extends BorderPane implements CoreViewInterf
 
     @Override
     public void styleCoreUIComponents() {
-        getStyleClass().add("manage-course-view");
+        getStyleClass().add("manage-module-view");
 
         // Sidebar
         sidebar.getStyleClass().add("left-panel");
-        courseNameLabel.getStyleClass().add("section-header");
-        courseNameLabel.setFont(Font.font("System", FontWeight.BOLD, 18));
-        courseDescriptionLabel.getStyleClass().add("course-description-label");
-        courseDescriptionLabel.setWrapText(true);
-        courseDescriptionLabel.setMaxWidth(Double.MAX_VALUE);
-        courseDescriptionLabel.setPrefWidth(200);
-        moduleDetailButton.getStyleClass().add("action-button");
+        moduleNameLabel.getStyleClass().add("section-header");
+        moduleNameLabel.setFont(Font.font("System", FontWeight.BOLD, 18));
+        moduleDescriptionLabel.getStyleClass().add("module-description-label");
+        moduleDescriptionLabel.setWrapText(true);
+        moduleDescriptionLabel.setMaxWidth(Double.MAX_VALUE);
+        moduleDescriptionLabel.setPrefWidth(200);
+        moduleLecturerLabel.getStyleClass().add("module-lecturer-label");
         assessmentDetailButton.getStyleClass().add("action-button");
         backButton.getStyleClass().add("navigate-button");
         logoutButton.getStyleClass().add("navigate-button");
@@ -165,9 +155,7 @@ public final class CourseDetailView extends BorderPane implements CoreViewInterf
         studentListContainer.getStyleClass().add("student-list-container");
 
         // Scroll panes
-        moduleScrollPane.getStyleClass().add("sidebar-scroll-pane");
         assessmentScrollPane.getStyleClass().add("sidebar-scroll-pane");
-        moduleListContainer.getStyleClass().add("sidebar-list-container");
         assessmentListContainer.getStyleClass().add("sidebar-list-container");
     }
 
@@ -180,7 +168,6 @@ public final class CourseDetailView extends BorderPane implements CoreViewInterf
             sidebar.setPrefWidth(sidebarWidth);
 
             double buttonWidth = sidebarWidth * 0.9;
-            moduleDetailButton.setPrefWidth(buttonWidth);
             assessmentDetailButton.setPrefWidth(buttonWidth);
             backButton.setPrefWidth(buttonWidth);
             logoutButton.setPrefWidth(buttonWidth);
@@ -191,10 +178,8 @@ public final class CourseDetailView extends BorderPane implements CoreViewInterf
             statsPanel.setPrefHeight(statsPanelHeight);
 
             double availableHeight = newVal.doubleValue() - statsPanelHeight - 200;
-            double moduleHeight = availableHeight * 0.25;
-            double assessmentHeight = availableHeight * 0.25;
+            double assessmentHeight = availableHeight * 0.3;
 
-            moduleScrollPane.setPrefHeight(moduleHeight);
             assessmentScrollPane.setPrefHeight(assessmentHeight);
 
             studentScrollPane.setPrefHeight(availableHeight * 0.8);
@@ -235,67 +220,71 @@ public final class CourseDetailView extends BorderPane implements CoreViewInterf
     }
 
     /**
-     * Sets the current course ID and updates the course information and student list
-     * @param courseId The ID of the course to display
+     * Sets the current module ID and updates the module information and student list
+     * @param moduleId The ID of the module to display
      */
-    public void setCourseId(int courseId) {
-        this.currentCourseId = courseId;
-        updateCourseInformation();
+    public void setModuleId(int moduleId) {
+        this.currentModuleId = moduleId;
+        updateModuleInformation();
         updateStudentList();
-        updateModuleList();
         updateAssessmentList();
     }
 
     /**
-     * Updates the course name and description labels with data from the controller
+     * Updates the module name and description labels with data from ModuleDAO
      */
-    private void updateCourseInformation() {
-        if (currentCourseId <= 0) {
-            LOGGER.warn("No course ID set, cannot load course information");
-            courseNameLabel.setText("Course Name");
-            courseDescriptionLabel.setText("Select a course to view details");
+    private void updateModuleInformation() {
+        if (currentModuleId <= 0) {
+            LOGGER.warn("No module ID set, cannot load module information");
+            moduleNameLabel.setText("Module Name");
+            moduleDescriptionLabel.setText("Select a module to view details");
+            moduleLecturerLabel.setText("Lecturer: ");
             return;
         }
 
-        String[] courseInfo = CourseDetailViewController.loadCourseInformation(currentCourseId);
-
-        if (courseInfo != null) {
-            courseNameLabel.setText(courseInfo[0]);
-            // Check if description is empty or null and provide a default message
-            String description = courseInfo[1];
-            if (description == null || description.trim().isEmpty()) {
-                description = "No description available for this course.";
-            }
-            courseDescriptionLabel.setText(description);
-            LOGGER.debug("Updated course information for course ID: {}", currentCourseId);
-        } else {
-            LOGGER.warn("Course not found for ID: {}", currentCourseId);
-            courseNameLabel.setText("Course Not Found");
-            courseDescriptionLabel.setText("No description available");
+        try {
+            ModuleDAO.findById(currentModuleId)
+                    .ifPresentOrElse(
+                            module -> {
+                                moduleNameLabel.setText(module.getName());
+                                moduleDescriptionLabel.setText(module.getDescription());
+                                moduleLecturerLabel.setText("Lecturer: " + module.getLecturer());
+                                LOGGER.debug("Updated module information for module ID: {}", currentModuleId);
+                            },
+                            () -> {
+                                LOGGER.warn("Module not found for ID: {}", currentModuleId);
+                                moduleNameLabel.setText("Module Not Found");
+                                moduleDescriptionLabel.setText("No description available");
+                                moduleLecturerLabel.setText("Lecturer: Unknown");
+                            });
+        } catch (Exception e) {
+            LOGGER.error("Error loading module information for module ID: {}", currentModuleId, e);
+            moduleNameLabel.setText("Error Loading Module");
+            moduleDescriptionLabel.setText("Could not load module description");
+            moduleLecturerLabel.setText("Lecturer: Unknown");
         }
     }
 
     private void assignButtonActions() {
-        moduleDetailButton.setOnAction(CourseDetailViewController::handleViewModuleDetailButton);
-        assessmentDetailButton.setOnAction(CourseDetailViewController::handleViewAssessmentDetailButton);
-        backButton.setOnAction(CourseDetailViewController::handleBackButton);
-        logoutButton.setOnAction(CourseDetailViewController::handleLogoutButton);
-        viewStudentButton.setOnAction(CourseDetailViewController::handleViewStudentDetailButton);
+        assessmentDetailButton.setOnAction(ModuleDetailViewController::handleViewAssessmentDetailButton);
+        backButton.setOnAction(ModuleDetailViewController::handleBackButton);
+        logoutButton.setOnAction(ModuleDetailViewController::handleLogoutButton);
+        viewStudentButton.setOnAction(ModuleDetailViewController::handleViewStudentDetailButton);
     }
 
     /**
-     * Updates the student list with students enrolled in the current course
+     * Updates the student list with students enrolled in the current module
      */
     private void updateStudentList() {
         clearStudentSelection();
         studentListContainer.getChildren().clear();
 
-        if (currentCourseId <= 0) {
-            LOGGER.warn("No course ID set, cannot load students");
+        if (currentModuleId <= 0) {
+            LOGGER.warn("No module ID set, cannot load students");
             return;
         }
 
-        List<Student> students = CourseDetailViewController.loadStudentsForCourse(currentCourseId);
+        List<Student> students = ModuleDetailViewController.loadStudentsForModule(currentModuleId);
         totalStudentsLabel.setText("Total Students: " + students.size());
 
         for (Student student : students) {
@@ -309,13 +298,70 @@ public final class CourseDetailView extends BorderPane implements CoreViewInterf
         }
 
         // Update statistics
-        updateCourseStatistics();
+        updateModuleStatistics();
     }
 
-    private HBox createSidebarRow(String text) {
+    /**
+     * Updates the assessment list with assessments for the current module
+     */
+    private void updateAssessmentList() {
+        clearAssessmentSelection();
+        assessmentListContainer.getChildren().clear();
+
+        if (currentModuleId <= 0) {
+            LOGGER.warn("No module ID set, cannot load assessments");
+            return;
+        }
+
+        List<Assessment> assessments = ModuleDetailViewController.loadAssessmentsForModule(currentModuleId);
+
+        if (assessments.isEmpty()) {
+            assessmentListContainer.getChildren().add(createSidebarRow("No assessments found"));
+            return;
+        }
+
+        for (Assessment assessment : assessments) {
+            String dueDate =
+                    assessment.getDueDate() != null ? assessment.getDueDate().toString() : "N/A";
+            assessmentListContainer
+                    .getChildren()
+                    .add(createSidebarRow(assessment.getName() + " (" + dueDate + ")", assessment.getId()));
+        }
+    }
+
+    /**
+     * Updates the module statistics panel with data from the controller
+     */
+    private void updateModuleStatistics() {
+        if (currentModuleId <= 0) {
+            LOGGER.warn("No module ID set, cannot update statistics");
+            totalStudentsLabel.setText("Total Students: 0");
+            averageGradeLabel.setText("Average Grade: 0.0");
+            passRateLabel.setText("Pass Rate: 0%");
+            return;
+        }
+
+        double[] stats = ModuleDetailViewController.calculateModuleStatistics(currentModuleId);
+        int totalStudents = (int) stats[0];
+        double averageGrade = stats[1];
+        double passRate = stats[2];
+
+        totalStudentsLabel.setText("Total Students: " + totalStudents);
+        averageGradeLabel.setText("Average Grade: " + String.format("%.1f", averageGrade));
+        passRateLabel.setText("Pass Rate: " + String.format("%.0f%%", passRate));
+
+        LOGGER.debug(
+                "Updated statistics for module ID {}: {} students, {} avg grade, {}% pass rate",
+                currentModuleId, totalStudents, averageGrade, passRate);
+    }
+
+    private HBox createSidebarRow(String text, Integer assessmentId) {
         HBox row = new HBox(10);
         row.setAlignment(Pos.CENTER_LEFT);
         row.setPadding(new Insets(5));
+
+        // Store the assessment ID as user data for later retrieval
+        row.setUserData(assessmentId);
 
         Label label = new Label(text);
         HBox.setHgrow(label, Priority.ALWAYS);
@@ -323,13 +369,13 @@ public final class CourseDetailView extends BorderPane implements CoreViewInterf
         row.getChildren().add(label);
 
         row.setOnMouseEntered(e -> {
-            if (row != selectedModuleRow && row != selectedAssessmentRow) {
+            if (row != selectedAssessmentRow) {
                 row.setStyle("-fx-background-color: #f0f0f0;");
             }
         });
 
         row.setOnMouseExited(e -> {
-            if (row != selectedModuleRow && row != selectedAssessmentRow) {
+            if (row != selectedAssessmentRow) {
                 row.setStyle("-fx-background-color: transparent;");
             }
         });
@@ -337,21 +383,13 @@ public final class CourseDetailView extends BorderPane implements CoreViewInterf
         row.setOnMouseClicked(e -> {
             LOGGER.debug(text + " selected");
 
-            if (moduleListContainer.getChildren().contains(row)) {
-                if (selectedModuleRow != null) {
-                    selectedModuleRow.setStyle("-fx-background-color: transparent;");
-                }
-                selectedModuleRow = row;
-                row.setStyle("-fx-background-color: #cce0ff;");
-                moduleDetailButton.setDisable(false);
-            } else {
-                if (selectedAssessmentRow != null) {
-                    selectedAssessmentRow.setStyle("-fx-background-color: transparent;");
-                }
-                selectedAssessmentRow = row;
-                row.setStyle("-fx-background-color: #cce0ff;");
-                assessmentDetailButton.setDisable(false);
+            if (selectedAssessmentRow != null) {
+                selectedAssessmentRow.setStyle("-fx-background-color: transparent;");
             }
+            selectedAssessmentRow = row;
+            row.setStyle("-fx-background-color: #cce0ff;");
+
+            assessmentDetailButton.setDisable(false);
         });
 
         row.getStyleClass().add("sidebar-row");
@@ -361,21 +399,24 @@ public final class CourseDetailView extends BorderPane implements CoreViewInterf
         return row;
     }
 
-    /**
-     * Clears all selections (modules, assessments, students)
-     */
+    private HBox createSidebarRow(String text) {
+        return createSidebarRow(text, null);
+    }
+
     public void clearSelections() {
-        if (selectedModuleRow != null) {
-            selectedModuleRow.setStyle("-fx-background-color: transparent;");
-            selectedModuleRow = null;
-            moduleDetailButton.setDisable(true);
-        }
+        clearAssessmentSelection();
+        clearStudentSelection();
+    }
+
+    /**
+     * Clears the current assessment selection
+     */
+    private void clearAssessmentSelection() {
         if (selectedAssessmentRow != null) {
             selectedAssessmentRow.setStyle("-fx-background-color: transparent;");
             selectedAssessmentRow = null;
             assessmentDetailButton.setDisable(true);
         }
-        clearStudentSelection();
     }
 
     /**
@@ -461,6 +502,18 @@ public final class CourseDetailView extends BorderPane implements CoreViewInterf
     }
 
     /**
+     * Gets the currently selected assessment row
+     * @return The selected assessment row, or null if no assessment is selected
+     */
+    public HBox getSelectedAssessmentRow() {
+        return selectedAssessmentRow;
+    }
+
+    /**
+     * Gets the ID of the currently selected student
+     * @return The ID of the selected student, or null if no student is selected
+     */
+    /**
      * Gets the ID of the currently selected student
      * @return The ID of the selected student, or null if no student is selected
      */
@@ -478,22 +531,6 @@ public final class CourseDetailView extends BorderPane implements CoreViewInterf
     }
 
     /**
-     * Gets the currently selected module row
-     * @return The selected module row, or null if no module is selected
-     */
-    public HBox getSelectedModuleRow() {
-        return selectedModuleRow;
-    }
-
-    /**
-     * Gets the currently selected assessment row
-     * @return The selected assessment row, or null if no assessment is selected
-     */
-    public HBox getSelectedAssessmentRow() {
-        return selectedAssessmentRow;
-    }
-
-    /**
      * Clears the current student selection and disables the view button
      */
     private void clearStudentSelection() {
@@ -502,88 +539,5 @@ public final class CourseDetailView extends BorderPane implements CoreViewInterf
             selectedStudentRow = null;
             viewStudentButton.setDisable(true);
         }
-    }
-
-    /**
-     * Updates the course statistics panel with data from the controller
-     */
-    private void updateCourseStatistics() {
-        if (currentCourseId <= 0) {
-            LOGGER.warn("No course ID set, cannot update statistics");
-            totalStudentsLabel.setText("Total Students: 0");
-            averageGradeLabel.setText("Average Grade: 0.0");
-            passRateLabel.setText("Pass Rate: 0%");
-            return;
-        }
-
-        double[] stats = CourseDetailViewController.calculateCourseStatistics(currentCourseId);
-        int totalStudents = (int) stats[0];
-        double averageGrade = stats[1];
-        double passRate = stats[2];
-
-        totalStudentsLabel.setText("Total Students: " + totalStudents);
-        averageGradeLabel.setText("Average Grade: " + String.format("%.1f", averageGrade));
-        passRateLabel.setText("Pass Rate: " + String.format("%.0f%%", passRate));
-
-        LOGGER.debug(
-                "Updated statistics for course ID {}: {} students, {} avg grade, {}% pass rate",
-                currentCourseId, totalStudents, averageGrade, passRate);
-    }
-
-    /**
-     * Updates the module list with modules from the current course
-     */
-    public void updateModuleList() {
-        moduleListContainer.getChildren().clear();
-
-        if (currentCourseId <= 0) {
-            LOGGER.warn("No course ID set, cannot load modules");
-            return;
-        }
-
-        List<sms.gradle.model.entities.Module> modules =
-                CourseDetailViewController.loadModulesForCourse(currentCourseId);
-
-        if (modules.isEmpty()) {
-            HBox noModulesRow = createSidebarRow("No modules found");
-            moduleListContainer.getChildren().add(noModulesRow);
-            return;
-        }
-
-        for (sms.gradle.model.entities.Module module : modules) {
-            HBox moduleRow = createSidebarRow(module.getName());
-            moduleRow.setUserData(module.getId());
-            moduleListContainer.getChildren().add(moduleRow);
-        }
-
-        LOGGER.debug("Updated module list with {} modules", modules.size());
-    }
-
-    /**
-     * Updates the assessment list with assessments from the current course's modules
-     */
-    public void updateAssessmentList() {
-        assessmentListContainer.getChildren().clear();
-
-        if (currentCourseId <= 0) {
-            LOGGER.warn("No course ID set, cannot load assessments");
-            return;
-        }
-
-        List<Assessment> assessments = CourseDetailViewController.loadAssessmentsForCourse(currentCourseId);
-
-        if (assessments.isEmpty()) {
-            HBox noAssessmentsRow = createSidebarRow("No assessments found");
-            assessmentListContainer.getChildren().add(noAssessmentsRow);
-            return;
-        }
-
-        for (Assessment assessment : assessments) {
-            HBox assessmentRow = createSidebarRow(assessment.getName());
-            assessmentRow.setUserData(assessment.getId());
-            assessmentListContainer.getChildren().add(assessmentRow);
-        }
-
-        LOGGER.debug("Updated assessment list with {} assessments", assessments.size());
     }
 }
