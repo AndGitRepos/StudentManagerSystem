@@ -42,6 +42,8 @@ public final class ModuleDetailViewController {
             LOGGER.debug("Loaded {} students for module ID: {}", students.size(), moduleId);
         } catch (SQLException e) {
             LOGGER.error("Error loading students for module ID: {}", moduleId, e);
+            Common.showAlert(
+                    "An error occurred", "We had a problem loading the students for the module. Please try again.");
         }
 
         return students;
@@ -61,6 +63,8 @@ public final class ModuleDetailViewController {
             LOGGER.debug("Loaded {} assessments for module ID: {}", assessments.size(), moduleId);
         } catch (SQLException e) {
             LOGGER.error("Error loading assessments for module ID: {}", moduleId, e);
+            Common.showAlert(
+                    "An error occurred", "We had a problem loading the assessments for the module. Please try again.");
         }
 
         return assessments;

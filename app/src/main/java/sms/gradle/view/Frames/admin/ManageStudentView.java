@@ -186,22 +186,38 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
 
     @Override
     public void styleCoreUIComponents() {
+        applyBasicStyles();
+    }
 
+    private void applyBasicStyles() {
         setMinWidth(850);
         setPrefSize(900, 550);
         getStyleClass().add("manage-view-container");
 
-        leftPanel.getStyleClass().add("left-panel");
-        studentListView.setPrefWidth(150);
-
-        enrolledCoursesListView.setPrefWidth(150);
-        availableCoursesListView.setPrefWidth(200);
-
         // Style containers
         getStyleClass().add("manage-student-view");
-
+        leftPanel.getStyleClass().add("left-panel");
         centerPanel.getStyleClass().add("center-panel");
         rightPanel.getStyleClass().add("right-panel");
+
+        // Add width binding to maintain proportions
+        widthProperty().addListener((obs, oldVal, newVal) -> {
+            double width = newVal.doubleValue();
+            // Left panel (25%)
+            leftPanel.setPrefWidth(width * 0.25);
+            leftPanel.setMinWidth(width * 0.25);
+            leftPanel.setMaxWidth(width * 0.25);
+
+            // Center panel (50%)
+            centerPanel.setPrefWidth(width * 0.50);
+            centerPanel.setMinWidth(width * 0.50);
+            centerPanel.setMaxWidth(width * 0.50);
+
+            // Right panel (25%)
+            rightPanel.setPrefWidth(width * 0.25);
+            rightPanel.setMinWidth(width * 0.25);
+            rightPanel.setMaxWidth(width * 0.25);
+        });
 
         studentListView.getStyleClass().add("student-list");
         enrolledCoursesListView.getStyleClass().add("courses-list");

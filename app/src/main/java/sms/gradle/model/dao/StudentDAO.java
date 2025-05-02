@@ -80,7 +80,12 @@ public final class StudentDAO {
             addSqlStatement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error("Failed to add student to database {}", student, e);
-            throw new SQLException(String.format("Failed to add student: %s", student.toString()), e);
+
+            switch (e.getErrorCode()) {
+                case 23505 -> throw new SQLException(
+                        String.format("The email '%s' is associated with an existing student.", student.getEmail()), e);
+                default -> throw new SQLException("Failed to add student", e);
+            }
         }
     }
 

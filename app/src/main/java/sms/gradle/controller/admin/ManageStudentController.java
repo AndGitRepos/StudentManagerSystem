@@ -73,6 +73,7 @@ public final class ManageStudentController {
             StudentDAO.findAll().forEach(student -> studentList.getItems().add(student));
         } catch (SQLException e) {
             LOGGER.error("Failed to update list of students: ", e);
+            Common.showAlert("An error occurred", "We had a problem updating the list of students. Please try again.");
         }
     }
 
@@ -122,6 +123,7 @@ public final class ManageStudentController {
             }
         } catch (SQLException e) {
             LOGGER.error("Failed to update enrolled courses list: ", e);
+            Common.showAlert("An error occurred", "We had a problem fetching the enrolled courses. Please try again.");
         }
 
         // Update available courses list
@@ -136,6 +138,8 @@ public final class ManageStudentController {
             }
         } catch (SQLException e) {
             LOGGER.error("Failed to update available courses list: ", e);
+            Common.showAlert(
+                    "An error occurred", "We had a problem updating the list of available courses. Please try again.");
         }
     }
 
@@ -171,6 +175,7 @@ public final class ManageStudentController {
             StudentDAO.update(updatedStudent, Common.generateSha256Hash(passwordField.getText()));
         } catch (SQLException e) {
             LOGGER.error("Failed to update student: ", e);
+            Common.showAlert("An error occurred", "We had a problem updating the student. Please try again.");
         }
     }
 
@@ -204,6 +209,7 @@ public final class ManageStudentController {
             LOGGER.debug("New student created: {}", newStudent);
         } catch (SQLException e) {
             LOGGER.error("Failed to create new student: ", e);
+            Common.showAlert("Failed to create new student", e.getMessage());
         }
     }
 
@@ -227,6 +233,7 @@ public final class ManageStudentController {
             studentList.getItems().remove(selectedStudent);
         } catch (SQLException e) {
             LOGGER.error("Failed to delete student: ", e);
+            Common.showAlert("An error occurred", "We had a problem deleting the student. Please try again.");
         }
     }
 
@@ -264,6 +271,8 @@ public final class ManageStudentController {
             availableCourses.getItems().remove(selectedCourse);
         } catch (SQLException e) {
             LOGGER.error("Failed to enroll student into course", e);
+            Common.showAlert(
+                    "An error occurred", "We had a problem enrolling the student to the course. Please try again.");
         }
     }
 
@@ -310,6 +319,8 @@ public final class ManageStudentController {
             enrolledCourses.getItems().remove(selectedCourse);
         } catch (SQLException e) {
             LOGGER.error("Failed to unenroll student from course", e);
+            Common.showAlert(
+                    "An error occurred", "We had a problem unenrolling the student from the course. Please try again.");
         }
     }
 

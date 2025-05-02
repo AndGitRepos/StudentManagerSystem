@@ -63,7 +63,11 @@ public final class CourseDAO {
             addSqlStatement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error("Failed to add course to database {}", course, e);
-            throw new SQLException(String.format("Failed to add course: %s", course.toString()), e);
+            switch (e.getErrorCode()) {
+                case 23505 -> throw new SQLException(
+                        String.format("The name '%s' is associated with an existing course.", course.getName()), e);
+                default -> throw new SQLException(String.format("Failed to add course: %s", course.toString()), e);
+            }
         }
     }
 

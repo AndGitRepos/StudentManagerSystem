@@ -94,6 +94,7 @@ public class ManageAssessmentsController {
                     CourseDAO.findById(linkedModule.getCourseId()).get().getName());
         } catch (SQLException e) {
             LOGGER.error("Failed to update linked modules list: ", e);
+            Common.showAlert("An error occurred", "We had a problem loading the linked modules. Please try again.");
         }
     }
 
@@ -117,6 +118,8 @@ public class ManageAssessmentsController {
             }
         } catch (SQLException e) {
             LOGGER.error("Failed to update unlinked modules list: ", e);
+            Common.showAlert(
+                    "An error occurred", "We had a problem updating the unlinked modules list. Please try again.");
         }
     }
 
@@ -150,6 +153,7 @@ public class ManageAssessmentsController {
                     .forEach(assessment -> assessmentsList.getItems().add(assessment));
         } catch (SQLException e) {
             LOGGER.error("Failed to update list of students: ", e);
+            Common.showAlert("An error occurred", "We had a problem updating the list of students. Please try again.");
         }
     }
 
@@ -177,6 +181,9 @@ public class ManageAssessmentsController {
             linkedModule = ModuleDAO.findById(selectedAssessment.getModuleId()).get();
         } catch (SQLException e) {
             LOGGER.error("Failed to get linked module from currently selected assessment");
+            Common.showAlert(
+                    "An error occurred",
+                    "We had a problem fetching the linked module for the selected assessment. Please try again.");
             return;
         }
 
@@ -206,6 +213,7 @@ public class ManageAssessmentsController {
             modules = ModuleDAO.findAll();
         } catch (SQLException e) {
             LOGGER.error("Failed to get list of modules: ", e);
+            Common.showAlert("An error occurred", "We had a problem fetching the modules. Please try again.");
             return;
         }
 
@@ -227,6 +235,7 @@ public class ManageAssessmentsController {
             LOGGER.debug("New assessment created: {}", newAssessment);
         } catch (SQLException e) {
             LOGGER.error("Failed to create new assessment: ", e);
+            Common.showAlert("An error occurred", "We had a problem creating the new assessment. Please try again.");
         }
     }
 
@@ -252,6 +261,7 @@ public class ManageAssessmentsController {
             assessmentsListView.getItems().remove(selectedAssessment);
         } catch (SQLException e) {
             LOGGER.error("Failed to delete assessment: ", e);
+            Common.showAlert("An error occurred", "We had a problem deleting the assessment. Please try again.");
         }
     }
 
@@ -317,6 +327,7 @@ public class ManageAssessmentsController {
             LOGGER.debug("Assessment updated: {}", updatedAssessment);
         } catch (SQLException e) {
             LOGGER.error("Failed to update assessment: ", e);
+            Common.showAlert("An error occurred", "We had a problem updating the assessment. Please try again.");
         }
     }
 

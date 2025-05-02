@@ -56,6 +56,7 @@ public final class CourseDetailViewController {
             LOGGER.debug("Loaded {} students for course ID: {}", students.size(), courseId);
         } catch (SQLException e) {
             LOGGER.error("Error loading students for course ID: {}", courseId, e);
+            Common.showAlert("An error occurred", "We had a problem loading the students. Please try again.");
         }
 
         return students;
@@ -80,6 +81,7 @@ public final class CourseDetailViewController {
 
         } catch (SQLException e) {
             LOGGER.error("Error calculating statistics for course ID: {}", courseId, e);
+            Common.showAlert("An error occurred", "We had a problem calculating the statistics. Please try again.");
         }
 
         return stats;
@@ -105,6 +107,7 @@ public final class CourseDetailViewController {
                     .orElse(null);
         } catch (SQLException e) {
             LOGGER.error("Error loading course information for course ID: {}", courseId, e);
+            Common.showAlert("An error occurred", "We had a problem loading the course information. Please try again.");
             return null;
         }
     }
@@ -123,6 +126,7 @@ public final class CourseDetailViewController {
             LOGGER.debug("Loaded {} modules for course ID: {}", modules.size(), courseId);
         } catch (SQLException e) {
             LOGGER.error("Error loading modules for course ID: {}", courseId, e);
+            Common.showAlert("An error occurred", "We had a problem loading the modules. Please try again.");
         }
 
         return modules;
@@ -150,6 +154,7 @@ public final class CourseDetailViewController {
             LOGGER.debug("Loaded {} assessments for course ID: {}", assessments.size(), courseId);
         } catch (SQLException e) {
             LOGGER.error("Error loading assessments for course ID: {}", courseId, e);
+            Common.showAlert("An error occurred", "We had a problem loading the assessments. Please try again.");
         }
 
         return assessments;

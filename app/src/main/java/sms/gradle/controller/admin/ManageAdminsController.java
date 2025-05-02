@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
@@ -117,7 +116,7 @@ public final class ManageAdminsController {
             AdminDAO.findAll().forEach(admin -> adminListView.getItems().add(admin));
         } catch (SQLException e) {
             LOGGER.info("Failed to update & refresh admins list", e);
-            displayLoginFailureError("Failed to update & refresh admins list");
+            Common.showAlert("An error occurred", "Failed to update & refresh admins list");
         }
     }
 
@@ -153,7 +152,7 @@ public final class ManageAdminsController {
             LOGGER.debug("Created new admin: {}", newAdmin);
         } catch (SQLException e) {
             LOGGER.info("Failed to create new admin: ", e);
-            displayLoginFailureError("Failed to create new admin");
+            Common.showAlert("Failed to create new student", e.getMessage());
         }
     }
 
@@ -193,7 +192,7 @@ public final class ManageAdminsController {
             LOGGER.debug("Updated admin: {}", updatedAdmin);
         } catch (SQLException e) {
             LOGGER.info("Failed in updating chosen admin: ", e);
-            displayLoginFailureError("Failed to update chosen admin");
+            Common.showAlert("An error occurred", "Failed to update the chosen admin");
         }
     }
 
@@ -212,7 +211,7 @@ public final class ManageAdminsController {
 
         if (selectedAdmin == null) {
             LOGGER.info("No admin selected for deletion. Aborting");
-            displayLoginFailureError("Please highlight an admin to delete");
+            Common.showAlert("Warning", "Please highlight an admin to delete");
             return;
         }
 
@@ -230,10 +229,10 @@ public final class ManageAdminsController {
                     refreshListOfAdmins(event);
 
                     clearFields();
-                    LOGGER.debug("Deleted chosen admin: {}", selectedAdmin);
+                    LOGGER.debug("Deleted selected admin: {}", selectedAdmin);
                 } catch (SQLException e) {
-                    LOGGER.info("Failed to delete chosen admin: ", e);
-                    displayLoginFailureError("Failed to delete chosen admin");
+                    LOGGER.info("Failed to delete selected admin: ", e);
+                    Common.showAlert("An error occurred", "Failed to delete selected admin");
                 }
 
             } else {
@@ -250,14 +249,6 @@ public final class ManageAdminsController {
      */
     public static void handleOnShowEvent(WindowEvent event) {
         refreshListOfAdmins(new ActionEvent());
-    }
-
-    private static void displayLoginFailureError(String errorMessage) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Login Error");
-        alert.setHeaderText(null);
-        alert.setContentText(errorMessage);
-        alert.showAndWait();
     }
 
     /**

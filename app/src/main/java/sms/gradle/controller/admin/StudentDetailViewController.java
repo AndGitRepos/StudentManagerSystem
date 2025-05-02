@@ -43,6 +43,7 @@ public final class StudentDetailViewController {
             return StudentDAO.findById(studentId).orElse(null);
         } catch (SQLException e) {
             LOGGER.error("Error loading student with ID: {}", studentId, e);
+            Common.showAlert("An error occurred", "We had a problem loading the student. Please try again.");
             return null;
         }
     }
@@ -68,6 +69,7 @@ public final class StudentDetailViewController {
             LOGGER.debug("Loaded {} modules for student ID: {}", modules.size(), studentId);
         } catch (SQLException e) {
             LOGGER.error("Error loading modules for student ID: {}", studentId, e);
+            Common.showAlert("An error occurred", "We had a problem loading the student's modules. Please try again.");
         }
 
         return modules;
@@ -95,6 +97,8 @@ public final class StudentDetailViewController {
             LOGGER.debug("Loaded {} assessments for student ID: {}", assessments.size(), studentId);
         } catch (SQLException e) {
             LOGGER.error("Error loading assessments for student ID: {}", studentId, e);
+            Common.showAlert(
+                    "An error occurred", "We had a problem loading the student's assessments. Please try again.");
         }
 
         return assessments;
