@@ -2,7 +2,9 @@ package sms.gradle.controller.admin;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -18,10 +20,29 @@ import sms.gradle.model.dao.ModuleDAO;
 import sms.gradle.model.entities.Assessment;
 import sms.gradle.model.entities.Module;
 import sms.gradle.utils.Common;
+import sms.gradle.utils.checks.ChecksProcessor;
+import sms.gradle.utils.checks.NodeValidator;
+import sms.gradle.utils.checks.datepicker.AfterSpecifiedDate;
+import sms.gradle.utils.checks.datepicker.HasValue;
+import sms.gradle.utils.checks.textfield.MinLengthCheck;
 import sms.gradle.view.ViewFactory;
 
 public class ManageAssessmentsController {
     private static final Logger LOGGER = LogManager.getLogger();
+
+    private static final NodeValidator idValidator =
+            new NodeValidator("Id", "#assessmentIdField", List.of(new MinLengthCheck(1)), List.of());
+
+    private static final List<NodeValidator> nodeValidators = List.of(
+            new NodeValidator("Name", "#nameField", List.of(new MinLengthCheck(1)), List.of()),
+            new NodeValidator("Description", "#descriptionField", List.of(new MinLengthCheck(1)), List.of()),
+            new NodeValidator(
+                    "Due Date",
+                    "#dueDatePicker",
+                    List.of(),
+                    List.of(
+                            new HasValue(),
+                            new AfterSpecifiedDate(LocalDate.now().minusDays(1)))));
 
     private ManageAssessmentsController() {
         throw new UnsupportedOperationException("This is a controller class and cannot be instantiated");
@@ -176,6 +197,10 @@ public class ManageAssessmentsController {
         final TextField descriptionField = Common.getNode(getViewStage(), "#descriptionField");
         final DatePicker dueDatePicker = Common.getNode(getViewStage(), "#dueDatePicker");
 
+        if (!ChecksProcessor.checkValidationError(getViewStage(), nodeValidators)) {
+            return;
+        }
+
         List<Module> modules;
         try {
             modules = ModuleDAO.findAll();
@@ -263,6 +288,13 @@ public class ManageAssessmentsController {
         final TextField nameField = Common.getNode(getViewStage(), "#nameField");
         final TextField descriptionField = Common.getNode(getViewStage(), "#descriptionField");
         final DatePicker dueDatePicker = Common.getNode(getViewStage(), "#dueDatePicker");
+
+        List<NodeValidator> mergedValidators = List.of(idValidator).stream().collect(Collectors.toList());
+        mergedValidators.addAll(nodeValidators);
+
+        if (!ChecksProcessor.checkValidationError(getViewStage(), mergedValidators)) {
+            return;
+        }
 
         final int moduleIdFromLinkedModule = getModuleIdFromLinkedModule();
 

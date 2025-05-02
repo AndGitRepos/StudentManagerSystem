@@ -3,6 +3,7 @@ package sms.gradle.controller.admin;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -16,10 +17,21 @@ import sms.gradle.model.dao.ModuleDAO;
 import sms.gradle.model.entities.Course;
 import sms.gradle.model.entities.Module;
 import sms.gradle.utils.Common;
+import sms.gradle.utils.checks.ChecksProcessor;
+import sms.gradle.utils.checks.NodeValidator;
+import sms.gradle.utils.checks.textfield.MinLengthCheck;
 import sms.gradle.view.ViewFactory;
 
 public final class ManageModuleController {
     private static final Logger LOGGER = LogManager.getLogger();
+
+    private static final NodeValidator idValidator =
+            new NodeValidator("Id", "#moduleIdField", List.of(new MinLengthCheck(1)), List.of());
+
+    private static final List<NodeValidator> nodeValidators = List.of(
+            new NodeValidator("Name", "#nameField", List.of(new MinLengthCheck(1)), List.of()),
+            new NodeValidator("Description", "#descriptionField", List.of(new MinLengthCheck(1)), List.of()),
+            new NodeValidator("Lecturer", "#lecturerField", List.of(new MinLengthCheck(1)), List.of()));
 
     private ManageModuleController() {
         throw new UnsupportedOperationException("This is a controller class and cannot be instantiated");
@@ -166,6 +178,10 @@ public final class ManageModuleController {
         final TextField descriptionField = Common.getNode(getViewStage(), "#descriptionField");
         final TextField lecturerField = Common.getNode(getViewStage(), "#lecturerField");
 
+        if (!ChecksProcessor.checkValidationError(getViewStage(), nodeValidators)) {
+            return;
+        }
+
         List<Course> courses;
         try {
             courses = CourseDAO.findAll();
@@ -248,6 +264,13 @@ public final class ManageModuleController {
         final TextField nameField = Common.getNode(getViewStage(), "#nameField");
         final TextField descriptionField = Common.getNode(getViewStage(), "#descriptionField");
         final TextField lecturerField = Common.getNode(getViewStage(), "#lecturerField");
+
+        List<NodeValidator> mergedValidators = List.of(idValidator).stream().collect(Collectors.toList());
+        mergedValidators.addAll(nodeValidators);
+
+        if (!ChecksProcessor.checkValidationError(getViewStage(), mergedValidators)) {
+            return;
+        }
 
         final int courseIdFromLinkedCourse = getCourseIdFromLinkedCourse();
 
