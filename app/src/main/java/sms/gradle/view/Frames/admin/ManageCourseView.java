@@ -135,11 +135,32 @@ public class ManageCourseView extends BorderPane implements CoreViewInterface {
 
     @Override
     public void styleCoreUIComponents() {
-        setPrefSize(750, 550);
-        courseListView.setPrefWidth(150);
+        applyBasicStyles();
+    }
 
+    private void applyBasicStyles() {
+        setPrefSize(750, 550);
+
+        // Style containers
         getStyleClass().add("manage-course-view");
         centerPanel.getStyleClass().add("center-panel");
+
+        // Add width binding to maintain proportions
+        widthProperty().addListener((obs, oldVal, newVal) -> {
+            double width = newVal.doubleValue();
+            // Left panel (25%)
+            VBox leftPanel = (VBox) getLeft();
+            if (leftPanel != null) {
+                leftPanel.setPrefWidth(width * 0.25);
+                leftPanel.setMinWidth(width * 0.25);
+                leftPanel.setMaxWidth(width * 0.25);
+            }
+
+            // Center panel (75%)
+            centerPanel.setPrefWidth(width * 0.75);
+            centerPanel.setMinWidth(width * 0.75);
+            centerPanel.setMaxWidth(width * 0.75);
+        });
 
         selectButton.getStyleClass().add("action-button");
         deleteButton.getStyleClass().add("action-button");

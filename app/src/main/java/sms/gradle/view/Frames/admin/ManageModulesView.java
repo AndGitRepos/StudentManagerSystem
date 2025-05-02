@@ -149,10 +149,32 @@ public class ManageModulesView extends BorderPane implements CoreViewInterface {
 
     private void applyBasicStyles() {
         setPrefSize(750, 550);
-        modulesListView.setPrefWidth(150);
-        unlinkedCoursesListView.setPrefWidth(150);
 
+        // Style containers
         getStyleClass().add("manage-modules-view");
+        leftPanel.getStyleClass().add("left-panel");
+        centerPanel.getStyleClass().add("center-panel");
+        rightPanel.getStyleClass().add("right-panel");
+
+        // Add width binding to maintain proportions
+        widthProperty().addListener((obs, oldVal, newVal) -> {
+            double width = newVal.doubleValue();
+            // Left panel (25%)
+            leftPanel.setPrefWidth(width * 0.25);
+            leftPanel.setMinWidth(width * 0.25);
+            leftPanel.setMaxWidth(width * 0.25);
+
+            // Center panel (50%)
+            centerPanel.setPrefWidth(width * 0.50);
+            centerPanel.setMinWidth(width * 0.50);
+            centerPanel.setMaxWidth(width * 0.50);
+
+            // Right panel (25%)
+            rightPanel.setPrefWidth(width * 0.25);
+            rightPanel.setMinWidth(width * 0.25);
+            rightPanel.setMaxWidth(width * 0.25);
+        });
+
         modulesListView.getStyleClass().add("modules-list");
         moduleDetailsPane.getStyleClass().add("details-pane");
         unlinkedCoursesListView.getStyleClass().add("courses-list");
