@@ -152,7 +152,7 @@ public final class ManageAdminsController {
             LOGGER.debug("Created new admin: {}", newAdmin);
         } catch (SQLException e) {
             LOGGER.info("Failed to create new admin: ", e);
-            Common.showAlert("Failed to create new student", e.getMessage());
+            Common.showAlert("Failed to create new admin", e.getMessage());
         }
     }
 

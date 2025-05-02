@@ -94,7 +94,7 @@ public class ManageAssessmentsController {
                     CourseDAO.findById(linkedModule.getCourseId()).get().getName());
         } catch (SQLException e) {
             LOGGER.error("Failed to update linked modules list: ", e);
-            Common.showAlert("An error occurred", "We had a problem loading the linked modules. Please try again.");
+            Common.showAlert("An error occurred", "We had a problem updating the linked modules. Please try again.");
         }
     }
 
@@ -152,8 +152,9 @@ public class ManageAssessmentsController {
             AssessmentDAO.findAll()
                     .forEach(assessment -> assessmentsList.getItems().add(assessment));
         } catch (SQLException e) {
-            LOGGER.error("Failed to update list of students: ", e);
-            Common.showAlert("An error occurred", "We had a problem updating the list of students. Please try again.");
+            LOGGER.error("Failed to update list of assessments: ", e);
+            Common.showAlert(
+                    "An error occurred", "We had a problem updating the list of assessments. Please try again.");
         }
     }
 
