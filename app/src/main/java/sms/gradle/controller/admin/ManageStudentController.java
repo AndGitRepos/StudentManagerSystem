@@ -374,24 +374,6 @@ public final class ManageStudentController {
     }
 
     /**
-     * Displays validation errors in an alert dialog
-     * @param errorMessages List of error messages to display
-     */
-    private static void displayValidationErrors(List<String> errorMessages) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Validation Error");
-        alert.setHeaderText("Please fix the following issues:");
-
-        StringBuilder content = new StringBuilder();
-        for (String error : errorMessages) {
-            content.append("• ").append(error).append("\n");
-        }
-
-        alert.setContentText(content.toString());
-        alert.showAndWait();
-    }
-
-    /**
      * Hides the current stage and changes to the admin dashboard stage.
      *
      * @param event The action event that triggered this method

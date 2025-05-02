@@ -266,14 +266,6 @@ public final class ManageAdminsController {
         alert.showAndWait();
     }
 
-    private static void displayLoginFailureError(String errorMessage) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Login Error");
-        alert.setHeaderText(null);
-        alert.setContentText(errorMessage);
-        alert.showAndWait();
-    }
-
     /**
      * Event handler for navigating back to the admin dashboard.
      * Hides the current stage and changes the view to the admin dashboard.
@@ -291,7 +283,7 @@ public final class ManageAdminsController {
      * Hides the current stage and changes the view to the login stage.
      *
      * @param event The action event that triggered this method.
-     */ 
+     */
     public static void handleLogout(ActionEvent event) {
         LOGGER.debug("Logging Out - returning to Login Page");
         ViewFactory.getInstance().getManageAdminStage().hide();

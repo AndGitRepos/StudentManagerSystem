@@ -109,40 +109,6 @@ public final class LoginController {
     }
 
     /**
-     * Collects validation errors from username and password fields
-     * @param usernameField The username field
-     * @param passwordField The password field
-     * @return A list of error messages
-     */
-    public static List<String> collectValidationErrors(TextField usernameField, PasswordField passwordField) {
-        List<String> errorMessages = new ArrayList<>();
-
-        // Username validation
-        List<TextFieldCheck> usernameChecks = List.of(new MinLengthCheck(1));
-
-        // Password validation
-        List<TextFieldCheck> passwordChecks = List.of(new MinLengthCheck(1));
-
-        // Check username
-        String username = usernameField.getText();
-        for (TextFieldCheck check : usernameChecks) {
-            if (!check.isValid(username)) {
-                errorMessages.add("Username: " + check.getErrorMessage());
-            }
-        }
-
-        // Check password
-        String password = passwordField.getText();
-        for (TextFieldCheck check : passwordChecks) {
-            if (!check.isValid(password)) {
-                errorMessages.add("Password: " + check.getErrorMessage());
-            }
-        }
-
-        return errorMessages;
-    }
-
-    /**
      * Handles the login attempt by retrieving the username and password from the form,
      * authenticating the user, and either displaying a success message or an error message.
      *
@@ -174,24 +140,6 @@ public final class LoginController {
         } catch (Exception e) {
             displayLoginFailureError("Login error occurred! Please retry.");
         }
-    }
-
-    /**
-     * Displays validation errors in an alert dialog
-     * @param errorMessages List of error messages to display
-     */
-    private static void displayValidationErrors(List<String> errorMessages) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Validation Error");
-        alert.setHeaderText("Please fix the following issues:");
-
-        StringBuilder content = new StringBuilder();
-        for (String error : errorMessages) {
-            content.append("• ").append(error).append("\n");
-        }
-
-        alert.setContentText(content.toString());
-        alert.showAndWait();
     }
 
     /**
