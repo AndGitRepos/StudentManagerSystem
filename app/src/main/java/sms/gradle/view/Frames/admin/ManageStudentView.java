@@ -62,6 +62,7 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
         refreshButton.setOnAction(ManageStudentController::updateListOfStudents);
         selectButton.setOnAction(ManageStudentController::selectStudent);
         deleteButton.setOnAction(ManageStudentController::deleteStudent);
+        updateButton.setOnAction(ManageStudentController::updateStudent);
         createNewButton.setOnAction(ManageStudentController::createNewStudent);
         enrollButton.setOnAction(ManageStudentController::enrollCourse);
         unenrollButton.setOnAction(ManageStudentController::unenrollCourse);

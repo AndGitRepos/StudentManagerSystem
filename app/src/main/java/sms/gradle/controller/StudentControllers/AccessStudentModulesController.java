@@ -35,8 +35,14 @@ public final class AccessStudentModulesController {
         return ViewFactory.getInstance().getStudentModulesStage();
     }
 
+    /**
+     * Creates a visual card representation of a module using JavaFX components.
+     * The card contains the module's name, ID, lecturer, and description in a styled VBox layout.
+     *
+     * @param module The Module object containing the data to be displayed
+     * @return VBox containing the formatted module information as a card
+     */
     private static VBox createModuleCard(final Module module) {
-
         final VBox card = new VBox(10);
         card.getStyleClass().add("module-card");
         card.setPadding(new Insets(15));
@@ -54,6 +60,15 @@ public final class AccessStudentModulesController {
         return card;
     }
 
+    /**
+     * Adds a module to the grid pane at the specified row and column.
+     * The module card is created using the createModuleCard method.
+     *
+     * @param modulesGrid The GridPane where the module card will be added
+     * @param module The Module object containing the data to be displayed
+     * @param row The row index where the module card will be added
+     * @param column The column index where the module card will be added
+     */
     private static void updateModuleToGrid(
             final GridPane modulesGrid, final Module module, final int row, final int column) {
         final VBox moduleCard = createModuleCard(module);
@@ -61,6 +76,12 @@ public final class AccessStudentModulesController {
         LOGGER.debug("Added module {} to grid, positioned: ({}, {})", module.getName(), row, column);
     }
 
+    /**
+     * Displays all modules in the grid pane
+     *
+     * @param modules list of modules to be displayed
+     * @param modulesGrid grid pane where modules will be displayed
+     */
     private static void displayModules(final List<Module> modules, final GridPane modulesGrid) {
         modulesGrid.getChildren().clear();
         int row = 0;
@@ -103,16 +124,34 @@ public final class AccessStudentModulesController {
         }
     }
 
+    /**
+     * Handles the event when the student modules stage is shown.
+     * Refreshes the modules display when the stage is shown.
+     *
+     * @param event The WindowEvent triggered when the stage is shown
+     */
     public static void handleOnShowEvent(WindowEvent event) {
         handleRefreshModulesButton(new ActionEvent());
     }
 
+    /**
+     * Handles the event when the back button is clicked.
+     * Hides the current stage and changes to the student dashboard stage.
+     *
+     * @param event The ActionEvent triggered by clicking the back button
+     */
     public static void handleBackButton(ActionEvent event) {
         LOGGER.debug("Clicked back button");
         ViewFactory.getInstance().getStudentModulesStage().hide();
         ViewFactory.getInstance().changeToStudentDashboardStage();
     }
 
+    /**
+     * Handles the event when the signout button is clicked.
+     * Hides the current stage and changes to the login stage.
+     *
+     * @param event The ActionEvent triggered by clicking the signout button
+     */
     public static void handleSignoutButton(ActionEvent event) {
         LOGGER.debug("Clicked signout button");
         ViewFactory.getInstance().getStudentModulesStage().hide();

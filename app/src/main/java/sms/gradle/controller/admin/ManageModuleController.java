@@ -29,6 +29,10 @@ public final class ManageModuleController {
         return ViewFactory.getInstance().getManageModulesStage();
     }
 
+    /**
+     * Updates the module details with the selected module's information
+     * @param selectedModule The module selected in the list view
+     */
     private static void updateModuleDetails(Module selectedModule) {
         final TextField moduleIdField = Common.getNode(getViewStage(), "#moduleIdField");
         final TextField nameField = Common.getNode(getViewStage(), "#nameField");
@@ -41,6 +45,10 @@ public final class ManageModuleController {
         lecturerField.setText(selectedModule.getLecturer());
     }
 
+    /**
+     * Updates the linked course details with the selected course's information
+     * @param selectedCourse The course selected in the list view
+     */
     private static void updateLinkedCourseDetails(Course linkedCourse) {
         LOGGER.debug("Updating linked course details");
 
@@ -53,6 +61,10 @@ public final class ManageModuleController {
         linkedCourseDescriptionLabel.setText(linkedCourse.getDescription());
     }
 
+    /**
+     * Updates the list of unlinked courses by fetching all courses from the database
+     * and adding them to the unlinked courses list view, excluding the currently linked course.
+     */
     private static void updateUnlinkedCoursesListView() {
         LOGGER.debug("Updating unlinked modules list");
 
@@ -72,6 +84,11 @@ public final class ManageModuleController {
         }
     }
 
+    /**
+     * Retrieves the course ID of the currently linked course from the UI label.
+     *
+     * @return The course ID of the linked course, or 0 if not found or empty
+     */
     private static int getCourseIdFromLinkedCourse() {
         final Label linkedCourseIdLabel = Common.getNode(getViewStage(), "#linkedCourseIdLabel");
         final String labelText = linkedCourseIdLabel.getText();
@@ -198,6 +215,11 @@ public final class ManageModuleController {
         }
     }
 
+    /**
+     * Updates the linked course details with the selected course from the unlinked courses list.
+     *
+     * @param event The action event that triggered this method
+     */
     public static void swapLinkedCourse(ActionEvent event) {
         LOGGER.debug("Swapping linked module");
         final ListView<Course> unlinkedCoursesListView = Common.getNode(getViewStage(), "#unlinkedCoursesListView");
@@ -214,6 +236,11 @@ public final class ManageModuleController {
         updateUnlinkedCoursesListView();
     }
 
+    /**
+     * Updates the selected module in the database with the provided information.
+     *
+     * @param event The action event that triggered this method
+     */
     public static void updateModule(ActionEvent event) {
         LOGGER.debug("Updating module");
 
@@ -246,10 +273,20 @@ public final class ManageModuleController {
         }
     }
 
+    /**
+     * Hides the current stage and changes to the admin dashboard stage.
+     *
+     * @param event The action event that triggered this method
+     */
     public static void handleOnShowEvent(WindowEvent event) {
         updateListOfModules(new ActionEvent());
     }
 
+    /**
+     * Hides the current stage and changes to the admin dashboard stage.
+     *
+     * @param event The action event that triggered this method
+     */
     public static void handleBackButton(ActionEvent event) {
         LOGGER.debug("Handling back button");
         ViewFactory.getInstance().getManageModulesStage().hide();

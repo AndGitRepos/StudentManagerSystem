@@ -40,6 +40,14 @@ public class AccessStudentAssessmentsController {
         return ViewFactory.getInstance().getStudentAssessmentsStage();
     }
 
+    /**
+     * Updates the assessment list view with assessments from a specific course.
+     * Retrieves all modules for the given course, then finds all assessments for each module
+     * and displays them in the assessment list view.
+     *
+     * @param courseId The ID of the course to show assessments for
+     * @throws SQLException If there is an error accessing the database
+     */
     private static void updateAssessmentList(int courseId) {
         try {
             ListView<Assessment> assessmentsList = Common.getNode(getViewStage(), "#assessmentListView");
@@ -62,6 +70,13 @@ public class AccessStudentAssessmentsController {
         }
     }
 
+    /**
+     * Updates the UI labels with details of the selected assessment.
+     * Displays the assessment name, ID, description, due date, associated module name and lecturer,
+     * and the grade score for the selected assessment.
+     *
+     * @param assessment The Assessment object containing the details to display
+     */
     private static void updateAssessmentDetails(Assessment assessment) {
         try {
             // Assessment details - update
@@ -110,6 +125,12 @@ public class AccessStudentAssessmentsController {
         }
     }
 
+    /**
+     * Handles the event when a course is selected from the filter dropdown.
+     * Updates the assessment list view to show only assessments for the selected course.
+     *
+     * @param event The ActionEvent triggered by selecting a course from the ComboBox
+     */
     public static void handleFilterAssessments(ActionEvent event) {
         ComboBox<Course> filterByCourse = (ComboBox<Course>) event.getSource();
         Course chosenCourse = filterByCourse.getValue();
@@ -118,6 +139,12 @@ public class AccessStudentAssessmentsController {
         }
     }
 
+    /**
+     * Handles the event when a select button is clicked.
+     * Retrieves the selected assessment from the list view and updates the UI with its details.
+     *
+     * @param event The ActionEvent triggered by clicking the select button
+     */
     public static void handleSelectButton(ActionEvent event) {
         ListView<Assessment> assessmentsList = Common.getNode(getViewStage(), "#assessmentListView");
         Assessment chosenAssessment = assessmentsList.getSelectionModel().getSelectedItem();
@@ -126,6 +153,12 @@ public class AccessStudentAssessmentsController {
         }
     }
 
+    /**
+     * Handles the event when the refresh button is clicked.
+     * Updates the assessment list view with assessments from the selected course in the filter dropdown.
+     *
+     * @param event The ActionEvent triggered by clicking the refresh button
+     */
     public static void handleRefreshButton(ActionEvent event) {
         loadCoursesToFilter();
 
@@ -136,6 +169,10 @@ public class AccessStudentAssessmentsController {
         }
     }
 
+    /**
+     * Loads the courses that the current student is enrolled in to the filter dropdown.
+     * Retrieves the student's enrollments and populates the filter dropdown with the corresponding courses.
+     */
     public static void loadCoursesToFilter() {
         try {
             ComboBox<Course> filterByCourse = Common.getNode(getViewStage(), "#filterDropDown");
@@ -159,16 +196,34 @@ public class AccessStudentAssessmentsController {
         }
     }
 
+    /**
+     * Handles the event when the stage is shown.
+     * Loads the courses that the current student is enrolled in to the filter dropdown.
+     *
+     * @param event The WindowEvent triggered by showing the stage
+     */
     public static void handleOnShowEvent(WindowEvent event) {
         loadCoursesToFilter();
     }
 
+    /**
+     * Handles the event when the back button is clicked.
+     * Hides the current stage and changes to the student dashboard stage.
+     *
+     * @param event The ActionEvent triggered by clicking the back button
+     */
     public static void handleBackButton(ActionEvent event) {
         LOGGER.debug("Clicked back button");
         ViewFactory.getInstance().getStudentAssessmentsStage().hide();
         ViewFactory.getInstance().changeToStudentDashboardStage();
     }
 
+    /**
+     * Handles the event when the signout button is clicked.
+     * Hides the current stage and changes to the login stage.
+     *
+     * @param event The ActionEvent triggered by clicking the signout button
+     */
     public static void handleSignoutButton(ActionEvent event) {
         LOGGER.debug("Clicked signout button");
         ViewFactory.getInstance().getStudentAssessmentsStage().hide();

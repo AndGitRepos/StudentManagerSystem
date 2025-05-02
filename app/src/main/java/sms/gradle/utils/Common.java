@@ -15,11 +15,22 @@ public final class Common {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
+    /**
+     * Generates a SHA-256 hash of the given input string
+     * @param input The input string to hash
+     * @return The SHA-256 hash of the input string
+     */
     public static String generateSha256Hash(final String input) {
         LOGGER.debug("Generating SHA-256 hash for input: {}", input);
         return Hashing.sha256().hashString(input, StandardCharsets.UTF_8).toString();
     }
 
+    /**
+     * Creates a styled label
+     * @param text The text to display
+     * @param style The style to apply
+     * @return The styled label
+     */
     public static Label createStyledLabel(final String text, final String style) {
         Label label = new Label(text);
         label.setStyle(style);

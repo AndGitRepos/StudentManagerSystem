@@ -30,6 +30,12 @@ public final class DatabaseConnection {
         return instance;
     }
 
+    /**
+     * Creates a 'data' directory if it doesn't already exist.
+     * This directory is used to store the H2 database files.
+     *
+     * @throws RuntimeException if the data directory cannot be created
+     */
     private void createDataFolder() {
         LOGGER.debug("Creating data folder if it doesn't exist");
         File dataDir = new File("data");
@@ -45,6 +51,10 @@ public final class DatabaseConnection {
         LOGGER.debug("Data folder created successfully");
     }
 
+    /**
+     * Establishes a connection to the H2 database using the specified database path.
+     * If the connection fails, an error message is logged.
+     */
     private void connectToDatabase() {
         LOGGER.debug("Connecting to database");
         try {
@@ -58,6 +68,10 @@ public final class DatabaseConnection {
         return connection;
     }
 
+    /**
+     * Sets up the database tables by executing the SQL statements defined in the DatabaseScripts class.
+     * If the tables already exist, this method does nothing.
+     */
     private void setupTables() {
         LOGGER.debug("Setting up database tables");
         try (Statement statement = connection.createStatement()) {
@@ -78,6 +92,10 @@ public final class DatabaseConnection {
         }
     }
 
+    /**
+     * Checks if the database is populated with data.
+     * @return true if the database is populated, false otherwise.
+     */
     public boolean isPopulated() {
         LOGGER.debug("Checking if database is populated");
         try (Statement statement = connection.createStatement()) {

@@ -23,8 +23,15 @@ public final class ManageCourseController {
         return ViewFactory.getInstance().getManageCourseStage();
     }
 
+    /**
+     * Populates form fields with data from the selected course.
+     * Retrieves the course ID, name, and description from the selected course object
+     * and sets them in the corresponding UI text fields.
+     *
+     * @param selectedCourse The Course object containing the data to populate the form fields with.
+     *                      If null, no action is taken.
+     */
     private static void populateFormFields(Course selectedCourse) {
-
         if (selectedCourse != null) {
             LOGGER.debug("Populating field for course: {}", selectedCourse);
             TextField courseIdField = Common.getNode(getViewStage(), "#courseIdField");
@@ -37,6 +44,13 @@ public final class ManageCourseController {
         }
     }
 
+    /**
+     * Clears all input fields in the course management form.
+     * Specifically clears:
+     * - Course ID field
+     * - Course name field
+     * - Course description text area
+     */
     private static void clearFields() {
         LOGGER.debug("Clearing Fields");
         TextField courseIdField = Common.getNode(getViewStage(), "#courseIdField");
@@ -47,6 +61,12 @@ public final class ManageCourseController {
         courseDescriptionArea.clear();
     }
 
+    /**
+     * Event handler for selecting a course from the list view.
+     * Populates the course form fields with the selected course's data.
+     *
+     * @param event The action event that triggered this method.
+     */
     public static void selectCourse(ActionEvent event) {
         LOGGER.debug("Selecting course");
         ListView<Course> courseListView = Common.getNode(getViewStage(), "#courseListView");
@@ -55,8 +75,13 @@ public final class ManageCourseController {
         populateFormFields(selectedCourse);
     }
 
+    /**
+     * Refreshes the list of courses displayed in the course list view.
+     * Clears the current list and repopulates it with all courses from the database.
+     *
+     * @param event The action event that triggered this method
+     */
     public static void refreshListOfCourses(ActionEvent event) {
-
         LOGGER.debug("Updating & Refreshing List Of Courses");
         ListView<Course> courseListView = Common.getNode(getViewStage(), "#courseListView");
 
@@ -69,6 +94,14 @@ public final class ManageCourseController {
         }
     }
 
+    /**
+     * Event handler for creating a new course.
+     * Retrieves the course name and description from the form fields,
+     * creates a new Course object, and adds it to the database.
+     * Refreshes the course list view and clears the form fields.
+     *
+     * @param event The action event that triggered this method.
+     */
     public static void createNewCourse(ActionEvent event) {
         LOGGER.debug("Creating new Course member");
         TextField courseNameField = Common.getNode(getViewStage(), "#courseNameField");
@@ -88,6 +121,14 @@ public final class ManageCourseController {
         }
     }
 
+    /**
+     * Event handler for updating an existing course.
+     * Retrieves the course ID, name, and description from the form fields,
+     * creates a new Course object, and updates it in the database.
+     * Refreshes the course list view and clears the form fields.
+     *
+     * @param event The action event that triggered this method.
+     */
     public static void updateCourse(ActionEvent event) {
         LOGGER.debug("Updating selected Course member");
         TextField courseIdField = Common.getNode(getViewStage(), "#courseIdField");
@@ -107,6 +148,13 @@ public final class ManageCourseController {
         }
     }
 
+    /**
+     * Event handler for deleting a course.
+     * Prompts the user for confirmation before deleting the selected course.
+     * If confirmed, deletes the course from the database and refreshes the course list view.
+     *
+     * @param event The action event that triggered this method.
+     */
     public static void deleteCourse(ActionEvent event) {
         LOGGER.debug("Delete selected Course member");
 
@@ -142,16 +190,34 @@ public final class ManageCourseController {
         });
     }
 
+    /**
+     * Event handler for the "On Show" event of the course management stage.
+     * Refreshes the list of courses when the stage is shown.
+     *
+     * @param event The window event that triggered this method.
+     */
     public static void handleOnShowEvent(WindowEvent event) {
         refreshListOfCourses(new ActionEvent());
     }
 
+    /**
+     * Event handler for navigating back to the admin dashboard.
+     * Hides the current stage and changes the view to the admin dashboard.
+     *
+     * @param event The action event that triggered this method.
+     */
     public static void handleBackButton(ActionEvent event) {
         LOGGER.debug("Returning to Main Course Dashboard");
         ViewFactory.getInstance().getManageCourseStage().hide();
         ViewFactory.getInstance().changeToAdminDashboardStage();
     }
 
+    /**
+     * Event handler for logging out and returning to the login stage.
+     * Hides the current stage and changes the view to the login stage.
+     *
+     * @param event The action event that triggered this method.
+     */
     public static void handleLogoutButton(ActionEvent event) {
         LOGGER.debug("Logging Out - returning to Login Page");
         ViewFactory.getInstance().getManageCourseStage().hide();

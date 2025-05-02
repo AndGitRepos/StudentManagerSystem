@@ -110,6 +110,34 @@ public final class ManageStudentController {
     }
 
     /**
+     * Updates the student in the database with the provided information.
+     *
+     * @param event The action event that triggered this method
+     */
+    public static void updateStudent(ActionEvent event) {
+        final TextField studentIdField = Common.getNode(getViewStage(), "#studentIdField");
+        final TextField firstNameField = Common.getNode(getViewStage(), "#firstNameField");
+        final TextField lastNameField = Common.getNode(getViewStage(), "#lastNameField");
+        final DatePicker dateOfBirthPicker = Common.getNode(getViewStage(), "#dateOfBirthPicker");
+        final DatePicker joinDatePicker = Common.getNode(getViewStage(), "#joinDatePicker");
+        final TextField emailField = Common.getNode(getViewStage(), "#emailField");
+        final PasswordField passwordField = Common.getNode(getViewStage(), "#passwordField");
+
+        try {
+            final Student updatedStudent = new Student(
+                    Integer.parseInt(studentIdField.getText()),
+                    firstNameField.getText(),
+                    lastNameField.getText(),
+                    emailField.getText(),
+                    java.sql.Date.valueOf(dateOfBirthPicker.getValue()),
+                    java.sql.Date.valueOf(joinDatePicker.getValue()));
+            StudentDAO.update(updatedStudent, Common.generateSha256Hash(passwordField.getText()));
+        } catch (SQLException e) {
+            LOGGER.error("Failed to update student: ", e);
+        }
+    }
+
+    /**
      * Creates a new student in the database with the provided information.
      *
      * @param event The action event that triggered this method
@@ -161,6 +189,13 @@ public final class ManageStudentController {
         }
     }
 
+    /**
+     * Enrolls the selected student in a course from the available courses list.
+     * Takes the selected course from the available courses list view and adds it to the
+     * enrolled courses list view. Creates a new CourseEnrollment record in the database.
+     *
+     * @param event The action event that triggered this method
+     */
     public static void enrollCourse(ActionEvent event) {
         final TextField studentIdField = Common.getNode(getViewStage(), "#studentIdField");
         final ListView<Course> enrolledCourses = Common.getNode(getViewStage(), "#enrolledCoursesListView");
@@ -191,6 +226,13 @@ public final class ManageStudentController {
         }
     }
 
+    /**
+     * Unenrolls the selected student from a course from the enrolled courses list.
+     * Takes the selected course from the enrolled courses list view and removes it from the
+     * enrolled courses list view. Deletes the corresponding CourseEnrollment record from the database.
+     *
+     * @param event The action event that triggered this method
+     */
     public static void unenrollCourse(ActionEvent event) {
         final TextField studentIdField = Common.getNode(getViewStage(), "#studentIdField");
         final ListView<Course> enrolledCourses = Common.getNode(getViewStage(), "#enrolledCoursesListView");
@@ -230,10 +272,20 @@ public final class ManageStudentController {
         }
     }
 
+    /**
+     * Hides the current stage and changes to the admin dashboard stage.
+     *
+     * @param event The action event that triggered this method
+     */
     public static void handleOnShowEvent(WindowEvent event) {
         updateListOfStudents(new ActionEvent());
     }
 
+    /**
+     * Hides the current stage and changes to the admin dashboard stage.
+     *
+     * @param event The action event that triggered this method
+     */
     public static void handleBackButton(ActionEvent event) {
         LOGGER.debug("Handling back button");
         ViewFactory.getInstance().getManageStudentStage().hide();

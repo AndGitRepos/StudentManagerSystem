@@ -305,7 +305,6 @@ public final class MockDatabaseGenerator {
                     MockDatabaseGenerator.LAST_NAMES.get(random.nextInt(MockDatabaseGenerator.LAST_NAMES.size()));
             String email = generateUniqueStudentEmail(studentNum);
 
-            // Check if a student with this email already exists
             if (StudentDAO.findByEmail(email).isPresent()) {
                 LOGGER.debug("Student with email {} already exists, skipping", email);
                 continue;
@@ -351,7 +350,6 @@ public final class MockDatabaseGenerator {
                     int studentNum = Integer.parseInt(email.substring(7, email.indexOf("@")));
                     highestStudentNum = Math.max(highestStudentNum, studentNum);
                 } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
-                    // Skip emails that don't match the expected pattern
                     LOGGER.debug("Skipping email that doesn't match pattern: {}", email);
                 }
             }
@@ -371,7 +369,6 @@ public final class MockDatabaseGenerator {
         for (int courseNum = 0; courseNum < NUMBER_OF_COURSES; courseNum++) {
             String courseName = MockDatabaseGenerator.COURSE_NAMES.get(courseNum);
 
-            // Check if a course with this name already exists
             if (CourseDAO.findByName(courseName).isPresent()) {
                 LOGGER.debug("Course with name {} already exists, skipping", courseName);
                 continue;
@@ -398,7 +395,6 @@ public final class MockDatabaseGenerator {
         }
 
         for (Course course : courses) {
-            // Check how many modules this course already has
             List<Module> existingModules = ModuleDAO.findByCourseId(course.getId());
             int modulesToAdd = NUMBER_OF_MODULES_PER_COURSE - existingModules.size();
 
@@ -413,7 +409,6 @@ public final class MockDatabaseGenerator {
                 String lecturer =
                         MockDatabaseGenerator.LAST_NAMES.get(random.nextInt(MockDatabaseGenerator.LAST_NAMES.size()));
 
-                // Create a unique description to avoid conflicts
                 String description = "Description-" + course.getId() + "-" + System.currentTimeMillis() + "-" + i;
 
                 ModuleDAO.addModule(new Module(0, moduleName, description, lecturer, course.getId()));
@@ -437,7 +432,6 @@ public final class MockDatabaseGenerator {
         }
 
         for (Module module : modules) {
-            // Check how many assessments this module already has
             List<Assessment> existingAssessments = AssessmentDAO.findByModuleId(module.getId());
             int assessmentsToAdd = NUMBER_OF_ASSESSMENTS_PER_MODULE - existingAssessments.size();
 
@@ -447,7 +441,6 @@ public final class MockDatabaseGenerator {
             }
 
             for (int i = 0; i < assessmentsToAdd; i++) {
-                // Create a unique name and description to avoid conflicts
                 String name = "Assessment-" + module.getId() + "-" + (existingAssessments.size() + i + 1);
                 String description = "Description-" + module.getId() + "-" + System.currentTimeMillis() + "-" + i;
 
@@ -477,7 +470,6 @@ public final class MockDatabaseGenerator {
         }
 
         for (Student student : students) {
-            // Check how many courses this student is already enrolled in
             List<CourseEnrollment> existingEnrollments = CourseEnrollmentDAO.findByStudentId(student.getId());
             int enrollmentsToAdd =
                     Math.min(NUMBER_OF_ENROLLMENTS_PER_STUDENT - existingEnrollments.size(), courses.size());
@@ -504,7 +496,6 @@ public final class MockDatabaseGenerator {
                 CourseEnrollmentDAO.addCourseEnrollment(
                         new CourseEnrollment(0, student.getId(), courseId, new Date(System.currentTimeMillis())));
 
-                // Add some random results for this enrollment
                 addRandomResultsForEnrollment(student.getId(), courseId, random);
             }
         }
@@ -526,7 +517,6 @@ public final class MockDatabaseGenerator {
         for (Module module : modules) {
             List<Assessment> assessments = AssessmentDAO.findByModuleId(module.getId());
             for (Assessment assessment : assessments) {
-                // Check if a result already exists for this student and assessment
                 if (ResultDAO.findByStudentAndAssessment(studentId, assessment.getId())
                         .isPresent()) {
                     continue;

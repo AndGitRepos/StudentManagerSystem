@@ -221,6 +221,12 @@ public final class AssessmentDAO {
         }
     }
 
+    /**
+     * Deletes all assessments associated with a module ID
+     * @param moduleId The module ID of the assessments to delete
+     * @return The number of assessments deleted
+     * @throws SQLException if there is an error executing the delete operation
+     */
     public static int deleteByModuleId(final int moduleId) throws SQLException {
         LOGGER.debug("Deleting assessments by module ID: {}", moduleId);
         List<Assessment> assessments = AssessmentDAO.findByModuleId(moduleId);

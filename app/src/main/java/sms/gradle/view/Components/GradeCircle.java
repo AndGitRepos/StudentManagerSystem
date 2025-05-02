@@ -17,6 +17,12 @@ public class GradeCircle extends StackPane {
     private static final int MERIT_GRADE = 70;
     private static final int PASSING_GRADE = 50;
 
+    /**
+     * Constructor for GradeCircle
+     *
+     * @param grade The grade score to be displayed
+     * @throws IllegalArgumentException if the grade is not between 0 and 100
+     */
     public GradeCircle(final int grade) {
 
         getStylesheets().add(getClass().getResource("/styles/components.css").toExternalForm());
@@ -36,12 +42,23 @@ public class GradeCircle extends StackPane {
         Tooltip.install(this, tooltip);
     }
 
+    /**
+     * Validates the grade score
+     *
+     * @param grade The grade score to be validated
+     * @throws IllegalArgumentException if the grade is not between 0 and 100
+     */
     private void gradeValidation(final int grade) {
         if (grade < 0 || grade > 100) {
             throw new IllegalArgumentException("Grade must be between 0 and 100");
         }
     }
 
+    /**
+     * Styles the circle colour based on the grade score
+     *
+     * @param grade The grade score to be styled
+     */
     private void styleCircleColourByGrade(final int grade) {
 
         if (grade >= EXCEPTIONAL_GRADE) {

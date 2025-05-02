@@ -31,6 +31,12 @@ public class ManageAssessmentsController {
         return ViewFactory.getInstance().getManageAssessmentsStage();
     }
 
+    /**
+     * Updates the assessment details form fields with information from the selected assessment.
+     * Populates the assessment ID, name, description, and due date fields.
+     *
+     * @param selectedAssessment The Assessment object containing the details to display
+     */
     private static void updateAssessmentDetails(Assessment selectedAssessment) {
         final TextField assessmentIdField = Common.getNode(getViewStage(), "#assessmentIdField");
         final TextField nameField = Common.getNode(getViewStage(), "#nameField");
@@ -43,6 +49,13 @@ public class ManageAssessmentsController {
         dueDatePicker.setValue(selectedAssessment.getDueDate().toLocalDate());
     }
 
+    /**
+     * Updates the UI labels with details of the linked module.
+     * Populates the module name, ID, description, lecturer, and associated course name.
+     * Retrieves course information from the database to display the course name.
+     *
+     * @param linkedModule The Module object containing the details to display
+     */
     private static void updateLinkedModuleDetails(Module linkedModule) {
         LOGGER.debug("Updating linked module");
         try {
@@ -63,6 +76,10 @@ public class ManageAssessmentsController {
         }
     }
 
+    /**
+     * Updates the list of unlinked modules by fetching all modules from the database
+     * and adding them to the unlinked modules list view, excluding the currently linked module.
+     */
     private static void updateUnlinkedModulesListView() {
         LOGGER.debug("Updating unlinked modules list");
 
@@ -82,6 +99,11 @@ public class ManageAssessmentsController {
         }
     }
 
+    /**
+     * Retrieves the module ID of the currently linked module from the UI label.
+     *
+     * @return The module ID of the linked module, or 0 if not found or empty
+     */
     private static int getModuleIdFromLinkedModule() {
         final Label linkedModuleIdLabel = Common.getNode(getViewStage(), "#linkedModuleIdLabel");
         final String labelText = linkedModuleIdLabel.getText();
@@ -208,6 +230,11 @@ public class ManageAssessmentsController {
         }
     }
 
+    /**
+     * Updates the linked module details with the selected module from the unlinked modules list.
+     *
+     * @param event The action event that triggered this method
+     */
     public static void swapLinkedModule(ActionEvent event) {
         LOGGER.debug("Swapping linked module");
         ListView<Module> unlinkedModulesListView = Common.getNode(getViewStage(), "#unlinkedModulesListView");
@@ -224,6 +251,11 @@ public class ManageAssessmentsController {
         updateUnlinkedModulesListView();
     }
 
+    /**
+     * Updates the selected assessment in the database with the provided information.
+     *
+     * @param event The action event that triggered this method
+     */
     public static void updateAssessment(ActionEvent event) {
         LOGGER.debug("Updating assessment");
 
@@ -256,10 +288,20 @@ public class ManageAssessmentsController {
         }
     }
 
+    /**
+     * Updates the list of assessments with all the assessments in the database
+     * @param event The action event that triggered this method
+     */
     public static void handleOnShowEvent(WindowEvent event) {
         updateListOfAssessments(new ActionEvent());
     }
 
+    /**
+     * Handles the back button action event.
+     * Hides the current stage and changes to the admin dashboard stage.
+     *
+     * @param event The action event that triggered this method
+     */
     public static void handleBackButton(ActionEvent event) {
         LOGGER.debug("Handling back button");
         ViewFactory.getInstance().getManageAssessmentsStage().hide();
