@@ -71,7 +71,7 @@ public class ManageAdminView extends BorderPane implements CoreViewInterface {
                 }
 
                 String displayText = String.format(
-                        "%s %s\nID**: %d\nEmail: %s",
+                        "%s %s\nID: %d\nEmail: %s",
                         admin.getFirstName(), admin.getLastName(), admin.getId(), admin.getEmail());
                 setText(displayText);
                 setWrapText(true);

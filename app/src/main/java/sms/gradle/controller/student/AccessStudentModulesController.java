@@ -1,4 +1,4 @@
-package sms.gradle.controller.StudentControllers;
+package sms.gradle.controller.student;
 
 import java.sql.SQLException;
 import java.util.List;
