@@ -148,18 +148,19 @@ public final class StudentDAO {
      * @return The number of rows affected (1 if successful, 0 if student not found)
      * @throws SQLException if there is an error executing the update operation
      */
-    public static int update(final Student student) throws SQLException {
+    public static int update(final Student student, final String hashedPassword) throws SQLException {
         LOGGER.debug("Updating student: {}", student);
         final String sql =
-                "UPDATE students SET first_name = ?, last_name = ?, email = ?, date_of_birth = ?, join_date = ? WHERE id = ?";
+                "UPDATE students SET first_name = ?, last_name = ?, email = ?, password = ?, date_of_birth = ?, join_date = ? WHERE id = ?";
         try (PreparedStatement updateSqlStatement =
                 DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
             updateSqlStatement.setString(1, student.getFirstName());
             updateSqlStatement.setString(2, student.getLastName());
             updateSqlStatement.setString(3, student.getEmail());
-            updateSqlStatement.setDate(4, student.getDateOfBirth());
-            updateSqlStatement.setDate(5, student.getJoinDate());
-            updateSqlStatement.setInt(6, student.getId());
+            updateSqlStatement.setString(4, hashedPassword);
+            updateSqlStatement.setDate(5, student.getDateOfBirth());
+            updateSqlStatement.setDate(6, student.getJoinDate());
+            updateSqlStatement.setInt(7, student.getId());
             return updateSqlStatement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error("Failed to update student: {}", student, e);

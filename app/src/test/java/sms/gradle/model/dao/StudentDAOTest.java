@@ -187,19 +187,21 @@ public class StudentDAOTest {
     public void testUpdateStudent() throws SQLException {
         Date dateOfBirth = Date.valueOf("2003-10-16");
         Date joinDate = Date.valueOf("2022-09-14");
+        String hashedPassword = "hashedPassword";
         Student student = new Student(1, "John", "Smith", "johnsmith@gmail.com", dateOfBirth, joinDate);
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
         when(mockPreparedStatement.executeUpdate()).thenReturn(1);
 
-        int result = StudentDAO.update(student);
+        int result = StudentDAO.update(student, hashedPassword);
 
         assertEquals(1, result);
         verify(mockPreparedStatement).setString(1, student.getFirstName());
         verify(mockPreparedStatement).setString(2, student.getLastName());
         verify(mockPreparedStatement).setString(3, student.getEmail());
-        verify(mockPreparedStatement).setDate(4, student.getDateOfBirth());
-        verify(mockPreparedStatement).setDate(5, student.getJoinDate());
-        verify(mockPreparedStatement).setInt(6, student.getId());
+        verify(mockPreparedStatement).setString(4, hashedPassword);
+        verify(mockPreparedStatement).setDate(5, student.getDateOfBirth());
+        verify(mockPreparedStatement).setDate(6, student.getJoinDate());
+        verify(mockPreparedStatement).setInt(7, student.getId());
     }
 
     @Test

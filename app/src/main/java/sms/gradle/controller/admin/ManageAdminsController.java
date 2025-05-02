@@ -28,6 +28,12 @@ public final class ManageAdminsController {
         return ViewFactory.getInstance().getManageAdminStage();
     }
 
+    /**
+     * Verifies that all required admin fields in the form are filled out.
+     * Checks the first name, last name, and email fields to ensure they are not empty.
+     *
+     * @return true if all required fields are filled out, false if any field is empty
+     */
     private static boolean verifyAdminFields() {
         LOGGER.debug("Verifying admin fields");
         final TextField adminFirstNameField = Common.getNode(getViewStage(), "#firstNameField");
@@ -39,6 +45,14 @@ public final class ManageAdminsController {
                 && !adminEmailField.getText().isEmpty();
     }
 
+    /**
+     * Populates the admin form fields with data from the selected admin.
+     * Sets the ID, email, first name, and last name fields based on the admin object.
+     * Clears the password field for security.
+     *
+     * @param selectedAdmin The Admin object containing the data to populate the form with.
+     *                     If null, no fields will be populated.
+     */
     private static void populateFormFields(Admin selectedAdmin) {
         final TextField adminFirstNameField = Common.getNode(getViewStage(), "#firstNameField");
         final TextField adminLastNameField = Common.getNode(getViewStage(), "#lastNameField");
@@ -56,6 +70,10 @@ public final class ManageAdminsController {
         }
     }
 
+    /**
+     * Clears all admin form fields.
+     * Clears the values of the ID, first name, last name, email, and password fields.
+     */
     private static void clearFields() {
         LOGGER.debug("Clearing Fields");
         final TextField adminFirstNameField = Common.getNode(getViewStage(), "#firstNameField");
@@ -71,6 +89,12 @@ public final class ManageAdminsController {
         adminPasswordField.clear();
     }
 
+    /**
+     * Event handler for selecting an admin from the list view.
+     * Populates the admin form fields with the selected admin's data.
+     *
+     * @param event The action event that triggered this method.
+     */
     public static void selectAdmin(ActionEvent event) {
         LOGGER.debug("Selecting admin");
         final ListView<Admin> adminListView = Common.getNode(getViewStage(), "#adminListView");
@@ -79,6 +103,12 @@ public final class ManageAdminsController {
         populateFormFields(selectedAdmin);
     }
 
+    /**
+     * Event handler for refreshing the list of admins.
+     * Clears the admin list view and fetches the latest list of admins from the database.
+     *
+     * @param event The action event that triggered this method.
+     */
     public static void refreshListOfAdmins(ActionEvent event) {
         LOGGER.debug("Updating & Refreshing List Of Admins");
         final ListView<Admin> adminListView = Common.getNode(getViewStage(), "#adminListView");
@@ -92,6 +122,14 @@ public final class ManageAdminsController {
         }
     }
 
+    /**
+     * Event handler for creating a new admin.
+     * Verifies that all required fields are filled out.
+     * If verified, creates a new admin object and adds it to the database.
+     * Refreshes the admin list view and clears the form fields.
+     *
+     * @param event The action event that triggered this method.
+     */
     public static void createNewAdmin(ActionEvent event) {
         LOGGER.debug("Creating new Admin member");
 
@@ -120,6 +158,13 @@ public final class ManageAdminsController {
         }
     }
 
+    /**
+     * Event handler for updating an existing admin.
+     * Verifies that all required fields are filled out.
+     * If verified, updates the selected admin with the new data and refreshes the list view.
+     *
+     * @param event The action event that triggered this method.
+     */
     public static void updateAdmin(ActionEvent event) {
         LOGGER.debug("Updating selected Admin member");
 
@@ -150,6 +195,13 @@ public final class ManageAdminsController {
         }
     }
 
+    /**
+     * Event handler for deleting an admin.
+     * Prompts the user for confirmation before deleting the selected admin.
+     * If confirmed, deletes the admin from the database and refreshes the list view.
+     *
+     * @param event The action event that triggered this method.
+     */
     public static void deleteAdmin(ActionEvent event) {
         LOGGER.debug("Delete selected Admin member");
 
@@ -186,16 +238,34 @@ public final class ManageAdminsController {
         });
     }
 
+    /**
+     * Event handler for handling the window show event.
+     * Refreshes the list of admins when the manage admin stage is shown.
+     *
+     * @param event The window event that triggered this method.
+     */
     public static void handleOnShowEvent(WindowEvent event) {
         refreshListOfAdmins(new ActionEvent());
     }
 
+    /**
+     * Event handler for navigating back to the admin dashboard.
+     * Hides the current stage and changes the view to the admin dashboard.
+     *
+     * @param event The action event that triggered this method.
+     */
     public static void handleBack(ActionEvent event) {
         LOGGER.debug("Returning to Main Admin Dashboard");
         ViewFactory.getInstance().getManageAdminStage().hide();
         ViewFactory.getInstance().changeToAdminDashboardStage();
     }
 
+    /**
+     * Event handler for logging out and returning to the login stage.
+     * Hides the current stage and changes the view to the login stage.
+     *
+     * @param event The action event that triggered this method.
+     */
     public static void handleLogout(ActionEvent event) {
         LOGGER.debug("Logging Out - returning to LogIn Page");
         ViewFactory.getInstance().getManageAdminStage().hide();

@@ -207,6 +207,11 @@ public final class AdminDAO {
         }
     }
 
+    /**
+     * Gets the number of rows in the admins table
+     * @return The number of rows in the admins table
+     * @throws SQLException if there is an error executing the query
+     */
     public static int getTableSize() throws SQLException {
         LOGGER.debug("Getting table size");
         final String sql = "SELECT COUNT(*) FROM admins";

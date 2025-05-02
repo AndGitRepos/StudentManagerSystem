@@ -74,6 +74,11 @@ public class StudentDashboardController {
         }
     }
 
+    /**
+     * Displays course details for selected course
+     *
+     * @param dashboardView instance of student-dashboard view
+     */
     public static void handleSelectCourseButton(ActionEvent event) {
         final ListView<Course> courseList = Common.getNode(getViewStage(), "#courseListView");
 
@@ -95,21 +100,44 @@ public class StudentDashboardController {
         }
     }
 
+    /**
+     * Loads all courses from database to course list view
+     *
+     * @param dashboardView instance of student-dashboard view
+     */
     public static void handleOnShowEvent(WindowEvent event) {
         handleCourseRefreshButton(new ActionEvent());
     }
 
+    /**
+     * Handler for the view statistics button click event
+     * Currently logs the button click but functionality is not yet implemented
+     *
+     * @param event The ActionEvent triggered by clicking the view stats button
+     */
     public static void handleViewStatsButton(ActionEvent event) {
         LOGGER.debug("Clicked 'view stats' button");
         // TODO: Implement access stats view
     }
 
+    /**
+     * Handler for the view assessments button click event
+     * Currently logs the button click but functionality is not yet implemented
+     *
+     * @param event The ActionEvent triggered by clicking the view assessments button
+     */
     public static void handleViewAssessmentsButton(ActionEvent event) {
         LOGGER.debug("Clicked 'access assessments' button");
         ViewFactory.getInstance().getStudentDashboardStage().hide();
         ViewFactory.getInstance().changeToStudentAssessmentsStage();
     }
 
+    /**
+     * Handler for the signout button click event
+     * Logs the button click and changes the stage to the login stage
+     *
+     * @param event The ActionEvent triggered by clicking the signout button
+     */
     public static void handleSignout(ActionEvent event) {
         LOGGER.debug("Clicked signout button");
         ViewFactory.getInstance().getStudentDashboardStage().hide();

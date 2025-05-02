@@ -13,6 +13,14 @@ public class ModuleRow extends HBox {
 
     private final GradeCircle gradeCircle;
 
+    /**
+     * Creates a new module row
+     *
+     * @param moduleName The name of the module
+     * @param moduleLecturer The lecturer of the module
+     * @param moduleRoomNumber The room number of the module
+     * @param moduleGrade The grade of the module
+     */
     public ModuleRow(
             final String moduleName,
             final String moduleLecturer,
@@ -32,11 +40,23 @@ public class ModuleRow extends HBox {
         setUpToolTips(moduleName, moduleLecturer, moduleRoomNumber);
     }
 
+    /**
+     * Sets up the layout properties for the module row.
+     * Configures spacing between elements and padding around the row.
+     */
     private void setUpModuleRowLayout() {
         setSpacing(20);
         setPadding(new Insets(10));
     }
 
+    /**
+     * Creates a container for module details (name, lecturer, room number).
+     *
+     * @param moduleName The name of the module
+     * @param moduleLecturer The lecturer of the module
+     * @param moduleRoomNumber The room number of the module
+     * @return A VBox containing the module details
+     */
     private VBox createModuleDetailsContainer(
             final String moduleName, final String moduleLecturer, final String moduleRoomNumber) {
 
@@ -49,6 +69,13 @@ public class ModuleRow extends HBox {
         return container;
     }
 
+    /**
+     * Sets up a tooltip for the module row displaying module details.
+     *
+     * @param moduleName The name of the module
+     * @param moduleLecturer The lecturer of the module
+     * @param moduleRoomNumber The room number of the module
+     */
     private void setUpToolTips(final String moduleName, final String moduleLecturer, final String moduleRoomNumber) {
         Tooltip toolTip = (new Tooltip(
                 "Module: " + moduleName + "\nLecturer: " + moduleLecturer + "\nRoom No: " + moduleRoomNumber));
