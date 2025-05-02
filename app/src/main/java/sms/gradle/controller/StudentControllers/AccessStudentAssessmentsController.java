@@ -160,7 +160,7 @@ public class AccessStudentAssessmentsController {
         }
     }
 
-    public static void handleCourseFilterLoading(WindowEvent event) {
+    public static void handleOnShowEvent(WindowEvent event) {
         loadCoursesToFilter();
     }
 

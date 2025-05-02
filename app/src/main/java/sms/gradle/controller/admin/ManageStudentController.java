@@ -7,6 +7,7 @@ import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.model.dao.CourseDAO;
@@ -227,6 +228,10 @@ public final class ManageStudentController {
         } catch (SQLException e) {
             LOGGER.error("Failed to unenroll student from course", e);
         }
+    }
+
+    public static void handleOnShowEvent(WindowEvent event) {
+        updateListOfStudents(new ActionEvent());
     }
 
     public static void handleBackButton(ActionEvent event) {

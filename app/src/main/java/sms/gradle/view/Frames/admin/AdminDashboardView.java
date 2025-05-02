@@ -5,11 +5,12 @@ import static javafx.geometry.Pos.CENTER;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.controller.admin.AdminDashboardController;
+import sms.gradle.model.entities.Course;
 import sms.gradle.view.CoreViewInterface;
 
 public class AdminDashboardView extends VBox implements CoreViewInterface {
@@ -24,7 +25,7 @@ public class AdminDashboardView extends VBox implements CoreViewInterface {
     private Button viewCourseButton = new Button("View Course");
     private Button logoutButton = new Button("Logout");
     private VBox courseListContainer = new VBox(5);
-    private ScrollPane courseScrollPane = new ScrollPane(courseListContainer);
+    private ListView<Course> courseListView = new ListView<>();
 
     public AdminDashboardView() {
         LOGGER.debug("Initialising Admin Dashboard View");
@@ -48,9 +49,7 @@ public class AdminDashboardView extends VBox implements CoreViewInterface {
 
     @Override
     public void initialiseCoreUIComponents() {
-        courseScrollPane.setPrefViewportHeight(200);
-        courseScrollPane.setPrefViewportWidth(100);
-        courseScrollPane.setFitToWidth(true);
+        courseListView.setId("courseListView");
 
         viewCourseButton.setPrefWidth(200);
         manageAssessmentsButton.setPrefWidth(200);
@@ -66,7 +65,6 @@ public class AdminDashboardView extends VBox implements CoreViewInterface {
         getStyleClass().add("admin-dashboard-container");
         welcomeLabel.getStyleClass().add("welcome-label");
 
-        courseScrollPane.getStyleClass().add("course-scroll-pane");
         courseListContainer.getStyleClass().add("course-list-container");
 
         viewCourseButton.getStyleClass().add("menu-button");
@@ -87,7 +85,7 @@ public class AdminDashboardView extends VBox implements CoreViewInterface {
         menu.getChildren()
                 .addAll(
                         welcomeLabel,
-                        courseScrollPane,
+                        courseListView,
                         viewCourseButton,
                         manageCoursesButton,
                         manageModulesButton,

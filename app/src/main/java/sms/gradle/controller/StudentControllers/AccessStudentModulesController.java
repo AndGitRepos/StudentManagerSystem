@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -101,6 +102,10 @@ public final class AccessStudentModulesController {
             alert.setContentText("Failed in loading modules. Try again");
             alert.showAndWait();
         }
+    }
+
+    public static void handleOnShowEvent(WindowEvent event) {
+        handleRefreshModulesButton(new ActionEvent());
     }
 
     public static void handleBackButton(ActionEvent event) {
