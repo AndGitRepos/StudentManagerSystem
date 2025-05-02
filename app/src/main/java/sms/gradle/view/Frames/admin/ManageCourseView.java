@@ -5,6 +5,7 @@ import static javafx.geometry.Pos.CENTER;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -74,6 +75,22 @@ public class ManageCourseView extends BorderPane implements CoreViewInterface {
     @Override
     public void initialiseCoreUIComponents() {
         courseIdField.setEditable(false);
+
+        courseListView.setCellFactory(listView -> new ListCell<Course>() {
+            @Override
+            protected void updateItem(Course course, boolean empty) {
+                super.updateItem(course, empty);
+
+                if (empty || course == null) {
+                    setText(null);
+                    return;
+                }
+                String displayText = String.format(
+                        "%s\nID: %d\nDescription: %s", course.getName(), course.getId(), course.getDescription());
+                setText(displayText);
+                setWrapText(true);
+            }
+        });
         setComponentIds();
     }
 

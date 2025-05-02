@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -95,6 +96,46 @@ public class ManageStudentView extends BorderPane implements CoreViewInterface {
     @Override
     public void initialiseCoreUIComponents() {
         studentIdField.setEditable(false);
+
+        studentListView.setCellFactory(listView -> new ListCell<Student>() {
+            @Override
+            protected void updateItem(Student student, boolean empty) {
+                super.updateItem(student, empty);
+
+                if (empty || student == null) {
+                    setText(null);
+                    return;
+                }
+                String displayText = String.format(
+                        "%s %s\nID: %d\nEmail: %s\nJoined: %s",
+                        student.getFirstName(),
+                        student.getLastName(),
+                        student.getId(),
+                        student.getEmail(),
+                        student.getJoinDate());
+                setText(displayText);
+                setWrapText(true);
+            }
+        });
+
+        ListCell<Course> courseCell = new ListCell<Course>() {
+            @Override
+            protected void updateItem(Course course, boolean empty) {
+                super.updateItem(course, empty);
+
+                if (empty || course == null) {
+                    setText(null);
+                    return;
+                }
+                String displayText = String.format(
+                        "%s\nID: %d\nDescription: %s", course.getName(), course.getId(), course.getDescription());
+                setText(displayText);
+                setWrapText(true);
+            }
+        };
+
+        enrolledCoursesListView.setCellFactory(listView -> courseCell);
+        availableCoursesListView.setCellFactory(listView -> courseCell);
 
         setCoreUiComponentIds();
     }
