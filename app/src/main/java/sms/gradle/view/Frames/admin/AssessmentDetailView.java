@@ -184,39 +184,6 @@ public final class AssessmentDetailView extends BorderPane implements CoreViewIn
             moduleScrollPane.setPrefHeight(moduleHeight);
             studentScrollPane.setPrefHeight(availableHeight * 0.8);
         });
-
-        sceneProperty().addListener((observable, oldScene, newScene) -> {
-            if (newScene != null) {
-                // When the view is added to a scene, maximize it
-                newScene.windowProperty().addListener((prop, oldWindow, newWindow) -> {
-                    if (newWindow != null) {
-                        maximizeToScreen();
-                    }
-                });
-            }
-        });
-    }
-
-    /**
-     * Maximizes the view to fill the available screen space without going into fullscreen mode.
-     * This method is called when the view is added to a scene and window.
-     */
-    public void maximizeToScreen() {
-        javafx.stage.Screen screen = javafx.stage.Screen.getPrimary();
-        javafx.geometry.Rectangle2D bounds = screen.getVisualBounds();
-
-        if (getScene() != null && getScene().getWindow() != null) {
-            javafx.stage.Stage stage = (javafx.stage.Stage) getScene().getWindow();
-
-            stage.setX(bounds.getMinX());
-            stage.setY(bounds.getMinY());
-            stage.setWidth(bounds.getWidth());
-            stage.setHeight(bounds.getHeight());
-
-            stage.setFullScreen(false);
-
-            LOGGER.debug("View maximized to screen dimensions: {}x{}", bounds.getWidth(), bounds.getHeight());
-        }
     }
 
     /**
