@@ -83,7 +83,6 @@ public final class AccessStudentModulesController {
         try {
             final GridPane modulesGrid = Common.getNode(getViewStage(), "#modulesGrid");
             final Label courseHeader = Common.getNode(getViewStage(), "#courseNameHeading");
-
             final int courseId = Session.getInstance().getSelectedCourseId();
 
             CourseDAO.findById(courseId)

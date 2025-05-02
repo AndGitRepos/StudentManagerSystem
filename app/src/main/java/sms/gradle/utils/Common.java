@@ -35,6 +35,10 @@ public final class Common {
      */
     @SuppressWarnings("unchecked")
     public static <T extends Node> T getNode(final Stage stage, final String selector) {
-        return (T) stage.getScene().lookup(selector);
+        T lookupResult = (T) stage.getScene().lookup(selector);
+        if (lookupResult == null) {
+            LOGGER.error("Failed to find node with selector: {}", selector);
+        }
+        return lookupResult;
     }
 }

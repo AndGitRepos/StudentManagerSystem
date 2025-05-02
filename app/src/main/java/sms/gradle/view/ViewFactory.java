@@ -141,7 +141,7 @@ public class ViewFactory {
         StudentDashboardView studentDashboardView = new StudentDashboardView();
 
         studentDashboardStage = new Stage();
-        studentDashboardStage.setOnShowing(StudentDashboardController::handleOnShowEvent);
+        studentDashboardStage.setOnShown(StudentDashboardController::handleOnShowEvent);
         studentDashboardStage.setMinHeight(550);
         studentDashboardStage.setMinWidth(750);
         studentDashboardStage.setTitle("SMS - Student Dashboard");
@@ -154,7 +154,7 @@ public class ViewFactory {
         AccessStudentModulesView modulesView = new AccessStudentModulesView();
 
         studentModulesStage = new Stage();
-        studentModulesStage.setOnShowing(AccessStudentModulesController::handleOnShowEvent);
+        studentModulesStage.setOnShown(AccessStudentModulesController::handleOnShowEvent);
         studentModulesStage.setMinHeight(550);
         studentModulesStage.setMinWidth(750);
         studentModulesStage.setTitle("SMS - Module View");
@@ -167,7 +167,7 @@ public class ViewFactory {
         AccessStudentAssessmentsView assessmentsView = new AccessStudentAssessmentsView();
 
         studentAssessmentsStage = new Stage();
-        studentAssessmentsStage.setOnShowing(AccessStudentAssessmentsController::handleOnShowEvent);
+        studentAssessmentsStage.setOnShown(AccessStudentAssessmentsController::handleOnShowEvent);
         studentAssessmentsStage.setMinHeight(550);
         studentAssessmentsStage.setMinWidth(750);
         studentAssessmentsStage.setTitle("SMS - Assessments View");
@@ -180,7 +180,7 @@ public class ViewFactory {
         AdminDashboardView adminDashboardView = new AdminDashboardView();
 
         adminDashboardStage = new Stage();
-        adminDashboardStage.setOnShowing(AdminDashboardController::handleOnShowEvent);
+        adminDashboardStage.setOnShown(AdminDashboardController::handleOnShowEvent);
         adminDashboardStage.setMinHeight(550);
         adminDashboardStage.setMinWidth(750);
         adminDashboardStage.setTitle("SMS - Admin Dashboard");
@@ -193,7 +193,7 @@ public class ViewFactory {
         ManageStudentView manageStudentView = new ManageStudentView();
 
         manageStudentStage = new Stage();
-        manageStudentStage.setOnShowing(ManageStudentController::handleOnShowEvent);
+        manageStudentStage.setOnShown(ManageStudentController::handleOnShowEvent);
         manageStudentStage.setMinHeight(550);
         manageStudentStage.setMinWidth(750);
         manageStudentStage.setTitle("SMS - Manage Students");
@@ -206,7 +206,7 @@ public class ViewFactory {
         ManageCourseView manageCourseView = new ManageCourseView();
 
         manageCourseStage = new Stage();
-        manageCourseStage.setOnShowing(ManageCourseController::handleOnShowEvent);
+        manageCourseStage.setOnShown(ManageCourseController::handleOnShowEvent);
         manageCourseStage.setMinHeight(550);
         manageCourseStage.setMinWidth(750);
         manageCourseStage.setTitle("SMS - Manage Courses");
@@ -219,7 +219,7 @@ public class ViewFactory {
         ManageModulesView manageModulesView = new ManageModulesView();
 
         manageModulesStage = new Stage();
-        manageModulesStage.setOnShowing(ManageModuleController::handleOnShowEvent);
+        manageModulesStage.setOnShown(ManageModuleController::handleOnShowEvent);
         manageModulesStage.setMinHeight(550);
         manageModulesStage.setMinWidth(750);
         manageModulesStage.setTitle("SMS - Manage Modules");
@@ -231,7 +231,7 @@ public class ViewFactory {
         ManageAdminView manageAdminView = new ManageAdminView();
 
         manageAdminStage = new Stage();
-        manageAdminStage.setOnShowing(ManageAdminsController::handleOnShowEvent);
+        manageAdminStage.setOnShown(ManageAdminsController::handleOnShowEvent);
         manageAdminStage.setMinHeight(550);
         manageAdminStage.setMinWidth(750);
         manageAdminStage.setScene(new Scene(manageAdminView));
@@ -256,7 +256,7 @@ public class ViewFactory {
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
         manageAssessmentsStage = new Stage();
-        manageAssessmentsStage.setOnShowing(ManageAssessmentsController::handleOnShowEvent);
+        manageAssessmentsStage.setOnShown(ManageAssessmentsController::handleOnShowEvent);
         manageAssessmentsStage.setX(screenBounds.getMinX());
         manageAssessmentsStage.setY(screenBounds.getMinY());
         manageAssessmentsStage.setWidth(screenBounds.getWidth());

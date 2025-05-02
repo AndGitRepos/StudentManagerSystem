@@ -127,7 +127,6 @@ public class AccessStudentAssessmentsController {
     }
 
     public static void handleRefreshButton(ActionEvent event) {
-
         loadCoursesToFilter();
 
         ComboBox<Course> filterByCourse = Common.getNode(getViewStage(), "#filterDropDown");
