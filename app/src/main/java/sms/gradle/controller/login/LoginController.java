@@ -1,12 +1,17 @@
 package sms.gradle.controller.login;
 
+import java.security.SecureRandom;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import sms.gradle.model.dao.AdminDAO;
 import sms.gradle.model.dao.StudentDAO;
 import sms.gradle.model.entities.Admin;
@@ -18,6 +23,7 @@ import sms.gradle.utils.session.UserType;
 import sms.gradle.view.ViewFactory;
 
 public final class LoginController {
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private LoginController() {
         throw new UnsupportedOperationException("This is a controller class and cannot be instantiated");
@@ -27,7 +33,32 @@ public final class LoginController {
         return ViewFactory.getInstance().getLoginStage();
     }
 
-    public static void handleLoginAttempt() {
+    public static void handleFillAdminDetails(ActionEvent event) {
+        TextField usernameField = Common.getNode(getViewStage(), "#username_field");
+        PasswordField passwordField = Common.getNode(getViewStage(), "#password_field");
+
+        usernameField.setText("admin@sms.com");
+        passwordField.setText("admin");
+    }
+
+    public static void handleFillStudentDetails(ActionEvent event) {
+        TextField usernameField = Common.getNode(getViewStage(), "#username_field");
+        PasswordField passwordField = Common.getNode(getViewStage(), "#password_field");
+
+        try {
+            List<Student> students = StudentDAO.findAll();
+            SecureRandom secureRandom = new SecureRandom();
+            if (!students.isEmpty()) {
+                Student randomStudent = students.get(secureRandom.nextInt(students.size()));
+                usernameField.setText(randomStudent.getEmail());
+                passwordField.setText(randomStudent.getFirstName() + randomStudent.getLastName());
+            }
+        } catch (SQLException e) {
+            LOGGER.error("Failed to find students", e);
+        }
+    }
+
+    public static void handleLoginAttempt(ActionEvent event) {
         TextField usernameField = Common.getNode(getViewStage(), "#username_field");
         PasswordField passwordField = Common.getNode(getViewStage(), "#password_field");
 
