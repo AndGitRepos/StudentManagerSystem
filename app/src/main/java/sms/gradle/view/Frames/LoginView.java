@@ -1,5 +1,6 @@
 package sms.gradle.view.frames;
 
+import java.util.List;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -11,6 +12,8 @@ import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sms.gradle.controller.login.LoginController;
+import sms.gradle.utils.checks.textfield.MinLengthCheck;
+import sms.gradle.utils.checks.textfield.TextFieldValidator;
 import sms.gradle.view.CoreViewInterface;
 
 /*
@@ -44,6 +47,18 @@ public class LoginView extends VBox implements CoreViewInterface {
         fillStudentDetailsButton.setOnAction(LoginController::handleFillStudentDetails);
     }
 
+    private void configureValidationChecks() {
+
+        TextFieldValidator usernameValidator = new TextFieldValidator(List.of(new MinLengthCheck(1)));
+        usernameField.textProperty().addListener((observable, oldValue, newValue) -> {
+            new TextFieldValidator(List.of(new MinLengthCheck(1))).validate(usernameField);
+        });
+
+        passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
+            new TextFieldValidator(List.of(new MinLengthCheck(1))).validate(passwordField);
+        });
+    }
+
     @Override
     public void initialiseCoreUIComponents() {
         usernameField.setId("username_field");
@@ -62,6 +77,8 @@ public class LoginView extends VBox implements CoreViewInterface {
         loginErrorLabel.setId("error_label");
         loginErrorLabel.setVisible(false);
         loginErrorLabel.getStyleClass().add("login-error-label");
+
+        configureValidationChecks();
     }
 
     @Override

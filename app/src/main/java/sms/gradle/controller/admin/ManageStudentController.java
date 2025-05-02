@@ -2,10 +2,13 @@ package sms.gradle.controller.admin;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.apache.logging.log4j.LogManager;
@@ -17,6 +20,11 @@ import sms.gradle.model.entities.Course;
 import sms.gradle.model.entities.CourseEnrollment;
 import sms.gradle.model.entities.Student;
 import sms.gradle.utils.Common;
+import sms.gradle.utils.checks.datepicker.BeforeSpecifiedDate;
+import sms.gradle.utils.checks.datepicker.DatePickerCheck;
+import sms.gradle.utils.checks.datepicker.HasValue;
+import sms.gradle.utils.checks.textfield.MinLengthCheck;
+import sms.gradle.utils.checks.textfield.TextFieldCheck;
 import sms.gradle.view.ViewFactory;
 
 public final class ManageStudentController {
@@ -151,6 +159,14 @@ public final class ManageStudentController {
         final TextField emailField = Common.getNode(getViewStage(), "#emailField");
         final PasswordField passwordField = Common.getNode(getViewStage(), "#passwordField");
 
+        List<String> validationErrors = collectValidationErrors(
+                firstNameField, lastNameField, emailField, passwordField, dateOfBirthPicker, joinDatePicker);
+
+        if (!validationErrors.isEmpty()) {
+            displayValidationErrors(validationErrors);
+            return;
+        }
+
         try {
             final Student newStudent = new Student(
                     0,
@@ -164,6 +180,73 @@ public final class ManageStudentController {
         } catch (SQLException e) {
             LOGGER.error("Failed to create new student: ", e);
         }
+    }
+
+    private static List<String> collectValidationErrors(
+            TextField firstNameField,
+            TextField lastNameField,
+            TextField emailField,
+            PasswordField passwordField,
+            DatePicker dateOfBirthPicker,
+            DatePicker joinDatePicker) {
+        List<String> errorMessages = new ArrayList<>();
+
+        List<TextFieldCheck> firstNameChecks = List.of(new MinLengthCheck(1));
+        List<TextFieldCheck> lastNameChecks = List.of(new MinLengthCheck(1));
+        List<TextFieldCheck> emailChecks = List.of(new MinLengthCheck(1));
+        List<TextFieldCheck> passwordChecks = List.of(new MinLengthCheck(1));
+        List<DatePickerCheck> dateOfBirthChecks = List.of(
+                new HasValue(),
+                new BeforeSpecifiedDate(LocalDate.now().plusDays(1)) // Add 1 day to allow selecting today
+                );
+        List<DatePickerCheck> joinDateChecks =
+                List.of(new HasValue(), new BeforeSpecifiedDate(LocalDate.now().plusDays(1)));
+
+        // Check first name
+        String firstName = firstNameField.getText();
+        for (TextFieldCheck check : firstNameChecks) {
+            if (!check.isValid(firstName)) {
+                errorMessages.add("First Name: " + check.getErrorMessage());
+            }
+        }
+
+        // Check last name
+        String lastName = lastNameField.getText();
+        for (TextFieldCheck check : lastNameChecks) {
+            if (!check.isValid(lastName)) {
+                errorMessages.add("Last Name: " + check.getErrorMessage());
+            }
+        }
+        // Check email
+        String email = emailField.getText();
+        for (TextFieldCheck check : emailChecks) {
+            if (!check.isValid(email)) {
+                errorMessages.add("Email: " + check.getErrorMessage());
+            }
+        }
+        // Check password
+        String password = passwordField.getText();
+        for (TextFieldCheck check : passwordChecks) {
+            if (!check.isValid(password)) {
+                errorMessages.add("Password: " + check.getErrorMessage());
+            }
+        }
+        // Check date of birth
+        LocalDate dateOfBirth = dateOfBirthPicker.getValue();
+        for (DatePickerCheck check : dateOfBirthChecks) {
+            if (!check.isValid(dateOfBirth)) {
+                errorMessages.add("Date of Birth: " + check.getErrorMessage());
+            }
+        }
+        // Check join date
+        LocalDate joinDate = joinDatePicker.getValue();
+        for (DatePickerCheck check : joinDateChecks) {
+            if (!check.isValid(joinDate)) {
+                errorMessages.add("Join Date: " + check.getErrorMessage());
+            }
+        }
+
+        return errorMessages;
     }
 
     /**
@@ -270,6 +353,24 @@ public final class ManageStudentController {
         } catch (SQLException e) {
             LOGGER.error("Failed to unenroll student from course", e);
         }
+    }
+
+    /**
+     * Displays validation errors in an alert dialog
+     * @param errorMessages List of error messages to display
+     */
+    private static void displayValidationErrors(List<String> errorMessages) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Validation Error");
+        alert.setHeaderText("Please fix the following issues:");
+
+        StringBuilder content = new StringBuilder();
+        for (String error : errorMessages) {
+            content.append("• ").append(error).append("\n");
+        }
+
+        alert.setContentText(content.toString());
+        alert.showAndWait();
     }
 
     /**
